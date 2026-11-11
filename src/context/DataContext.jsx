@@ -60,6 +60,163 @@ export const DataProvider = ({ children }) => {
     }
   }, [data]);
 
+  // Institute Info & Director (About & Contact Sections)
+  const updateInstituteInfo = (updatedFields) => {
+    setData(prev => ({
+      ...prev,
+      instituteInfo: {
+        ...prev.instituteInfo,
+        ...updatedFields
+      }
+    }));
+  };
+
+  const updateDirector = (directorFields) => {
+    setData(prev => ({
+      ...prev,
+      instituteInfo: {
+        ...prev.instituteInfo,
+        director: {
+          ...prev.instituteInfo.director,
+          ...directorFields
+        }
+      }
+    }));
+  };
+
+  // Banner Actions (Home Page Hero Slider)
+  const addBanner = (bannerData) => {
+    const newBanner = {
+      ...bannerData,
+      id: `ban-${Date.now()}`,
+      bgGradient: bannerData.bgGradient || "from-blue-900 via-indigo-900 to-slate-900",
+      image: bannerData.image || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+    };
+    setData(prev => ({
+      ...prev,
+      banners: [...prev.banners, newBanner]
+    }));
+  };
+
+  const updateBanner = (id, fields) => {
+    setData(prev => ({
+      ...prev,
+      banners: prev.banners.map(b => b.id === id ? { ...b, ...fields } : b)
+    }));
+  };
+
+  const deleteBanner = (id) => {
+    setData(prev => ({
+      ...prev,
+      banners: prev.banners.filter(b => b.id !== id)
+    }));
+  };
+
+  // Courses Actions
+  const addCourse = (courseData) => {
+    const newCourse = {
+      ...courseData,
+      id: `c-${Date.now()}`,
+      code: courseData.code || `CRS-${Date.now().toString().slice(-4)}`,
+      features: Array.isArray(courseData.features) ? courseData.features : courseData.features.split('\n').filter(Boolean)
+    };
+    setData(prev => ({
+      ...prev,
+      courses: [...prev.courses, newCourse]
+    }));
+  };
+
+  const updateCourse = (id, fields) => {
+    setData(prev => ({
+      ...prev,
+      courses: prev.courses.map(c => {
+        if (c.id === id) {
+          const features = typeof fields.features === 'string'
+            ? fields.features.split('\n').filter(Boolean)
+            : (fields.features || c.features);
+          return { ...c, ...fields, features };
+        }
+        return c;
+      })
+    }));
+  };
+
+  const deleteCourse = (id) => {
+    setData(prev => ({
+      ...prev,
+      courses: prev.courses.filter(c => c.id !== id)
+    }));
+  };
+
+  // Faculty Actions
+  const addFaculty = (facultyData) => {
+    const newFac = {
+      ...facultyData,
+      id: `f-${Date.now()}`,
+      photo: facultyData.photo || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80`
+    };
+    setData(prev => ({
+      ...prev,
+      faculty: [...prev.faculty, newFac]
+    }));
+  };
+
+  const updateFaculty = (id, fields) => {
+    setData(prev => ({
+      ...prev,
+      faculty: prev.faculty.map(f => f.id === id ? { ...f, ...fields } : f)
+    }));
+  };
+
+  const deleteFaculty = (id) => {
+    setData(prev => ({
+      ...prev,
+      faculty: prev.faculty.filter(f => f.id !== id)
+    }));
+  };
+
+  // Toppers Actions
+  const addTopper = (topperData) => {
+    const newTopper = {
+      ...topperData,
+      id: `top-${Date.now()}`,
+      photo: topperData.photo || `https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80`
+    };
+    setData(prev => ({
+      ...prev,
+      toppers: [newTopper, ...prev.toppers]
+    }));
+  };
+
+  const updateTopper = (id, fields) => {
+    setData(prev => ({
+      ...prev,
+      toppers: prev.toppers.map(t => t.id === id ? { ...t, ...fields } : t)
+    }));
+  };
+
+  const deleteTopper = (id) => {
+    setData(prev => ({
+      ...prev,
+      toppers: prev.toppers.filter(t => t.id !== id)
+    }));
+  };
+
+  // Gallery Actions
+  const addGalleryItem = (item) => {
+    setData(prev => ({
+      ...prev,
+      gallery: [{ ...item, id: `gal-${Date.now()}` }, ...prev.gallery]
+    }));
+  };
+
+  const deleteGalleryItem = (id) => {
+    setData(prev => ({
+      ...prev,
+      gallery: prev.gallery.filter(g => g.id !== id)
+    }));
+  };
+
   // Student Actions
   const addStudent = (studentData) => {
     const newStudent = {
@@ -117,7 +274,6 @@ export const DataProvider = ({ children }) => {
     };
 
     setData(prev => {
-      // Update student's fee paid & due records
       const updatedStudents = prev.students.map(stu => {
         if (stu.id === paymentData.studentId || stu.rollNo === paymentData.rollNo) {
           const newPaid = Number(stu.paidFee) + Number(paymentData.amount);
@@ -165,7 +321,6 @@ export const DataProvider = ({ children }) => {
         ];
       }
 
-      // Re-calculate attendance rate for modified students
       const updatedStudents = prev.students.map(student => {
         const studentBatches = updatedAttendance.filter(a => a.batch === student.batch);
         if (studentBatches.length === 0) return student;
@@ -206,6 +361,13 @@ export const DataProvider = ({ children }) => {
     setData(prev => ({
       ...prev,
       notices: [newNotice, ...prev.notices]
+    }));
+  };
+
+  const updateNotice = (id, fields) => {
+    setData(prev => ({
+      ...prev,
+      notices: prev.notices.map(n => n.id === id ? { ...n, ...fields } : n)
     }));
   };
 
@@ -271,19 +433,6 @@ export const DataProvider = ({ children }) => {
     }));
   };
 
-  // Teacher / Faculty Actions
-  const addFaculty = (facultyData) => {
-    const newFac = {
-      ...facultyData,
-      id: `f-${Date.now()}`,
-      photo: facultyData.photo || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80`
-    };
-    setData(prev => ({
-      ...prev,
-      faculty: [...prev.faculty, newFac]
-    }));
-  };
-
   // Batches Actions
   const addBatch = (batchData) => {
     const newBatch = {
@@ -294,14 +443,6 @@ export const DataProvider = ({ children }) => {
     setData(prev => ({
       ...prev,
       batches: [...prev.batches, newBatch]
-    }));
-  };
-
-  // Gallery Actions
-  const addGalleryItem = (item) => {
-    setData(prev => ({
-      ...prev,
-      gallery: [{ ...item, id: `gal-${Date.now()}` }, ...prev.gallery]
     }));
   };
 
@@ -358,21 +499,36 @@ export const DataProvider = ({ children }) => {
     <DataContext.Provider
       value={{
         ...data,
+        updateInstituteInfo,
+        updateDirector,
+        addBanner,
+        updateBanner,
+        deleteBanner,
+        addCourse,
+        updateCourse,
+        deleteCourse,
+        addFaculty,
+        updateFaculty,
+        deleteFaculty,
+        addTopper,
+        updateTopper,
+        deleteTopper,
+        addGalleryItem,
+        deleteGalleryItem,
         addStudent,
         updateStudent,
         deleteStudent,
         recordFeePayment,
         saveDailyAttendance,
         addNotice,
+        updateNotice,
         deleteNotice,
         addStudyMaterial,
         deleteStudyMaterial,
         saveExamResult,
         submitInquiry,
         updateInquiryStatus,
-        addFaculty,
         addBatch,
-        addGalleryItem,
         resetToDefault,
         exportDatabaseJSON,
         importDatabaseJSON

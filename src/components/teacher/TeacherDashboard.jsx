@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import {
   CalendarCheck, BookOpen, Upload, Award, FileText, CheckCircle2,
-  Users, UserCheck, X, Plus, LogOut, ChevronRight
+  Users, UserCheck, X, Plus, LogOut, ChevronRight, GraduationCap,
+  Sparkles, Layers, Phone
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 
-export const TeacherDashboard = ({ onBackToPublic }) => {
+export const TeacherDashboard = ({ onBackToPublic, onSwitchToAdmin }) => {
   const { currentUser, logout } = useAuth();
   const {
     students,
     batches,
+    courses,
+    faculty,
     attendance,
     saveDailyAttendance,
     studyMaterials,
@@ -37,15 +40,6 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
     fileType: 'PDF',
     fileSize: '3.5 MB',
     description: ''
-  });
-
-  // Marks Entry Form State
-  const [showMarksModal, setShowMarksModal] = useState(false);
-  const [marksForm, setMarksForm] = useState({
-    examName: 'साप्ताहिक क्लास टेस्ट #06',
-    batch: selectedBatch,
-    maxMarks: 100,
-    marks: {}
   });
 
   const batchStudents = students.filter(s => s.batch === selectedBatch);
@@ -135,7 +129,7 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
-        {/* Assigned Batches Summary Banner */}
+        {/* Banner with notice on managing Courses & Faculty */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">स्वागत है</span>
@@ -145,18 +139,38 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setShowMaterialModal(true)}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5"
             >
-              <Upload size={14} /> स्टडी मटेरियल अपलोड करें
+              <Upload size={14} /> स्टडी नोट्स व DPP अपलोड करें
             </button>
+
+            {onSwitchToAdmin && (
+              <button
+                onClick={onSwitchToAdmin}
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5"
+              >
+                <Sparkles size={14} /> एडमिन CMS एडिटर में जाएं
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Info Alert on Admin Editing Roles */}
+        <div className="p-4 bg-orange-50 border border-orange-200 rounded-2xl mb-6 text-xs text-orange-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-2.5">
+            <GraduationCap className="text-orange-600 shrink-0 mt-0.5" size={18} />
+            <div>
+              <span className="font-bold">फैकल्टी एवं कोर्सेज प्रबंधन सूचना: </span>
+              <span>वेबसाइट पर नए कोर्स जोड़ने, फीस बदलने अथवा नई फैकल्टी प्रोफाइल जोड़ने का अधिकार संस्थान संचालक (एडमिन) के पास होता है। एडमिन जब चाहें किसी भी पेज (Home, About, Courses, Faculty, Toppers, Gallery, Notices, Contact) को <strong>वेबसाइट पेज संपादक (CMS Editor)</strong> से सीधे एडिट कर सकते हैं।</span>
+            </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs mb-6">
+        <div className="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs mb-6">
           <button
             onClick={() => setActiveTab('attendance')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
@@ -178,12 +192,32 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
           </button>
 
           <button
+            onClick={() => setActiveTab('courses')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
+              activeTab === 'courses' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <Layers size={15} />
+            <span>सभी शैक्षणिक कोर्सेज ({courses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('faculty')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
+              activeTab === 'faculty' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            <Users size={15} />
+            <span>शिक्षक मंडल (Faculty Team)</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('students')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
               activeTab === 'students' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
-            <Users size={15} />
+            <UserCheck size={15} />
             <span>बैच छात्र सूची ({batchStudents.length})</span>
           </button>
         </div>
@@ -306,7 +340,85 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
           </div>
         )}
 
-        {/* TAB 3: BATCH STUDENTS */}
+        {/* TAB 3: ALL COURSES (VIEW & ATTACH MATERIALS) */}
+        {activeTab === 'courses' && (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">संस्थान के सभी पाठ्यक्रम (All Courses)</h3>
+                <p className="text-xs text-slate-500">अध्यापक प्रत्येक कोर्स के लिए संबंधित नोट्स और DPP अपलोड कर सकते हैं</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {courses.map((c) => (
+                <div key={c.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-900 text-white">{c.targetExam}</span>
+                      <span className="text-xs font-bold text-orange-600">{c.fee}</span>
+                    </div>
+                    <h4 className="font-bold text-slate-900 text-sm">{c.title}</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">{c.hindiTitle}</p>
+                    <p className="text-xs text-slate-600 mt-2">कक्षा: {c.class} | अवधि: {c.duration}</p>
+
+                    <div className="mt-3 pt-2 border-t border-slate-200 space-y-1">
+                      {c.features.slice(0, 2).map((f, i) => (
+                        <p key={i} className="text-[11px] text-slate-600 flex items-center gap-1">
+                          <span className="w-1 h-1 rounded-full bg-blue-600"></span>
+                          <span>{f}</span>
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-3 mt-3 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        setMaterialForm({
+                          ...materialForm,
+                          batch: c.title,
+                          title: `${c.title} - DPP & Formula Sheet`
+                        });
+                        setShowMaterialModal(true);
+                      }}
+                      className="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5"
+                    >
+                      <Upload size={13} />
+                      <span>इस कोर्स हेतु मटेरियल अपलोड करें</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: FACULTY TEAM */}
+        {activeTab === 'faculty' && (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
+            <div className="border-b border-slate-200 pb-3">
+              <h3 className="text-base font-bold text-slate-900">सर्वोदय एकेडेमिक्स शिक्षक मंडल (Faculty Colleagues)</h3>
+              <p className="text-xs text-slate-500">सभी विषयों के शिक्षकों का विवरण</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {faculty.map((f) => (
+                <div key={f.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center gap-3">
+                  <img src={f.photo} alt={f.name} className="w-14 h-14 rounded-xl object-cover border" />
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">{f.name}</h4>
+                    <p className="text-xs font-bold text-blue-600">{f.subject}</p>
+                    <p className="text-[11px] text-slate-500">{f.role}</p>
+                    <p className="text-[11px] text-slate-400">{f.qualification}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: BATCH STUDENTS */}
         {activeTab === 'students' && (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
@@ -366,7 +478,7 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">बैच चुनें</label>
+                  <label className="block font-bold text-slate-700 mb-1">बैच / कोर्स</label>
                   <select
                     value={materialForm.batch}
                     onChange={(e) => setMaterialForm({ ...materialForm, batch: e.target.value })}
@@ -374,6 +486,9 @@ export const TeacherDashboard = ({ onBackToPublic }) => {
                   >
                     {batches.map(b => (
                       <option key={b.id} value={b.name}>{b.name}</option>
+                    ))}
+                    {courses.map(c => (
+                      <option key={c.id} value={c.title}>{c.title}</option>
                     ))}
                   </select>
                 </div>

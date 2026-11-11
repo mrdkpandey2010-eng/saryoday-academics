@@ -23,9 +23,11 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { TeacherDashboard } from './components/teacher/TeacherDashboard';
 import { StudentDashboard } from './components/student/StudentDashboard';
 import { ParentDashboard } from './components/parent/ParentDashboard';
+import { WebsiteCmsEditor } from './components/admin/WebsiteCmsEditor';
+import { Edit3, Globe, Sparkles, X, Shield, ArrowLeft, LogOut } from 'lucide-react';
 
 export function App() {
-  const { currentUser, role, logout } = useAuth();
+  const { currentUser, role, logout, quickDemoLogin } = useAuth();
   const {
     instituteInfo,
     banners,
@@ -41,6 +43,10 @@ export function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginModalInitialRole, setLoginModalInitialRole] = useState('admin');
   const [selectedCourseForInquiry, setSelectedCourseForInquiry] = useState(null);
+  
+  // Admin Live Preview & In-Place CMS Modal
+  const [adminViewingPublic, setAdminViewingPublic] = useState(false);
+  const [cmsModalTab, setCmsModalTab] = useState(null);
 
   // Scroll to section helper
   const scrollToAdmission = () => {
@@ -65,11 +71,19 @@ export function App() {
 
   // If a user is logged in, show their specific portal dashboard!
   if (currentUser) {
-    if (role === 'admin') {
-      return <AdminDashboard onBackToPublic={logout} />;
+    if (role === 'admin' && !adminViewingPublic) {
+      return <AdminDashboard onBackToPublic={() => setAdminViewingPublic(true)} />;
     }
     if (role === 'teacher') {
-      return <TeacherDashboard onBackToPublic={logout} />;
+      return (
+        <TeacherDashboard
+          onBackToPublic={logout}
+          onSwitchToAdmin={() => {
+            quickDemoLogin('admin');
+            setAdminViewingPublic(false);
+          }}
+        />
+      );
     }
     if (role === 'student') {
       return <StudentDashboard onBackToPublic={logout} />;
@@ -79,9 +93,44 @@ export function App() {
     }
   }
 
-  // Otherwise show the public website
+  const isAdminActive = role === 'admin' && adminViewingPublic;
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-orange-500 selection:text-white relative">
+      {/* Admin Floating Control Bar when Director is viewing Live Website */}
+      {isAdminActive && (
+        <div className="sticky top-0 z-50 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-4 py-2 border-b-2 border-orange-500 shadow-xl flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span className="font-extrabold text-orange-400">👑 कोचिंग संचालक लाइव मोड (Director Live Mode)</span>
+            <span className="text-slate-400 hidden sm:inline">• किसी भी सेक्शन को सीधे एडिट करने के लिए नीचे 'एडिट करें' पर क्लिक करें</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCmsModalTab('courses')}
+              className="px-3 py-1 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold transition flex items-center gap-1 shadow"
+            >
+              <Globe size={13} />
+              <span>पेज एडिटर खोलें (CMS)</span>
+            </button>
+            <button
+              onClick={() => setAdminViewingPublic(false)}
+              className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-bold transition border border-slate-700 flex items-center gap-1"
+            >
+              <ArrowLeft size={13} />
+              <span>एडमिन डैशबोर्ड में लौटें</span>
+            </button>
+            <button
+              onClick={logout}
+              className="px-2.5 py-1 bg-red-600/80 hover:bg-red-600 text-white rounded-lg font-bold transition"
+            >
+              लॉगआउट
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. Topmost Notice Ticker & Header */}
       <Header
         onOpenLogin={() => handleOpenLogin('admin')}
@@ -95,6 +144,19 @@ export function App() {
       />
 
       <main className="flex-1">
+        {/* Quick Admin Section Edit Badge for Home Banners */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>होम पेज बैनर एवं पोस्टर्स (Home Hero Section)</span>
+            <button
+              onClick={() => setCmsModalTab('home')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> बैनर एडिट करें
+            </button>
+          </div>
+        )}
+
         {/* 3. Hero Banner Slider (Target Classes Style) */}
         <HeroBannerSlider
           banners={banners}
@@ -105,8 +167,34 @@ export function App() {
         {/* 4. Quick Highlights & USPs */}
         <QuickHighlights />
 
+        {/* Quick Admin Section Edit Badge for Notices */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>आधिकारिक सूचना पट्ट (Notice Board Section)</span>
+            <button
+              onClick={() => setCmsModalTab('about')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> सूचनाएं एडिट करें
+            </button>
+          </div>
+        )}
+
         {/* 5. Live Notice Board (Target Classes Style) */}
         <NoticeBoardSection notices={notices} />
+
+        {/* Quick Admin Section Edit Badge for About Us & Director */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>हमारे बारे में व निदेशक संदेश (About Us & Director Section)</span>
+            <button
+              onClick={() => setCmsModalTab('about')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> संदेश व फोटो एडिट करें
+            </button>
+          </div>
+        )}
 
         {/* 6. Director's Message & Vision */}
         <DirectorMessageSection
@@ -114,20 +202,72 @@ export function App() {
           onOpenAdmission={scrollToAdmission}
         />
 
+        {/* Quick Admin Section Edit Badge for Courses */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>शैक्षणिक कोर्सेज व फीस (Courses & Fees Section)</span>
+            <button
+              onClick={() => setCmsModalTab('courses')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> कोर्सेज जोड़ें / एडिट करें
+            </button>
+          </div>
+        )}
+
         {/* 7. Categorized Courses & Programs */}
         <CoursesSection
           courses={courses}
           onSelectCourse={handleSelectCourse}
         />
 
+        {/* Quick Admin Section Edit Badge for Faculty */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>विद्वान शिक्षक मंडल (Faculty Team Section)</span>
+            <button
+              onClick={() => setCmsModalTab('faculty')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> शिक्षक जोड़ें / एडिट करें
+            </button>
+          </div>
+        )}
+
         {/* 8. Faculty Team */}
         <FacultySection faculty={faculty} />
+
+        {/* Quick Admin Section Edit Badge for Toppers */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>हॉल ऑफ फेम व परिणाम (Toppers & Results Section)</span>
+            <button
+              onClick={() => setCmsModalTab('toppers')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> टॉपर्स व रिजल्ट्स एडिट करें
+            </button>
+          </div>
+        )}
 
         {/* 9. Results & Hall of Fame */}
         <ResultsToppersSection
           toppers={toppers}
           testimonials={testimonials}
         />
+
+        {/* Quick Admin Section Edit Badge for Gallery */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>चित्र दीर्घा (Photo Gallery Section)</span>
+            <button
+              onClick={() => setCmsModalTab('gallery')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> गैलरी फोटो जोड़ें / हटाएं
+            </button>
+          </div>
+        )}
 
         {/* 10. Photo Gallery */}
         <GallerySection gallery={gallery} />
@@ -138,6 +278,19 @@ export function App() {
           onSubmitInquiry={submitInquiry}
           instituteInfo={instituteInfo}
         />
+
+        {/* Quick Admin Section Edit Badge for Contact */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>संपर्क, पता व हेल्पलाइन (Contact & Address Section)</span>
+            <button
+              onClick={() => setCmsModalTab('contact')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
+            >
+              <Edit3 size={12} /> पता व फोन नंबर बदलें
+            </button>
+          </div>
+        )}
 
         {/* 12. Contact & Campus Location Map */}
         <ContactSection instituteInfo={instituteInfo} />
@@ -150,12 +303,42 @@ export function App() {
         onOpenAdmission={scrollToAdmission}
       />
 
+      {/* Floating Quick CMS Access Pill for Admin */}
+      {!isAdminActive && (
+        <button
+          onClick={() => {
+            quickDemoLogin('admin');
+            setAdminViewingPublic(true);
+          }}
+          title="वेबसाइट के किसी भी पेज को एडिट करने हेतु एडमिन मोड चालू करें"
+          className="fixed bottom-5 right-5 z-40 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-3.5 py-2 rounded-full shadow-2xl border-2 border-white text-xs font-black flex items-center gap-1.5 transition hover:scale-105"
+        >
+          <Edit3 size={14} />
+          <span>पेज एडिट मोड (Admin CMS)</span>
+        </button>
+      )}
+
       {/* Login Portal Modal */}
       {showLoginModal && (
         <LoginModal
           initialRole={loginModalInitialRole}
           onClose={() => setShowLoginModal(false)}
         />
+      )}
+
+      {/* CMS Page Editor Modal */}
+      {cmsModalTab && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[92vh] overflow-y-auto border border-slate-200">
+            <button
+              onClick={() => setCmsModalTab(null)}
+              className="absolute top-4 right-4 z-20 p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition"
+            >
+              <X size={20} />
+            </button>
+            <WebsiteCmsEditor initialTab={cmsModalTab} />
+          </div>
+        </div>
       )}
     </div>
   );

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import {
   Users, UserPlus, CreditCard, CalendarCheck, BookOpen, Bell, MessageSquare,
   DollarSign, Download, Upload, RotateCcw, Search, Trash2, Edit3, Printer,
-  Eye, Plus, ShieldCheck, CheckCircle2, X, Phone, UserCheck, Award
+  Eye, Plus, ShieldCheck, CheckCircle2, X, Phone, UserCheck, Award, Globe, Sparkles
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { IdCardModal } from '../common/IdCardModal';
 import { FeeReceiptModal } from '../common/FeeReceiptModal';
+import { WebsiteCmsEditor } from './WebsiteCmsEditor';
 
 export const AdminDashboard = ({ onBackToPublic }) => {
   const { logout, currentUser } = useAuth();
@@ -24,6 +25,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
   } = useData();
 
   const [activeTab, setActiveTab] = useState('students');
+  const [cmsPageTab, setCmsPageTab] = useState('courses');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBatchFilter, setSelectedBatchFilter] = useState('all');
 
@@ -294,6 +296,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
         <div className="flex flex-wrap items-center gap-1.5 bg-white p-2 rounded-2xl border border-slate-200 shadow-xs mb-6 overflow-x-auto">
           {[
             { id: 'students', label: 'विद्यार्थी (Students)', icon: Users },
+            { id: 'cms', label: 'वेबसाइट पेज संपादक (CMS Editor)', icon: Globe },
             { id: 'fees', label: 'फीस प्रबंधन (Fees)', icon: CreditCard },
             { id: 'attendance', label: 'दैनिक उपस्थिति (Attendance)', icon: CalendarCheck },
             { id: 'batches', label: 'बैच व फैकल्टी (Batches)', icon: BookOpen },
@@ -627,7 +630,18 @@ export const AdminDashboard = ({ onBackToPublic }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Batches Card */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-              <h3 className="font-bold text-base text-slate-900">सक्रिय बैच (Active Batches)</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-base text-slate-900">सक्रिय बैच (Active Batches)</h3>
+                <button
+                  onClick={() => {
+                    setCmsPageTab('courses');
+                    setActiveTab('cms');
+                  }}
+                  className="px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-lg text-xs font-bold transition flex items-center gap-1"
+                >
+                  <Edit3 size={12} /> कोर्स व फीस एडिट करें
+                </button>
+              </div>
               <div className="space-y-3">
                 {batches.map((batch) => (
                   <div key={batch.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
@@ -646,7 +660,18 @@ export const AdminDashboard = ({ onBackToPublic }) => {
 
             {/* Faculty Card */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-              <h3 className="font-bold text-base text-slate-900">शिक्षक मंडल (Faculty Team)</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-base text-slate-900">शिक्षक मंडल (Faculty Team)</h3>
+                <button
+                  onClick={() => {
+                    setCmsPageTab('faculty');
+                    setActiveTab('cms');
+                  }}
+                  className="px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-lg text-xs font-bold transition flex items-center gap-1"
+                >
+                  <Edit3 size={12} /> शिक्षक जोड़ें / एडिट करें
+                </button>
+              </div>
               <div className="space-y-3">
                 {faculty.map((f) => (
                   <div key={f.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center gap-3">
@@ -828,6 +853,11 @@ export const AdminDashboard = ({ onBackToPublic }) => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB CMS: WEBSITE PAGE EDITOR */}
+        {activeTab === 'cms' && (
+          <WebsiteCmsEditor initialTab={cmsPageTab} />
         )}
       </div>
 
