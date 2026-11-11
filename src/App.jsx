@@ -103,7 +103,7 @@ export function App() {
         <div className="sticky top-0 z-50 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-4 py-2 border-b-2 border-orange-500 shadow-xl flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span className="font-extrabold text-orange-400">👑 कोचिंग संचालक लाइव मोड (Director Live Mode)</span>
+            <span className="font-extrabold text-orange-400">👑 कोचिंग संचालक लाइव मोड</span>
             <span className="text-slate-400 hidden sm:inline">• किसी भी सेक्शन को सीधे एडिट करने के लिए नीचे 'एडिट करें' पर क्लिक करें</span>
           </div>
 
@@ -113,7 +113,7 @@ export function App() {
               className="px-3 py-1 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold transition flex items-center gap-1 shadow"
             >
               <Globe size={13} />
-              <span>पेज एडिटर खोलें (CMS)</span>
+              <span>पेज एडिटर खोलें</span>
             </button>
             <button
               onClick={() => setAdminViewingPublic(false)}
@@ -142,13 +142,14 @@ export function App() {
       <Navbar
         onOpenLogin={() => handleOpenLogin('admin')}
         onOpenAdmission={scrollToAdmission}
+        isAdminActive={isAdminActive}
       />
 
       <main className="flex-1">
         {/* Quick Admin Section Edit Badge for Home Banners */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>होम पेज बैनर एवं पोस्टर्स (Home Hero Section)</span>
+            <span>होम पेज बैनर एवं पोस्टर्स</span>
             <button
               onClick={() => setCmsModalTab('home')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -171,7 +172,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for Notices */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>आधिकारिक सूचना पट्ट (Notice Board Section)</span>
+            <span>आधिकारिक सूचना पट्ट</span>
             <button
               onClick={() => setCmsModalTab('about')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -187,7 +188,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for About Us & Director */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>हमारे बारे में व निदेशक संदेश (About Us & Director Section)</span>
+            <span>हमारे बारे में व निदेशक संदेश</span>
             <button
               onClick={() => setCmsModalTab('about')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -225,7 +226,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for Faculty */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>विद्वान शिक्षक मंडल (Faculty Team Section)</span>
+            <span>विद्वान शिक्षक मंडल</span>
             <button
               onClick={() => setCmsModalTab('faculty')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -241,7 +242,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for Toppers */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>हॉल ऑफ फेम व परिणाम (Toppers & Results Section)</span>
+            <span>हॉल ऑफ फेम व परिणाम</span>
             <button
               onClick={() => setCmsModalTab('toppers')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -260,7 +261,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for Gallery */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>चित्र दीर्घा (Photo Gallery Section)</span>
+            <span>चित्र दीर्घा एवं एलबम</span>
             <button
               onClick={() => setCmsModalTab('gallery')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"
@@ -283,7 +284,7 @@ export function App() {
         {/* Quick Admin Section Edit Badge for Contact */}
         {isAdminActive && (
           <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
-            <span>संपर्क, पता व हेल्पलाइन (Contact & Address Section)</span>
+            <span>संपर्क, पता व हेल्पलाइन</span>
             <button
               onClick={() => setCmsModalTab('contact')}
               className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1"

@@ -33,7 +33,7 @@ export const Header = ({ onOpenLogin, onOpenAdmission }) => {
               className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold px-3 py-1 rounded-md transition shadow-sm animate-pulse-subtle flex items-center gap-1"
             >
               <Bell size={13} />
-              <span>प्रवेश / छात्रवृत्ति फॉर्म</span>
+              <span>एडमिशन पूछताछ</span>
             </button>
 
             <a

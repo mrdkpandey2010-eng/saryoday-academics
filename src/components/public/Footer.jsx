@@ -69,17 +69,18 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
           {/* Col 2: Quick Links */}
           <div>
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">
-              महत्वपूर्ण लिंक्स (Quick Links)
+              महत्वपूर्ण लिंक्स
             </h4>
-            <ul className="space-y-2 text-xs">
-              <li><a href="#home" className="hover:text-orange-400 transition">मुख्य पृष्ठ (Home)</a></li>
-              <li><a href="#about" className="hover:text-orange-400 transition">हमारे बारे में (About Us)</a></li>
-              <li><a href="#courses" className="hover:text-orange-400 transition">उपलब्ध कोर्सेज (All Courses)</a></li>
-              <li><a href="#faculty" className="hover:text-orange-400 transition">फैकल्टी टीम (Expert Faculty)</a></li>
-              <li><a href="#toppers" className="hover:text-orange-400 transition">हॉल ऑफ फेम व परिणाम (Results)</a></li>
-              <li><a href="#gallery" className="hover:text-orange-400 transition">फोटो गैलरी (Gallery)</a></li>
-              <li><a href="#notices" className="hover:text-orange-400 transition">सूचना पट्ट (Notice Board)</a></li>
-              <li><a href="#contact" className="hover:text-orange-400 transition">संपर्क शाखा (Contact Us)</a></li>
+            <ul className="space-y-2 text-xs font-medium">
+              <li><a href="#home" className="hover:text-orange-400 transition">होम</a></li>
+              <li><a href="#about" className="hover:text-orange-400 transition">हमारे बारे में</a></li>
+              <li><a href="#courses" className="hover:text-orange-400 transition">कोर्सेज</a></li>
+              <li><a href="#faculty" className="hover:text-orange-400 transition">फैकल्टी</a></li>
+              <li><a href="#toppers" className="hover:text-orange-400 transition">टॉपर्स व परिणाम</a></li>
+              <li><a href="#gallery" className="hover:text-orange-400 transition">गैलरी</a></li>
+              <li><a href="#notices" className="hover:text-orange-400 transition">सूचना पट्ट</a></li>
+              <li><a href="#contact" className="hover:text-orange-400 transition">संपर्क</a></li>
+              <li><a href="#admission" className="text-orange-400 hover:underline font-bold transition">एडमिशन पूछताछ</a></li>
             </ul>
           </div>
 

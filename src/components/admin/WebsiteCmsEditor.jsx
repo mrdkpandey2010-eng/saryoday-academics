@@ -246,13 +246,13 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
       {/* Pages Navigation Bar */}
       <div className="flex items-center gap-1.5 p-2 bg-slate-50 border-b border-slate-200 overflow-x-auto">
         {[
-          { id: 'courses', label: 'कोर्सेज (Courses)', icon: BookOpen, count: courses.length },
-          { id: 'faculty', label: 'फैकल्टी (Faculty)', icon: Users, count: faculty.length },
-          { id: 'about', label: 'हमारे बारे में (About)', icon: Info },
-          { id: 'home', label: 'होम बैनर्स (Home)', icon: Home, count: banners.length },
-          { id: 'toppers', label: 'टॉपर्स व परिणाम (Results)', icon: Trophy, count: toppers.length },
-          { id: 'gallery', label: 'गैलरी (Gallery)', icon: Image, count: gallery.length },
-          { id: 'contact', label: 'संपर्क व पता (Contact)', icon: Phone },
+          { id: 'courses', label: 'कोर्सेज', icon: BookOpen, count: courses.length },
+          { id: 'faculty', label: 'फैकल्टी', icon: Users, count: faculty.length },
+          { id: 'about', label: 'हमारे बारे में', icon: Info },
+          { id: 'home', label: 'होम बैनर', icon: Home, count: banners.length },
+          { id: 'toppers', label: 'टॉपर्स व परिणाम', icon: Trophy, count: toppers.length },
+          { id: 'gallery', label: 'गैलरी व एलबम', icon: Image, count: gallery.length },
+          { id: 'contact', label: 'संपर्क व पता', icon: Phone },
         ].map((tab) => {
           const Icon = tab.icon;
           return (

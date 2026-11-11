@@ -4,7 +4,7 @@ import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
 
 export const ContactSection = ({ instituteInfo }) => {
   return (
-    <section id="contact" className="py-16 bg-white border-b border-slate-200">
+    <section id="contact" className="py-16 bg-white border-b border-slate-200 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">

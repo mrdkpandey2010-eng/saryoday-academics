@@ -3,7 +3,7 @@ import { Trophy, Star, Quote, Award, Sparkles, CheckCircle2 } from 'lucide-react
 
 export const ResultsToppersSection = ({ toppers, testimonials }) => {
   return (
-    <section id="toppers" className="py-16 bg-slate-900 text-white relative overflow-hidden">
+    <section id="toppers" className="py-16 bg-slate-900 text-white relative overflow-hidden scroll-mt-24">
       {/* Decorative background glows */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>

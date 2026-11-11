@@ -23,7 +23,7 @@ export const HeroBannerSlider = ({ banners, onOpenAdmission, onExploreCourses })
   const slide = banners[currentSlide] || banners[0];
 
   return (
-    <div id="home" className="relative overflow-hidden bg-slate-950 text-white min-h-[520px] lg:min-h-[580px] flex items-center">
+    <div id="home" className="relative overflow-hidden bg-slate-950 text-white min-h-[520px] lg:min-h-[580px] flex items-center scroll-mt-24">
       {/* Background with image and dark overlay */}
       <div className="absolute inset-0 z-0">
         <img

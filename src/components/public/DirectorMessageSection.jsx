@@ -3,7 +3,7 @@ import { Quote, Award, CheckCircle, GraduationCap, ArrowRight } from 'lucide-rea
 
 export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
   return (
-    <section id="about" className="py-16 bg-white overflow-hidden relative border-b border-slate-200">
+    <section id="about" className="py-16 bg-white overflow-hidden relative border-b border-slate-200 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Director Photo & Stats Card */}
