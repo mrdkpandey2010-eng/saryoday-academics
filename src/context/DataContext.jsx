@@ -1,0 +1,392 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import {
+  initialInstituteInfo,
+  initialBanners,
+  initialNotices,
+  initialCourses,
+  initialFaculty,
+  initialToppers,
+  initialGallery,
+  initialTestimonials,
+  initialStudents,
+  initialBatches,
+  initialFeeTransactions,
+  initialAttendance,
+  initialExamResults,
+  initialStudyMaterials,
+  initialInquiries
+} from '../data/initialData';
+
+const DataContext = createContext(null);
+
+const STORAGE_KEY = 'SARYODAY_ACADEMICS_DB_V1';
+
+export const DataProvider = ({ children }) => {
+  // Load state from localStorage or initialize with seed data
+  const [data, setData] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load data from localStorage', e);
+    }
+    return {
+      instituteInfo: initialInstituteInfo,
+      banners: initialBanners,
+      notices: initialNotices,
+      courses: initialCourses,
+      faculty: initialFaculty,
+      toppers: initialToppers,
+      gallery: initialGallery,
+      testimonials: initialTestimonials,
+      students: initialStudents,
+      batches: initialBatches,
+      feeTransactions: initialFeeTransactions,
+      attendance: initialAttendance,
+      examResults: initialExamResults,
+      studyMaterials: initialStudyMaterials,
+      inquiries: initialInquiries
+    };
+  });
+
+  // Save changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.error('Failed to persist database to localStorage', e);
+    }
+  }, [data]);
+
+  // Student Actions
+  const addStudent = (studentData) => {
+    const newStudent = {
+      ...studentData,
+      id: `stu-${Date.now()}`,
+      rollNo: studentData.rollNo || `SA-2025-0${data.students.length + 101}`,
+      paidFee: Number(studentData.paidFee || 0),
+      totalFee: Number(studentData.totalFee || 0),
+      dueFee: Number(studentData.totalFee || 0) - Number(studentData.paidFee || 0),
+      attendanceRate: 100,
+      avatar: studentData.avatar || `https://api.dicebear.com/7.x/micah/svg?seed=${studentData.name}`
+    };
+
+    setData(prev => ({
+      ...prev,
+      students: [newStudent, ...prev.students]
+    }));
+    return newStudent;
+  };
+
+  const updateStudent = (id, updatedFields) => {
+    setData(prev => ({
+      ...prev,
+      students: prev.students.map(s => {
+        if (s.id === id) {
+          const totalFee = updatedFields.totalFee !== undefined ? Number(updatedFields.totalFee) : s.totalFee;
+          const paidFee = updatedFields.paidFee !== undefined ? Number(updatedFields.paidFee) : s.paidFee;
+          return {
+            ...s,
+            ...updatedFields,
+            totalFee,
+            paidFee,
+            dueFee: Math.max(0, totalFee - paidFee)
+          };
+        }
+        return s;
+      })
+    }));
+  };
+
+  const deleteStudent = (id) => {
+    setData(prev => ({
+      ...prev,
+      students: prev.students.filter(s => s.id !== id)
+    }));
+  };
+
+  // Fee Management Actions
+  const recordFeePayment = (paymentData) => {
+    const txn = {
+      ...paymentData,
+      id: `TXN-${Date.now().toString().slice(-6)}`,
+      receiptNo: `SA-REC-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
+      date: paymentData.date || new Date().toISOString().split('T')[0]
+    };
+
+    setData(prev => {
+      // Update student's fee paid & due records
+      const updatedStudents = prev.students.map(stu => {
+        if (stu.id === paymentData.studentId || stu.rollNo === paymentData.rollNo) {
+          const newPaid = Number(stu.paidFee) + Number(paymentData.amount);
+          return {
+            ...stu,
+            paidFee: newPaid,
+            dueFee: Math.max(0, Number(stu.totalFee) - newPaid)
+          };
+        }
+        return stu;
+      });
+
+      return {
+        ...prev,
+        students: updatedStudents,
+        feeTransactions: [txn, ...prev.feeTransactions]
+      };
+    });
+
+    return txn;
+  };
+
+  // Attendance Actions
+  const saveDailyAttendance = (date, batch, records) => {
+    setData(prev => {
+      const existingIndex = prev.attendance.findIndex(a => a.date === date && a.batch === batch);
+      let updatedAttendance;
+      if (existingIndex >= 0) {
+        updatedAttendance = [...prev.attendance];
+        updatedAttendance[existingIndex] = {
+          id: prev.attendance[existingIndex].id,
+          date,
+          batch,
+          records
+        };
+      } else {
+        updatedAttendance = [
+          {
+            id: `att-${Date.now()}`,
+            date,
+            batch,
+            records
+          },
+          ...prev.attendance
+        ];
+      }
+
+      // Re-calculate attendance rate for modified students
+      const updatedStudents = prev.students.map(student => {
+        const studentBatches = updatedAttendance.filter(a => a.batch === student.batch);
+        if (studentBatches.length === 0) return student;
+
+        let totalSessions = 0;
+        let presentSessions = 0;
+        studentBatches.forEach(batchRecord => {
+          const rec = batchRecord.records.find(r => r.rollNo === student.rollNo || r.studentId === student.id);
+          if (rec) {
+            totalSessions++;
+            if (rec.status === 'Present') presentSessions++;
+          }
+        });
+
+        const rate = totalSessions > 0 ? ((presentSessions / totalSessions) * 100).toFixed(1) : student.attendanceRate;
+        return {
+          ...student,
+          attendanceRate: Number(rate)
+        };
+      });
+
+      return {
+        ...prev,
+        attendance: updatedAttendance,
+        students: updatedStudents
+      };
+    });
+  };
+
+  // Notice Actions
+  const addNotice = (noticeData) => {
+    const newNotice = {
+      ...noticeData,
+      id: `not-${Date.now()}`,
+      date: noticeData.date || new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+      isNew: true
+    };
+    setData(prev => ({
+      ...prev,
+      notices: [newNotice, ...prev.notices]
+    }));
+  };
+
+  const deleteNotice = (id) => {
+    setData(prev => ({
+      ...prev,
+      notices: prev.notices.filter(n => n.id !== id)
+    }));
+  };
+
+  // Study Material Actions
+  const addStudyMaterial = (materialData) => {
+    const newMaterial = {
+      ...materialData,
+      id: `mat-${Date.now()}`,
+      date: new Date().toISOString().split('T')[0]
+    };
+    setData(prev => ({
+      ...prev,
+      studyMaterials: [newMaterial, ...prev.studyMaterials]
+    }));
+  };
+
+  const deleteStudyMaterial = (id) => {
+    setData(prev => ({
+      ...prev,
+      studyMaterials: prev.studyMaterials.filter(m => m.id !== id)
+    }));
+  };
+
+  // Exam Result Actions
+  const saveExamResult = (resultData) => {
+    const newResult = {
+      ...resultData,
+      id: `res-${Date.now()}`,
+      date: resultData.date || new Date().toISOString().split('T')[0]
+    };
+    setData(prev => ({
+      ...prev,
+      examResults: [newResult, ...prev.examResults]
+    }));
+  };
+
+  // Inquiries Actions
+  const submitInquiry = (inquiryData) => {
+    const newInquiry = {
+      ...inquiryData,
+      id: `inq-${Date.now()}`,
+      date: new Date().toISOString().split('T')[0],
+      status: 'Pending'
+    };
+    setData(prev => ({
+      ...prev,
+      inquiries: [newInquiry, ...prev.inquiries]
+    }));
+    return newInquiry;
+  };
+
+  const updateInquiryStatus = (id, newStatus) => {
+    setData(prev => ({
+      ...prev,
+      inquiries: prev.inquiries.map(inq => inq.id === id ? { ...inq, status: newStatus } : inq)
+    }));
+  };
+
+  // Teacher / Faculty Actions
+  const addFaculty = (facultyData) => {
+    const newFac = {
+      ...facultyData,
+      id: `f-${Date.now()}`,
+      photo: facultyData.photo || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80`
+    };
+    setData(prev => ({
+      ...prev,
+      faculty: [...prev.faculty, newFac]
+    }));
+  };
+
+  // Batches Actions
+  const addBatch = (batchData) => {
+    const newBatch = {
+      ...batchData,
+      id: `bat-${Date.now()}`,
+      enrolledCount: 0
+    };
+    setData(prev => ({
+      ...prev,
+      batches: [...prev.batches, newBatch]
+    }));
+  };
+
+  // Gallery Actions
+  const addGalleryItem = (item) => {
+    setData(prev => ({
+      ...prev,
+      gallery: [{ ...item, id: `gal-${Date.now()}` }, ...prev.gallery]
+    }));
+  };
+
+  // Database Backup, Restore, and Reset
+  const resetToDefault = () => {
+    const defaultData = {
+      instituteInfo: initialInstituteInfo,
+      banners: initialBanners,
+      notices: initialNotices,
+      courses: initialCourses,
+      faculty: initialFaculty,
+      toppers: initialToppers,
+      gallery: initialGallery,
+      testimonials: initialTestimonials,
+      students: initialStudents,
+      batches: initialBatches,
+      feeTransactions: initialFeeTransactions,
+      attendance: initialAttendance,
+      examResults: initialExamResults,
+      studyMaterials: initialStudyMaterials,
+      inquiries: initialInquiries
+    };
+    setData(defaultData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+  };
+
+  const exportDatabaseJSON = () => {
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `saryoday_database_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const importDatabaseJSON = (jsonString) => {
+    try {
+      const parsed = JSON.parse(jsonString);
+      if (parsed.students && parsed.instituteInfo) {
+        setData(parsed);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+        return { success: true };
+      }
+      return { success: false, message: 'Invalid data format' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  };
+
+  return (
+    <DataContext.Provider
+      value={{
+        ...data,
+        addStudent,
+        updateStudent,
+        deleteStudent,
+        recordFeePayment,
+        saveDailyAttendance,
+        addNotice,
+        deleteNotice,
+        addStudyMaterial,
+        deleteStudyMaterial,
+        saveExamResult,
+        submitInquiry,
+        updateInquiryStatus,
+        addFaculty,
+        addBatch,
+        addGalleryItem,
+        resetToDefault,
+        exportDatabaseJSON,
+        importDatabaseJSON
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
+};
+
+export const useData = () => {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error('useData must be used within a DataProvider');
+  }
+  return context;
+};
