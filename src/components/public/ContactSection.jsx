@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, ExternalLink } from 'lucide-react';
-import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
+import { InstagramIcon, FacebookIcon, YoutubeIcon, PlayStoreIcon } from '../common/SocialIcons';
 
 export const ContactSection = ({ instituteInfo }) => {
   return (
@@ -8,13 +8,13 @@ export const ContactSection = ({ instituteInfo }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            संपर्क एवं शाखा विवरण (Contact Us)
+            Contact & Campus Location
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            सर्वोदय एकेडेमिक्स में आपका स्वागत है
+            Welcome to Saryoday Academics
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            कोर्स, फीस, बैच टाइमिंग अथवा करियर काउंसलिंग के लिए आप कभी भी सीधे संस्थान में पधार सकते हैं या कॉल कर सकते हैं
+            Visit our campus or connect via phone, WhatsApp or social media for course details, batch schedules & career guidance
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export const ContactSection = ({ instituteInfo }) => {
                 <MapPin size={22} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">हमारा पता (Campus Location)</h4>
+                <h4 className="text-sm font-bold text-slate-900">Campus Location</h4>
                 <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                   {instituteInfo?.address || "B-Colony, Near Geeta Vatika Mandir & Airtel Store, Shahpur, Gorakhpur, UP – 273006"}
                 </p>
@@ -37,7 +37,7 @@ export const ContactSection = ({ instituteInfo }) => {
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 text-[11px] font-bold text-orange-600 mt-2 hover:underline"
                 >
-                  <span>गूगल मैप पर देखें</span>
+                  <span>View on Google Maps</span>
                   <ExternalLink size={12} />
                 </a>
               </div>
@@ -49,7 +49,7 @@ export const ContactSection = ({ instituteInfo }) => {
                 <Phone size={22} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">कॉल एवं सहायता (Helpline)</h4>
+                <h4 className="text-sm font-bold text-slate-900">Helpline & Admissions Desk</h4>
                 <div className="text-xs text-slate-600 mt-1 space-y-0.5">
                   <p><a href="tel:08400100814" className="hover:text-blue-600 font-semibold">+91 84001 00814</a> (Director Desk)</p>
                   <p><a href="tel:08400100813" className="hover:text-blue-600 font-semibold">+91 84001 00813</a> (Admin Office)</p>
@@ -63,9 +63,9 @@ export const ContactSection = ({ instituteInfo }) => {
                 <Clock size={22} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">ऑफिस समय (Working Hours)</h4>
+                <h4 className="text-sm font-bold text-slate-900">Office Timings</h4>
                 <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                  {instituteInfo?.timings || "सोमवार - शनिवार: प्रातः 07:00 AM से सायं 07:00 PM (रविवार: विशेष डाउट सत्र)"}
+                  {instituteInfo?.timings || "Monday – Saturday: 07:00 AM to 07:00 PM (Sunday: Special Doubt Sessions)"}
                 </p>
               </div>
             </div>
@@ -73,11 +73,11 @@ export const ContactSection = ({ instituteInfo }) => {
             {/* WhatsApp Direct */}
             <div className="bg-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-200 flex items-center justify-between">
               <div>
-                <h4 className="text-sm font-bold text-emerald-900">तत्काल व्हाट्सएप सहायता</h4>
-                <p className="text-xs text-emerald-700">सिलेबस व फीस विवरण सीधे व्हाट्सएप पर पाएं</p>
+                <h4 className="text-sm font-bold text-emerald-900">Instant WhatsApp Support</h4>
+                <p className="text-xs text-emerald-700">Get syllabus, fees & batch timing directly on WhatsApp</p>
               </div>
               <a
-                href="https://wa.me/918400100814?text=नमस्ते%20सर्वोदय%20एकेडेमिक्स,%20कृपया%20कोर्स%20और%20फीस%20की%20जानकारी%20साझा%20करें।"
+                href="https://wa.me/918400100814?text=Hello%20Saryoday%20Academics,%20I%20would%20like%20information%20about%20IIT-JEE/NEET%20coaching%20and%20admissions."
                 target="_blank"
                 rel="noreferrer"
                 className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow shrink-0"
@@ -87,47 +87,76 @@ export const ContactSection = ({ instituteInfo }) => {
               </a>
             </div>
 
-            {/* Social Media Connect (Instagram & Facebook) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              {/* Instagram Card */}
-              <a
-                href={instituteInfo?.instagram || "https://www.instagram.com/saryoday_gorakhpur/"}
-                target="_blank"
-                rel="noreferrer"
-                className="group p-3.5 rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50/80 via-white to-rose-50/50 hover:shadow-md hover:border-pink-300 transition flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition">
-                  <InstagramIcon size={20} />
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1">
-                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Instagram</h4>
-                    <ExternalLink size={10} className="text-slate-400 group-hover:text-rose-500" />
+            {/* Social Media Connect (Instagram, Facebook, YouTube, Google Play Store) */}
+            <div className="space-y-2 pt-1">
+              <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                Connect on Official Channels
+              </h4>
+              <div className="grid grid-cols-2 gap-2.5">
+                {/* Instagram Card */}
+                <a
+                  href={instituteInfo?.instagram || "https://www.instagram.com/saryoday_gorakhpur/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group p-3 rounded-xl border border-pink-200 bg-gradient-to-br from-pink-50/70 via-white to-rose-50/40 hover:shadow hover:border-pink-300 transition flex items-center gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-xs group-hover:scale-105 transition">
+                    <InstagramIcon size={16} />
                   </div>
-                  <p className="text-[11px] font-bold text-rose-600 truncate">@saryoday_gorakhpur</p>
-                  <p className="text-[10px] text-slate-500">फॉलो करें व रील्स देखें</p>
-                </div>
-              </a>
+                  <div className="min-w-0">
+                    <h5 className="text-[11px] font-bold text-slate-900 group-hover:text-rose-600 transition truncate">Instagram</h5>
+                    <p className="text-[10px] text-rose-600 font-semibold truncate">@saryoday_gorakhpur</p>
+                  </div>
+                </a>
 
-              {/* Facebook Card */}
-              <a
-                href={instituteInfo?.facebook || "https://www.facebook.com/saryoday/"}
-                target="_blank"
-                rel="noreferrer"
-                className="group p-3.5 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-sky-50/50 hover:shadow-md hover:border-blue-300 transition flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#1877F2] flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition">
-                  <FacebookIcon size={20} />
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1">
-                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">Facebook</h4>
-                    <ExternalLink size={10} className="text-slate-400 group-hover:text-blue-500" />
+                {/* Facebook Card */}
+                <a
+                  href={instituteInfo?.facebook || "https://www.facebook.com/saryoday/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group p-3 rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50/70 via-white to-sky-50/40 hover:shadow hover:border-blue-300 transition flex items-center gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#1877F2] flex items-center justify-center text-white shrink-0 shadow-xs group-hover:scale-105 transition">
+                    <FacebookIcon size={16} />
                   </div>
-                  <p className="text-[11px] font-bold text-[#1877F2] truncate">/saryoday</p>
-                  <p className="text-[10px] text-slate-500">फेसबुक पेज से जुड़ें</p>
-                </div>
-              </a>
+                  <div className="min-w-0">
+                    <h5 className="text-[11px] font-bold text-slate-900 group-hover:text-blue-600 transition truncate">Facebook</h5>
+                    <p className="text-[10px] text-[#1877F2] font-semibold truncate">/saryoday</p>
+                  </div>
+                </a>
+
+                {/* YouTube Card */}
+                <a
+                  href={instituteInfo?.youtube || "https://www.youtube.com/@saryodayacademics"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group p-3 rounded-xl border border-red-200 bg-gradient-to-br from-red-50/70 via-white to-orange-50/40 hover:shadow hover:border-red-300 transition flex items-center gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#FF0000] flex items-center justify-center text-white shrink-0 shadow-xs group-hover:scale-105 transition">
+                    <YoutubeIcon size={16} />
+                  </div>
+                  <div className="min-w-0">
+                    <h5 className="text-[11px] font-bold text-slate-900 group-hover:text-red-600 transition truncate">YouTube</h5>
+                    <p className="text-[10px] text-red-600 font-semibold truncate">Video Lectures</p>
+                  </div>
+                </a>
+
+                {/* Google Play Store Card */}
+                <a
+                  href={instituteInfo?.playstore || "https://play.google.com/store/apps/details?id=com.saryoday.academics"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group p-3 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/40 hover:shadow hover:border-emerald-300 transition flex items-center gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center text-white shrink-0 shadow-xs group-hover:scale-105 transition">
+                    <PlayStoreIcon size={16} />
+                  </div>
+                  <div className="min-w-0">
+                    <h5 className="text-[11px] font-bold text-slate-900 group-hover:text-emerald-700 transition truncate">Play Store</h5>
+                    <p className="text-[10px] text-emerald-700 font-semibold truncate">Saryoday App</p>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
 

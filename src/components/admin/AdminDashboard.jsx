@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { IdCardModal } from '../common/IdCardModal';
 import { FeeReceiptModal } from '../common/FeeReceiptModal';
 import { WebsiteCmsEditor } from './WebsiteCmsEditor';
+import { validateEnglishOnly, validateIndianMobile } from '../../utils/validation';
 
 export const AdminDashboard = ({ onBackToPublic }) => {
   const { logout, currentUser, updateAdminPassword } = useAuth();
@@ -54,7 +55,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
     batch: batches[0]?.name || 'Class 12th IIT-JEE',
     totalFee: 45000,
     paidFee: 15000,
-    address: 'शाहपुर, गोरखपुर'
+    address: 'Shahpur, Gorakhpur'
   });
 
   // Fee Payment Form State
@@ -63,7 +64,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
     amount: '',
     paymentMode: 'UPI / PhonePe',
     txnRef: '',
-    remarks: 'नियमित फीस किस्त (Tuition Installment)'
+    remarks: 'Regular Tuition Installment'
   });
 
   // Notice Form State
@@ -137,6 +138,27 @@ export const AdminDashboard = ({ onBackToPublic }) => {
     e.preventDefault();
     if (!studentForm.name || !studentForm.phone) return;
 
+    // Database English-Only Validation Guard
+    const nameCheck = validateEnglishOnly(studentForm.name, 'Student Name');
+    if (!nameCheck.isValid) {
+      alert(nameCheck.message);
+      return;
+    }
+    if (studentForm.fatherName) {
+      const fatherCheck = validateEnglishOnly(studentForm.fatherName, "Father's Name");
+      if (!fatherCheck.isValid) {
+        alert(fatherCheck.message);
+        return;
+      }
+    }
+    if (studentForm.address) {
+      const addrCheck = validateEnglishOnly(studentForm.address, 'Address');
+      if (!addrCheck.isValid) {
+        alert(addrCheck.message);
+        return;
+      }
+    }
+
     if (editingStudent) {
       updateStudent(editingStudent.id, studentForm);
       setEditingStudent(null);
@@ -154,7 +176,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
       batch: batches[0]?.name || 'Class 12th IIT-JEE',
       totalFee: 45000,
       paidFee: 15000,
-      address: 'शाहपुर, गोरखपुर'
+      address: 'Shahpur, Gorakhpur'
     });
   };
 
@@ -162,6 +184,14 @@ export const AdminDashboard = ({ onBackToPublic }) => {
   const handleFeeSubmit = (e) => {
     e.preventDefault();
     if (!feeForm.studentId || !feeForm.amount) return;
+
+    if (feeForm.remarks) {
+      const remCheck = validateEnglishOnly(feeForm.remarks, 'Fee Remarks');
+      if (!remCheck.isValid) {
+        alert(remCheck.message);
+        return;
+      }
+    }
 
     const stu = students.find(s => s.id === feeForm.studentId || s.rollNo === feeForm.studentId);
     if (!stu) return;
@@ -186,7 +216,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
       amount: '',
       paymentMode: 'UPI / PhonePe',
       txnRef: '',
-      remarks: 'नियमित फीस किस्त (Tuition Installment)'
+      remarks: 'Regular Tuition Installment'
     });
   };
 
@@ -201,13 +231,25 @@ export const AdminDashboard = ({ onBackToPublic }) => {
     }));
 
     saveDailyAttendance(attendanceDate, attendanceBatch, records);
-    alert(`बैच "${attendanceBatch}" की उपस्थिति (${attendanceDate}) सफलतापूर्वक सहेज ली गई है!`);
+    alert(`Attendance for batch "${attendanceBatch}" (${attendanceDate}) saved successfully!`);
   };
 
   // Handle Notice Submit
   const handleNoticeSubmit = (e) => {
     e.preventDefault();
     if (!noticeForm.title || !noticeForm.content) return;
+
+    const titleCheck = validateEnglishOnly(noticeForm.title, 'Notice Title');
+    if (!titleCheck.isValid) {
+      alert(titleCheck.message);
+      return;
+    }
+    const contentCheck = validateEnglishOnly(noticeForm.content, 'Notice Content');
+    if (!contentCheck.isValid) {
+      alert(contentCheck.message);
+      return;
+    }
+
     addNotice(noticeForm);
     setShowAddNoticeModal(false);
     setNoticeForm({

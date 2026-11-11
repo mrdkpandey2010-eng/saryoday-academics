@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { BookOpen, Check, ArrowRight, Clock, Award, Shield, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const CoursesSection = ({ courses, onSelectCourse }) => {
+  const { isHindi } = useLanguage();
   const [filter, setFilter] = useState('all');
 
   const categories = [
-    { id: 'all', label: 'सभी कोर्सेज (All Courses)' },
+    { id: 'all', label: isHindi ? 'सभी कोर्सेज (All Courses)' : 'All Programs' },
     { id: 'Competitive', label: 'IIT-JEE & NEET' },
-    { id: 'Board', label: 'बोर्ड स्पेशल (10th & 12th)' },
-    { id: 'Foundation', label: 'प्री-फाउंडेशन (6th - 9th)' },
-    { id: 'Crash Course', label: 'क्रैश कोर्स व टेस्ट सीरीज' },
+    { id: 'Board', label: isHindi ? 'बोर्ड स्पेशल (10th & 12th)' : 'Board Booster (10th & 12th)' },
+    { id: 'Foundation', label: isHindi ? 'प्री-फाउंडेशन (6th - 9th)' : 'Foundation (6th - 9th)' },
+    { id: 'Crash Course', label: isHindi ? 'क्रैश कोर्स व टेस्ट सीरीज' : 'Crash Course & Test Series' },
   ];
 
   const filteredCourses = filter === 'all'
@@ -22,13 +24,19 @@ export const CoursesSection = ({ courses, onSelectCourse }) => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            शैक्षणिक कार्यक्रम (Our Courses)
+            {isHindi ? "शैक्षणिक कार्यक्रम (Our Courses)" : "Academic Programs & Classroom Courses"}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            आपकी सफलता के लिए विशेष रूप से डिज़ाइन किए गए पाठ्यक्रम
+            {isHindi
+              ? "आपकी सफलता के लिए विशेष रूप से डिज़ाइन किए गए पाठ्यक्रम"
+              : "Scientifically Structured Programs Designed for Top Ranks"
+            }
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            CBSE, ICSE, UP Board से लेकर IIT-JEE और NEET तक — गोरखपुर में सर्वश्रेष्ठ परिणाम के लिए प्रमाणित अध्ययन मॉडल
+            {isHindi
+              ? "CBSE, ICSE, UP Board से लेकर IIT-JEE और NEET तक — गोरखपुर में सर्वश्रेष्ठ परिणाम के लिए प्रमाणित अध्ययन मॉडल"
+              : "From CBSE, ICSE, UP Boards to IIT-JEE and NEET (UG) — Gorakhpur's proven curriculum for academic excellence"
+            }
           </p>
         </div>
 

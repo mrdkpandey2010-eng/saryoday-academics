@@ -1,19 +1,25 @@
 import React from 'react';
 import { Award, BookOpen, GraduationCap, CheckCircle } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const FacultySection = ({ faculty }) => {
+  const { isHindi } = useLanguage();
+
   return (
     <section id="faculty" className="py-16 bg-white border-b border-slate-200 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            विद्वान शिक्षक मंडल (Our Expert Faculty)
+            {isHindi ? "विद्वान शिक्षक मंडल (Our Expert Faculty)" : "Distinguished Academic Faculty Team"}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            अनुभवी व समर्पित शिक्षकों का मार्गदर्शन
+            {isHindi ? "अनुभवी व समर्पित शिक्षकों का मार्गदर्शन" : "Mentorship by Top IITians & Senior Educators"}
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            हमारे शिक्षक केवल पढ़ाते नहीं, बल्कि हर विद्यार्थी की व्यक्तिगत कमजोरियों को पहचान कर उन्हें विषय का महारथी बनाते हैं
+            {isHindi
+              ? "हमारे शिक्षक केवल पढ़ाते नहीं, बल्कि हर विद्यार्थी की व्यक्तिगत कमजोरियों को पहचान कर उन्हें विषय का महारथी बनाते हैं"
+              : "Our educators provide deep conceptual foundation, personal doubt resolution, and proven methodologies for IIT-JEE & NEET"
+            }
           </p>
         </div>
 

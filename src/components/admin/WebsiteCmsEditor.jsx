@@ -4,7 +4,7 @@ import {
   Plus, Edit3, Trash2, CheckCircle2, Save, X, ExternalLink, Sparkles,
   Folder, Upload, Camera, Layers, Calendar
 } from 'lucide-react';
-import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
+import { InstagramIcon, FacebookIcon, YoutubeIcon, PlayStoreIcon } from '../common/SocialIcons';
 import { useData } from '../../context/DataContext';
 
 export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
@@ -111,7 +111,9 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
     email: instituteInfo?.email || 'saryodayacademics@gmail.com',
     timings: instituteInfo?.timings || '',
     instagram: instituteInfo?.instagram || 'https://www.instagram.com/saryoday_gorakhpur/',
-    facebook: instituteInfo?.facebook || 'https://www.facebook.com/saryoday/'
+    facebook: instituteInfo?.facebook || 'https://www.facebook.com/saryoday/',
+    youtube: instituteInfo?.youtube || 'https://www.youtube.com/@saryodayacademics',
+    playstore: instituteInfo?.playstore || 'https://play.google.com/store/apps/details?id=com.saryoday.academics'
   });
 
   // Director form state
@@ -209,9 +211,13 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
       phones: [contactState.phone1, contactState.phone2],
       whatsapp: contactState.whatsapp,
       email: contactState.email,
-      timings: contactState.timings
+      timings: contactState.timings,
+      instagram: contactState.instagram,
+      facebook: contactState.facebook,
+      youtube: contactState.youtube,
+      playstore: contactState.playstore
     });
-    showSuccess('संपर्क विवरण एवं पता सफलतापूर्वक अपडेट कर दिया गया!');
+    showSuccess('संपर्क विवरण एवं सोशल मीडिया लिंक (YouTube, Play Store) सफलतापूर्वक अपडेट हो गए!');
   };
 
   // DIRECTOR / ABOUT SUBMIT
@@ -914,6 +920,34 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
                   value={contactState.facebook}
                   onChange={(e) => setContactState({ ...contactState, facebook: e.target.value })}
                   placeholder="https://www.facebook.com/saryoday/"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <YoutubeIcon size={13} className="text-red-600" />
+                  <span>यूट्यूब चैनल लिंक (YouTube Channel URL)</span>
+                </label>
+                <input
+                  type="url"
+                  value={contactState.youtube || ''}
+                  onChange={(e) => setContactState({ ...contactState, youtube: e.target.value })}
+                  placeholder="https://www.youtube.com/@saryodayacademics"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <PlayStoreIcon size={13} className="text-emerald-700" />
+                  <span>गूगल प्ले स्टोर ऐप लिंक (Play Store App URL)</span>
+                </label>
+                <input
+                  type="url"
+                  value={contactState.playstore || ''}
+                  onChange={(e) => setContactState({ ...contactState, playstore: e.target.value })}
+                  placeholder="https://play.google.com/store/apps/details?id=com.saryoday.academics"
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
                 />
               </div>

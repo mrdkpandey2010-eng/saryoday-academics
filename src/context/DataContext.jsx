@@ -26,6 +26,7 @@ import {
   exportDatabaseToFile,
   importDatabaseFromFile
 } from '../services/cloudDatabase';
+import { validateEnglishOnly } from '../utils/validation';
 
 const DataContext = createContext(null);
 const STORAGE_KEY = 'SARYODAY_ACADEMICS_SECURE_V5';
@@ -471,6 +472,20 @@ export const DataProvider = ({ children }) => {
 
   // Student Actions (100% immune to automatic deletion)
   const addStudent = useCallback((studentData) => {
+    // English-only database validation guard
+    const checkName = validateEnglishOnly(studentData.name, 'Student Name');
+    if (!checkName.isValid) {
+      alert(checkName.message);
+      return null;
+    }
+    if (studentData.fatherName) {
+      const checkFather = validateEnglishOnly(studentData.fatherName, "Father's Name");
+      if (!checkFather.isValid) {
+        alert(checkFather.message);
+        return null;
+      }
+    }
+
     const rollNo = studentData.rollNo || `SA-${new Date().getFullYear()}-${String(data.students.length + 101).padStart(4, '0')}`;
     const totalFee = Number(studentData.totalFee || 0);
     const paidFee = Number(studentData.paidFee || 0);

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Trophy, Star, Quote, Award, Sparkles, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const ResultsToppersSection = ({ toppers, testimonials }) => {
+  const { isHindi } = useLanguage();
+
   return (
     <section id="toppers" className="py-16 bg-slate-900 text-white relative overflow-hidden scroll-mt-24">
       {/* Decorative background glows */}
@@ -13,13 +16,16 @@ export const ResultsToppersSection = ({ toppers, testimonials }) => {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 font-bold text-xs uppercase tracking-wider border border-amber-400/30">
             <Trophy size={14} className="text-amber-400" />
-            <span>हॉल ऑफ फेम (Hall of Fame)</span>
+            <span>{isHindi ? "हॉल ऑफ फेम (Hall of Fame)" : "Hall of Fame & Academic Ranks"}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mt-3">
-            हमारे गौरव, हमारे सितारे — सर्वोदय टॉपर्स
+            {isHindi ? "हमारे गौरव, हमारे सितारे — सर्वोदय टॉपर्स" : "Our Pride, Our Achievers — Saryoday Stars"}
           </h2>
           <p className="text-sm text-slate-300 mt-2">
-            कड़ी मेहनत, सटीक मार्गदर्शन और नियमित अभ्यास का परिणाम — गोरखपुर के होनहार विद्यार्थियों की सफलता की दास्तान
+            {isHindi
+              ? "कड़ी मेहनत, सटीक मार्गदर्शन और नियमित अभ्यास का परिणाम — गोरखपुर के होनहार विद्यार्थियों की सफलता की दास्तान"
+              : "Inspiring ranks in IIT-JEE, NEET & Board Exams achieved through relentless practice and focused mentoring"
+            }
           </p>
         </div>
 

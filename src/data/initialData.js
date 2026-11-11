@@ -21,7 +21,9 @@ export const initialInstituteInfo = {
   established: "2018",
   affiliations: "CBSE | ICSE | UP Board | IIT-JEE (Main & Adv) | NEET (UG)",
   instagram: "https://www.instagram.com/saryoday_gorakhpur/",
-  facebook: "https://www.facebook.com/saryoday/"
+  facebook: "https://www.facebook.com/saryoday/",
+  youtube: "https://www.youtube.com/@saryodayacademics",
+  playstore: "https://play.google.com/store/apps/details?id=com.saryoday.academics"
 };
 
 export const initialBanners = [

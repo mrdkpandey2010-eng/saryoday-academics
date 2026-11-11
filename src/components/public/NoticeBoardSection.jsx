@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Bell, Calendar, ChevronRight, AlertCircle, FileText, X } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const NoticeBoardSection = ({ notices }) => {
+  const { isHindi } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedNotice, setSelectedNotice] = useState(null);
 
   const categories = [
-    { id: 'all', label: 'सभी सूचनाएं (All)' },
-    { id: 'Exam', label: 'परीक्षा (Exams)' },
-    { id: 'Academic', label: 'शैक्षणिक (Academic)' },
-    { id: 'Meeting', label: 'बैठक / PTM' },
+    { id: 'all', label: isHindi ? 'सभी सूचनाएं (All)' : 'All Notices' },
+    { id: 'Exam', label: isHindi ? 'परीक्षा (Exams)' : 'Exams' },
+    { id: 'Academic', label: isHindi ? 'शैक्षणिक (Academic)' : 'Academic' },
+    { id: 'Meeting', label: isHindi ? 'बैठक / PTM' : 'PTM & Events' },
   ];
 
   const filteredNotices = activeCategory === 'all'
@@ -23,13 +25,16 @@ export const NoticeBoardSection = ({ notices }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-700 font-bold text-xs uppercase tracking-wider border border-orange-200 mb-2">
               <Bell size={14} className="text-orange-600 animate-bounce" />
-              <span>आधिकारिक सूचना पट्ट</span>
+              <span>{isHindi ? "आधिकारिक सूचना पट्ट" : "Official Announcements"}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-              नवीनतम सूचनाएं एवं घोषणाएं (Notice Board)
+              {isHindi ? "नवीनतम सूचनाएं एवं घोषणाएं (Notice Board)" : "Latest Notices & Academic Circulars"}
             </h2>
             <p className="text-sm text-slate-600 mt-1">
-              प्रवेश, परीक्षा कार्यक्रम, परिणाम एवं विशेष सत्रों से संबंधित सभी महत्वपूर्ण अपडेट्स
+              {isHindi
+                ? "प्रवेश, परीक्षा कार्यक्रम, परिणाम एवं विशेष सत्रों से संबंधित सभी महत्वपूर्ण अपडेट्स"
+                : "Important updates regarding admissions, scholarship tests, mock exam schedules and results"
+              }
             </p>
           </div>
 

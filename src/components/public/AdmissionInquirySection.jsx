@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle2, Printer, Award, Sparkles, Phone, HelpCircle, Key, Lock, UserCheck } from 'lucide-react';
+import { Send, CheckCircle2, Printer, Award, Sparkles, Phone, HelpCircle, Key, Lock, UserCheck, AlertCircle } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { validateEnglishOnly, validateIndianMobile } from '../../utils/validation';
 
 export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, instituteInfo }) => {
   const { students, addStudent } = useData();
@@ -10,23 +11,70 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
     fatherName: '',
     phone: '',
     email: '',
-    classSelected: 'कक्षा 12वीं (Class 12th)',
+    classSelected: 'Class 12th (PCM)',
     course: preSelectedCourse ? preSelectedCourse.title : 'IIT-JEE (Main + Advanced)',
-    area: 'शाहपुर, गोरखपुर',
+    area: 'Shahpur, Gorakhpur',
     message: ''
   });
 
   const [submittedSlip, setSubmittedSlip] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationError, setValidationError] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // Real-time English only guard
+    if (name === 'name' || name === 'fatherName' || name === 'area' || name === 'message') {
+      const check = validateEnglishOnly(value, name);
+      if (!check.isValid) {
+        setValidationError(check.message);
+      } else {
+        setValidationError('');
+      }
+    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setValidationError('');
+
     if (!formData.name || !formData.phone) {
-      alert('कृपया अपना नाम और मोबाइल नंबर अवश्य दर्ज करें।');
+      setValidationError('Please provide student name and mobile phone number.');
+      return;
+    }
+
+    // Strict English Only Validation for Database
+    const nameCheck = validateEnglishOnly(formData.name, 'Student Name');
+    if (!nameCheck.isValid) {
+      setValidationError(nameCheck.message);
+      return;
+    }
+    if (formData.fatherName) {
+      const fatherCheck = validateEnglishOnly(formData.fatherName, "Father's Name");
+      if (!fatherCheck.isValid) {
+        setValidationError(fatherCheck.message);
+        return;
+      }
+    }
+    if (formData.area) {
+      const areaCheck = validateEnglishOnly(formData.area, 'Address / Area');
+      if (!areaCheck.isValid) {
+        setValidationError(areaCheck.message);
+        return;
+      }
+    }
+    if (formData.message) {
+      const msgCheck = validateEnglishOnly(formData.message, 'Message / Query');
+      if (!msgCheck.isValid) {
+        setValidationError(msgCheck.message);
+        return;
+      }
+    }
+
+    const phoneValidation = validateIndianMobile(formData.phone);
+    if (!phoneValidation.isValid) {
+      setValidationError(phoneValidation.message);
       return;
     }
 
@@ -140,10 +188,17 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {validationError && (
+                    <div className="p-3 bg-red-50 border border-red-300 rounded-xl text-xs text-red-700 font-semibold flex items-center gap-2 animate-shake">
+                      <AlertCircle size={16} className="shrink-0 text-red-600" />
+                      <span>{validationError}</span>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        विद्यार्थी का नाम (Student Name)*
+                        Student Full Name * <span className="text-[10px] text-orange-600 font-normal">(English Only)</span>
                       </label>
                       <input
                         type="text"
@@ -151,22 +206,22 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="उदा. राहुल वर्मा"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        placeholder="e.g. Rahul Sharma"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent font-medium"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        पिता/अभिभावक का नाम (Father's Name)
+                        Father's Name <span className="text-[10px] text-orange-600 font-normal">(English Only)</span>
                       </label>
                       <input
                         type="text"
                         name="fatherName"
                         value={formData.fatherName}
                         onChange={handleChange}
-                        placeholder="उदा. श्री विनोद वर्मा"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        placeholder="e.g. Mr. Vinod Sharma"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent font-medium"
                       />
                     </div>
                   </div>

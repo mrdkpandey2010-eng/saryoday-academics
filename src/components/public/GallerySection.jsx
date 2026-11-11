@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Image, X, ZoomIn, Eye, Folder, ChevronRight, ArrowLeft, ChevronLeft, Calendar, Layers } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const GallerySection = ({ gallery = [], albums = [] }) => {
+  const { isHindi } = useLanguage();
   const [viewMode, setViewMode] = useState('albums'); // 'albums' | 'all-photos'
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [filter, setFilter] = useState('all');
@@ -112,13 +114,15 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            चित्र दीर्घा एवं एलबम (Photo Gallery & Albums)
+            {isHindi ? "चित्र दीर्घा एवं एलबम" : "Photo Gallery & Campus Albums"}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            सर्वोदय एकेडेमिक्स के यादगार पल एवं गतिविधियां
+            {isHindi ? "सर्वोदय एकेडेमिक्स के यादगार पल एवं गतिविधियां" : "Memorable Moments & Academic Life at Saryoday"}
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            मेधावी छात्र-छात्रा सम्मान समारोह, आधुनिक क्लासरूम शिक्षण, टेस्ट सीरीज और अनुशासित कैंपस के विभिन्न एलबम
+            {isHindi
+              ? "मेधावी छात्र-छात्रा सम्मान समारोह, आधुनिक क्लासरूम शिक्षण, टेस्ट सीरीज और अनुशासित कैंपस के विभिन्न एलबम"
+              : "Toppers felicitation ceremonies, modern classroom sessions, test series workshops, and student life across campus albums"}
           </p>
         </div>
 
@@ -136,7 +140,7 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                 }`}
               >
                 <Folder size={15} />
-                <span>एलबम अनुसार (Albums View)</span>
+                <span>{isHindi ? "एलबम अनुसार" : "Albums View"}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${viewMode === 'albums' ? 'bg-orange-800' : 'bg-slate-200 text-slate-700'}`}>
                   {albums.length}
                 </span>
@@ -151,7 +155,7 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                 }`}
               >
                 <Layers size={15} />
-                <span>सभी तस्वीरें (All Photos)</span>
+                <span>{isHindi ? "सभी तस्वीरें" : "All Photos"}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${viewMode === 'all-photos' ? 'bg-orange-800' : 'bg-slate-200 text-slate-700'}`}>
                   {allPhotos.length}
                 </span>
