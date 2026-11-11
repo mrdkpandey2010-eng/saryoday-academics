@@ -270,37 +270,45 @@ export const TeacherDashboard = ({ onBackToPublic, onSwitchToAdmin }) => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {batchStudents.map((stu) => {
-                    const currentStatus = statusMap[stu.rollNo] || 'Present';
-                    return (
-                      <tr key={stu.id} className="hover:bg-slate-50">
-                        <td className="py-3 px-4 font-bold text-blue-600">{stu.rollNo}</td>
-                        <td className="py-3 px-4 font-bold text-slate-900">{stu.name}</td>
-                        <td className="py-3 px-4 text-center">
-                          <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-white">
-                            {['Present', 'Absent', 'Leave'].map((st) => (
-                              <button
-                                key={st}
-                                type="button"
-                                onClick={() => setStatusMap({ ...statusMap, [stu.rollNo]: st })}
-                                className={`px-3 py-1 rounded-md text-xs font-bold transition ${
-                                  currentStatus === st
-                                    ? st === 'Present'
-                                      ? 'bg-emerald-600 text-white'
-                                      : st === 'Absent'
-                                      ? 'bg-red-600 text-white'
-                                      : 'bg-amber-500 text-white'
-                                    : 'text-slate-600 hover:bg-slate-100'
-                                }`}
-                              >
-                                {st === 'Present' ? 'उपस्थित (P)' : st === 'Absent' ? 'अनुपस्थित (A)' : 'अवकाश (L)'}
-                              </button>
-                            ))}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {batchStudents.length === 0 ? (
+                    <tr>
+                      <td colSpan="3" className="py-8 text-center text-slate-500 font-medium">
+                        इस बैच में अभी कोई विद्यार्थी नामांकित नहीं है। एडमिन द्वारा नया प्रवेश होने पर यहाँ सूची दिखाई देगी।
+                      </td>
+                    </tr>
+                  ) : (
+                    batchStudents.map((stu) => {
+                      const currentStatus = statusMap[stu.rollNo] || 'Present';
+                      return (
+                        <tr key={stu.id} className="hover:bg-slate-50">
+                          <td className="py-3 px-4 font-bold text-blue-600">{stu.rollNo}</td>
+                          <td className="py-3 px-4 font-bold text-slate-900">{stu.name}</td>
+                          <td className="py-3 px-4 text-center">
+                            <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-white">
+                              {['Present', 'Absent', 'Leave'].map((st) => (
+                                <button
+                                  key={st}
+                                  type="button"
+                                  onClick={() => setStatusMap({ ...statusMap, [stu.rollNo]: st })}
+                                  className={`px-3 py-1 rounded-md text-xs font-bold transition ${
+                                    currentStatus === st
+                                      ? st === 'Present'
+                                        ? 'bg-emerald-600 text-white'
+                                        : st === 'Absent'
+                                        ? 'bg-red-600 text-white'
+                                        : 'bg-amber-500 text-white'
+                                      : 'text-slate-600 hover:bg-slate-100'
+                                  }`}
+                                >
+                                  {st === 'Present' ? 'उपस्थित (P)' : st === 'Absent' ? 'अनुपस्थित (A)' : 'अवकाश (L)'}
+                                </button>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -439,18 +447,24 @@ export const TeacherDashboard = ({ onBackToPublic, onSwitchToAdmin }) => {
               </select>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {batchStudents.map((stu) => (
-                <div key={stu.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
-                  <img src={stu.avatar} alt={stu.name} className="w-12 h-12 rounded-full object-cover border" />
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm">{stu.name}</h4>
-                    <p className="text-xs text-blue-600 font-semibold">{stu.rollNo}</p>
-                    <p className="text-xs text-slate-500 mt-1">उपस्थिति: <span className="font-bold text-emerald-600">{stu.attendanceRate}%</span></p>
+            {batchStudents.length === 0 ? (
+              <div className="p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-slate-500 font-medium">
+                इस बैच में अभी कोई विद्यार्थी नामांकित नहीं है।
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {batchStudents.map((stu) => (
+                  <div key={stu.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+                    <img src={stu.avatar} alt={stu.name} className="w-12 h-12 rounded-full object-cover border" />
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm">{stu.name}</h4>
+                      <p className="text-xs text-blue-600 font-semibold">{stu.rollNo}</p>
+                      <p className="text-xs text-slate-500 mt-1">उपस्थिति: <span className="font-bold text-emerald-600">{stu.attendanceRate}%</span></p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

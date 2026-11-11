@@ -132,11 +132,8 @@ export function App() {
         </div>
       )}
 
-      {/* 1. Topmost Notice Ticker & Header */}
-      <Header
-        onOpenLogin={() => handleOpenLogin('admin')}
-        onOpenAdmission={scrollToAdmission}
-      />
+      {/* 1. Topmost Notice Ticker */}
+      <Header />
 
       {/* 2. Main Sticky Navbar */}
       <Navbar

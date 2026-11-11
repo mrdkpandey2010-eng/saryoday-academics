@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShieldAlert, User, Lock, ArrowRight, ShieldCheck, Key } from 'lucide-react';
+import { X, ShieldAlert, User, Lock, ArrowRight, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 
@@ -10,6 +10,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
   const [activeRole, setActiveRole] = useState(initialRole);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,20 +24,8 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
   const handleRoleChange = (roleId) => {
     setActiveRole(roleId);
     setError('');
-    // Helpful initial default credentials
-    if (roleId === 'admin') {
-      setIdentifier('admin@saryoday.com');
-      setPassword('admin123');
-    } else if (roleId === 'teacher') {
-      setIdentifier('teacher@saryoday.com');
-      setPassword('teacher123');
-    } else if (roleId === 'student') {
-      setIdentifier('SA-2025-0101');
-      setPassword('student123');
-    } else if (roleId === 'parent') {
-      setIdentifier('9450123456');
-      setPassword('parent123');
-    }
+    setIdentifier('');
+    setPassword('');
   };
 
   const handleFormSubmit = (e) => {
@@ -63,6 +52,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition"
+          aria-label="Close"
         >
           <X size={20} />
         </button>
@@ -97,7 +87,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                 key={r.id}
                 type="button"
                 onClick={() => handleRoleChange(r.id)}
-                className={`py-2 px-1 text-center rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 ${
+                className={`py-2 px-1 text-center rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
                   activeRole === r.id
                     ? 'bg-orange-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -113,8 +103,8 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
         {/* Form Body */}
         <div className="p-6 sm:p-7 space-y-4">
           {error && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 animate-shake">
-              <ShieldAlert size={16} className="shrink-0" />
+            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+              <ShieldAlert size={16} className="shrink-0 text-red-600" />
               <span>{error}</span>
             </div>
           )}
@@ -122,7 +112,11 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                {activeRole === 'student' ? 'रोल नंबर अथवा मोबाइल नंबर (Roll No / Mobile No)' : activeRole === 'parent' ? 'अभिभावक का मोबाइल नंबर' : 'ईमेल पता (Email Address)'}
+                {activeRole === 'student'
+                  ? 'रोल नंबर अथवा मोबाइल नंबर (Roll No / Mobile No)'
+                  : activeRole === 'parent'
+                  ? 'अभिभावक का पंजीकृत मोबाइल नंबर'
+                  : 'ईमेल पता (Email Address)'}
               </label>
               <div className="relative">
                 <input
@@ -136,9 +130,10 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                       : activeRole === 'teacher'
                       ? 'teacher@saryoday.com'
                       : activeRole === 'student'
-                      ? 'SA-2025-0101 या आपका मोबाइल नंबर'
-                      : '9450123456 (अभिभावक मोबाइल नंबर)'
+                      ? 'रोल नंबर अथवा मोबाइल नंबर दर्ज करें'
+                      : '10 अंकों का मोबाइल नंबर दर्ज करें'
                   }
+                  autoComplete="username"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
                 />
                 <User size={16} className="absolute right-3.5 top-3 text-slate-400 pointer-events-none" />
@@ -150,20 +145,29 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                 <label className="text-xs font-bold text-slate-700">
                   पासवर्ड (Password)
                 </label>
-                <span className="text-[11px] text-orange-600 font-semibold">
-                  {activeRole === 'student' || activeRole === 'parent' ? '(डिफ़ॉल्ट: आपका मोबाइल नंबर)' : ''}
+                <span className="text-[11px] text-slate-500 font-medium">
+                  {activeRole === 'student' || activeRole === 'parent' ? '(पंजीकृत 10 अंकों का मोबाइल नंबर)' : ''}
                 </span>
               </div>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
+                  autoComplete="current-password"
+                  className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
                 />
-                <Lock size={16} className="absolute right-3.5 top-3 text-slate-400 pointer-events-none" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition"
+                  tabIndex="-1"
+                  aria-label={showPassword ? 'पासवर्ड छुपाएं' : 'पासवर्ड देखें'}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -183,21 +187,11 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
             </button>
           </form>
 
-          {/* Password Helper Box */}
-          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-2">
-            <div className="flex items-center justify-between text-slate-700 font-bold">
-              <span className="flex items-center gap-1.5 text-orange-600">
-                <Key size={14} /> पासवर्ड सहायता निर्देश (Login Credentials Guide)
-              </span>
-            </div>
-            <div className="text-[11px] text-slate-600 space-y-1">
-              <p>• <strong>एडमिन (Director):</strong> <code>admin@saryoday.com</code> / पासवर्ड: <code>admin123</code></p>
-              <p>• <strong>अध्यापक (Teacher):</strong> <code>teacher@saryoday.com</code> / पासवर्ड: <code>teacher123</code></p>
-              <p>• <strong>विद्यार्थी (Student):</strong> रोल नंबर या मोबाइल / पासवर्ड: <strong>आपका मोबाइल नंबर</strong> अथवा <code>student123</code></p>
-              <p>• <strong>अभिभावक (Parent):</strong> मोबाइल नंबर / पासवर्ड: <strong>आपका मोबाइल नंबर</strong> अथवा <code>parent123</code></p>
-              <p className="text-orange-700 font-semibold pt-1">
-                * नए प्रवेश के बाद छात्र व अभिभावक का लॉगिन पासवर्ड उनका पंजीकृत 10 अंकों का मोबाइल नंबर होता है।
-              </p>
+          {/* Secure Portal Info Notice */}
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-[11px] text-slate-600 flex items-center gap-2.5">
+            <ShieldCheck size={18} className="text-emerald-600 shrink-0" />
+            <div className="leading-relaxed">
+              <span><strong>सुरक्षा प्रमाणीकरण:</strong> यह पोर्टल SSL 256-बिट सुरक्षित है। अनधिकृत प्रवेश का प्रयास साइबर सुरक्षा नियमों के अंतर्गत प्रतिबंधित है।</span>
             </div>
           </div>
         </div>

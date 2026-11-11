@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, MapPin, Phone, Mail, Clock, Heart, Shield, LogIn, MessageSquare } from 'lucide-react';
+import { GraduationCap, MapPin, Phone, Mail, Clock, Heart, Shield, LogIn, MessageSquare, Users, Eye, Activity } from 'lucide-react';
 import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
 
 export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
@@ -7,7 +7,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Col 1: Institute Info */}
+          {/* Col 1: Institute Info & Visitor Counter */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <img
@@ -60,9 +60,31 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               </div>
             </div>
 
-            <div className="pt-1 text-[11px] text-slate-500 space-y-1">
-              <p>संबद्धता: CBSE | ICSE | UP Board</p>
-              <p>फाउंडेशन: कक्षा 6वीं से 12वीं तक</p>
+            {/* Website Live Visitor Counter Widget */}
+            <div className="pt-2">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 shadow-inner space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-300">
+                  <span className="flex items-center gap-1.5 text-orange-400">
+                    <Eye size={13} />
+                    <span>वेबसाइट विजिटर काउन्टर</span>
+                  </span>
+                  <span className="flex items-center gap-1 text-emerald-400 text-[10px]">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>लाइव</span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img
+                    src="https://komarev.com/ghpvc/?username=saryoday-academics-gorakhpur&label=%E0%A4%95%E0%A5%81%E0%A4%B2+%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A4%BF%E0%A4%9F%E0%A4%B0+(Visitors)&color=ea580c&style=flat-square"
+                    alt="Saryoday Academics Visitor Counter"
+                    className="rounded shadow-sm max-w-full"
+                    loading="lazy"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-500">
+                  प्रत्येक आगंतुक की वास्तविक समय गणना (Real-time Cloud Tracked)
+                </p>
+              </div>
             </div>
           </div>
 
@@ -93,7 +115,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <li>
                 <button
                   onClick={() => onOpenLogin('admin')}
-                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left"
+                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
                   <span>कोचिंग संचालक (Admin Panel)</span>
@@ -102,7 +124,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <li>
                 <button
                   onClick={() => onOpenLogin('teacher')}
-                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left"
+                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                   <span>अध्यापक पोर्टल (Teacher Login)</span>
@@ -111,7 +133,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <li>
                 <button
                   onClick={() => onOpenLogin('student')}
-                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left"
+                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   <span>छात्र/छात्रा पोर्टल (Student Login)</span>
@@ -120,7 +142,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <li>
                 <button
                   onClick={() => onOpenLogin('parent')}
-                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left"
+                  className="hover:text-orange-400 flex items-center gap-1.5 transition text-left cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
                   <span>अभिभावक पोर्टल (Parent Login)</span>
@@ -129,7 +151,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <li className="pt-2">
                 <button
                   onClick={onOpenAdmission}
-                  className="px-3 py-1.5 bg-orange-600/30 hover:bg-orange-600 border border-orange-500/50 text-orange-300 hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1"
+                  className="px-3 py-1.5 bg-orange-600/30 hover:bg-orange-600 border border-orange-500/50 text-orange-300 hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                 >
                   <span>ऑनलाइन प्रवेश फॉर्म</span>
                 </button>
@@ -170,9 +192,9 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
           <p>
             © {new Date().getFullYear()} Saryoday Academics, Gorakhpur. सर्वाधिकार सुरक्षित।
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="text-emerald-400 font-semibold flex items-center gap-1">
-              <Shield size={12} /> GitHub Pages & Cloud Ready
+              <Shield size={12} /> SSL 256-Bit Encrypted & Cloud Secured
             </span>
             <span>•</span>
             <span className="text-slate-400">Gorakhpur Premier Education</span>

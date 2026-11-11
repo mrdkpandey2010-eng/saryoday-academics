@@ -23,10 +23,10 @@ export const ParentDashboard = ({ onBackToPublic }) => {
   const [selectedReceipt, setSelectedReceipt] = useState(null);
   const [selectedReportCard, setSelectedReportCard] = useState(null);
 
-  // Match parent's child (defaulting to Rahul Verma or matched rollNo)
+  // Match parent's child (from registered students)
   const child = students.find(
-    s => s.rollNo === currentUser?.childRollNo || s.fatherName?.includes(currentUser?.name) || s.parentPhone === currentUser?.phone
-  ) || students[0];
+    s => s.rollNo === currentUser?.childRollNo || (currentUser?.name && s.fatherName?.includes(currentUser.name)) || s.parentPhone === currentUser?.phone
+  ) || currentUser;
 
   // Child's fee transactions
   const childTransactions = feeTransactions.filter(
@@ -67,11 +67,11 @@ export const ParentDashboard = ({ onBackToPublic }) => {
                   अभिभावक पोर्टल (Parent Portal)
                 </h1>
                 <span className="text-[10px] bg-purple-500/30 text-purple-300 font-bold px-2 py-0.5 rounded-full border border-purple-500/40">
-                  {currentUser?.name || "श्री विनोद वर्मा"}
+                  {currentUser?.name || "पंजीकृत अभिभावक"}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                विद्यार्थी: {child?.name} ({child?.rollNo}) | सर्वोदय एकेडेमिक्स
+                विद्यार्थी: {child?.name || "विद्यार्थी"} {child?.rollNo ? `(${child.rollNo})` : ''} | सर्वोदय एकेडेमिक्स
               </p>
             </div>
           </div>
@@ -101,16 +101,16 @@ export const ParentDashboard = ({ onBackToPublic }) => {
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <img
               src={child?.avatar || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80"}
-              alt={child?.name}
+              alt={child?.name || 'Student'}
               className="w-20 h-20 rounded-2xl object-cover border-2 border-purple-400 shadow-md"
             />
             <div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-purple-400 bg-purple-900/60 px-2.5 py-0.5 rounded-full border border-purple-700">
                 आपके सुपुत्र / सुपुत्री की प्रगति रिपोर्ट
               </span>
-              <h2 className="text-2xl font-black text-white mt-1">{child?.name}</h2>
+              <h2 className="text-2xl font-black text-white mt-1">{child?.name || "पंजीकृत विद्यार्थी"}</h2>
               <p className="text-xs text-slate-300 mt-0.5">
-                कक्षा व बैच: <span className="font-bold text-amber-400">{child?.batch}</span> • रोल नंबर: {child?.rollNo}
+                कक्षा व बैच: <span className="font-bold text-amber-400">{child?.batch || "कक्षा 12वीं IIT-JEE"}</span> • रोल नंबर: {child?.rollNo || "पंजीकरण प्रक्रियाधीन"}
               </p>
               <p className="text-xs text-slate-400 mt-0.5">
                 शाहपुर परिसर, गोरखपुर | मेंटर: Er. R.K. Mishra
@@ -127,7 +127,7 @@ export const ParentDashboard = ({ onBackToPublic }) => {
               <span>संस्थान निदेशक से बात करें</span>
             </a>
             <a
-              href="https://wa.me/918400100814?text=नमस्ते%20सर्वोदय%20एकेडेमिक्स,%20मैं%20राहुल%20वर्मा%20का%20अभिभावक%20बात%20कर%20रहा%20हूँ।"
+              href={`https://wa.me/918400100814?text=${encodeURIComponent(`नमस्ते सर्वोदय एकेडेमिक्स, मैं ${child?.name || 'छात्र'} का अभिभावक बात कर रहा हूँ।`)}`}
               target="_blank"
               rel="noreferrer"
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition shadow flex items-center gap-1.5"
