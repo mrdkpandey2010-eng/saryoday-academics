@@ -6,6 +6,7 @@ import {
   initialCourses,
   initialFaculty,
   initialToppers,
+  initialAlbums,
   initialGallery,
   initialTestimonials,
   initialStudents,
@@ -19,15 +20,45 @@ import {
 
 const DataContext = createContext(null);
 
-const STORAGE_KEY = 'SARYODAY_ACADEMICS_DB_V1';
+const STORAGE_KEY = 'SARYODAY_ACADEMICS_DB_V2';
 
 export const DataProvider = ({ children }) => {
   // Load state from localStorage or initialize with seed data
   const [data, setData] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        return JSON.parse(saved);
+      let saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        // Upgrade from V1 if available
+        const oldV1 = localStorage.getItem('SARYODAY_ACADEMICS_DB_V1');
+        if (oldV1) {
+          const parsedV1 = JSON.parse(oldV1);
+          return {
+            ...parsedV1,
+            instituteInfo: {
+              ...initialInstituteInfo,
+              ...parsedV1.instituteInfo,
+              instagram: initialInstituteInfo.instagram,
+              facebook: initialInstituteInfo.facebook,
+              director: {
+                ...initialInstituteInfo.director,
+                ...(parsedV1.instituteInfo?.director || {})
+              }
+            },
+            albums: initialAlbums,
+            gallery: initialGallery
+          };
+        }
+      } else {
+        const parsed = JSON.parse(saved);
+        return {
+          ...parsed,
+          albums: parsed.albums || initialAlbums,
+          gallery: parsed.gallery || initialGallery,
+          instituteInfo: {
+            ...initialInstituteInfo,
+            ...parsed.instituteInfo
+          }
+        };
       }
     } catch (e) {
       console.error('Failed to load data from localStorage', e);
@@ -39,6 +70,8 @@ export const DataProvider = ({ children }) => {
       courses: initialCourses,
       faculty: initialFaculty,
       toppers: initialToppers,
+      albums: initialAlbums,
+      albums: initialAlbums,
       gallery: initialGallery,
       testimonials: initialTestimonials,
       students: initialStudents,
@@ -59,6 +92,22 @@ export const DataProvider = ({ children }) => {
       console.error('Failed to persist database to localStorage', e);
     }
   }, [data]);
+
+  // Real-time synchronization across browser tabs and windows
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === STORAGE_KEY && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          setData(parsed);
+        } catch (err) {
+          console.error('Error syncing storage across tabs', err);
+        }
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Institute Info & Director (About & Contact Sections)
   const updateInstituteInfo = (updatedFields) => {
@@ -214,6 +263,90 @@ export const DataProvider = ({ children }) => {
     setData(prev => ({
       ...prev,
       gallery: prev.gallery.filter(g => g.id !== id)
+    }));
+  };
+
+  // ALBUM ACTIONS (गैलरी में एलबम प्रबंधन)
+  const addAlbum = (albumData) => {
+    const newAlbum = {
+      ...albumData,
+      id: `alb-${Date.now()}`,
+      date: albumData.date || 'सत्र 2024-25',
+      category: albumData.category || 'सम्मान समारोह',
+      coverImage: albumData.coverImage || './galary.jpg',
+      photos: albumData.photos || []
+    };
+    setData(prev => ({
+      ...prev,
+      albums: [newAlbum, ...(prev.albums || [])]
+    }));
+    return newAlbum;
+  };
+
+  const updateAlbum = (id, updatedFields) => {
+    setData(prev => ({
+      ...prev,
+      albums: (prev.albums || []).map(alb => alb.id === id ? { ...alb, ...updatedFields } : alb)
+    }));
+  };
+
+  const deleteAlbum = (id) => {
+    setData(prev => ({
+      ...prev,
+      albums: (prev.albums || []).filter(alb => alb.id !== id)
+    }));
+  };
+
+  const addPhotoToAlbum = (albumId, photoData) => {
+    const newPhoto = {
+      ...photoData,
+      id: `p-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      url: photoData.url || './galary.jpg',
+      title: photoData.title || 'सर्वोदय फोटो',
+      caption: photoData.caption || ''
+    };
+    setData(prev => ({
+      ...prev,
+      albums: (prev.albums || []).map(alb => {
+        if (alb.id === albumId) {
+          const currentPhotos = alb.photos || [];
+          return {
+            ...alb,
+            photos: [...currentPhotos, newPhoto],
+            // If album has no cover image or default, use this photo
+            coverImage: alb.coverImage || newPhoto.url
+          };
+        }
+        return alb;
+      }),
+      // Also sync to flat gallery
+      gallery: [{ id: newPhoto.id, title: newPhoto.title, category: 'Album Photo', image: newPhoto.url }, ...(prev.gallery || [])]
+    }));
+    return newPhoto;
+  };
+
+  const deletePhotoFromAlbum = (albumId, photoId) => {
+    setData(prev => ({
+      ...prev,
+      albums: (prev.albums || []).map(alb => {
+        if (alb.id === albumId) {
+          const remainingPhotos = (alb.photos || []).filter(p => p.id !== photoId);
+          return {
+            ...alb,
+            photos: remainingPhotos,
+            coverImage: alb.coverImage === photoId ? (remainingPhotos[0]?.url || './galary.jpg') : alb.coverImage
+          };
+        }
+        return alb;
+      }),
+      gallery: (prev.gallery || []).filter(g => g.id !== photoId)
+    }));
+  };
+
+  const setAlbumCover = (albumId, photoUrl) => {
+    setData(prev => ({
+      ...prev,
+      albums: (prev.albums || []).map(alb => alb.id === albumId ? { ...alb, coverImage: photoUrl } : alb)
     }));
   };
 
@@ -455,6 +588,7 @@ export const DataProvider = ({ children }) => {
       courses: initialCourses,
       faculty: initialFaculty,
       toppers: initialToppers,
+      albums: initialAlbums,
       gallery: initialGallery,
       testimonials: initialTestimonials,
       students: initialStudents,
@@ -515,6 +649,12 @@ export const DataProvider = ({ children }) => {
         deleteTopper,
         addGalleryItem,
         deleteGalleryItem,
+        addAlbum,
+        updateAlbum,
+        deleteAlbum,
+        addPhotoToAlbum,
+        deletePhotoFromAlbum,
+        setAlbumCover,
         addStudent,
         updateStudent,
         deleteStudent,

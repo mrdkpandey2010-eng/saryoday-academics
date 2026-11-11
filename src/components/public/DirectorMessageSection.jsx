@@ -14,7 +14,7 @@ export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
 
               <div className="relative bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                 <img
-                  src={director?.photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"}
+                  src={director?.photo || "./director-pic.jpg"}
                   alt={director?.name || "Er. R.K. Mishra"}
                   className="w-full h-80 object-cover object-top"
                 />

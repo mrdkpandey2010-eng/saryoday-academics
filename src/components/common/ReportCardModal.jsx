@@ -21,12 +21,21 @@ export const ReportCardModal = ({ student, result, instituteInfo, onClose }) => 
         <div className="printable-area border-2 border-slate-900 rounded-xl p-6 bg-white relative">
           {/* Header */}
           <div className="border-b-2 border-orange-500 pb-4 text-center">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-              {instituteInfo?.name || "SARYODAY ACADEMICS"}
-            </h2>
-            <p className="text-xs font-bold text-orange-600">
-              {instituteInfo?.hindiName || "सर्वोदय एकेडेमिक्स"} • Gorakhpur (U.P.)
-            </p>
+            <div className="flex items-center justify-center gap-3 mb-1">
+              <img
+                src="./logo.jpg"
+                alt="Logo"
+                className="w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-slate-300 p-0.5"
+              />
+              <div className="text-left sm:text-center">
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+                  {instituteInfo?.name || "SARYODAY ACADEMICS"}
+                </h2>
+                <p className="text-xs font-bold text-orange-600">
+                  {instituteInfo?.hindiName || "सर्वोदय एकेडेमिक्स"} • Gorakhpur (U.P.)
+                </p>
+              </div>
+            </div>
             <div className="inline-block mt-2 px-4 py-0.5 bg-slate-900 text-white text-xs font-bold rounded-full uppercase tracking-wider">
               Student Academic Performance Report (प्रगति पत्र)
             </div>

@@ -21,12 +21,13 @@ export const Navbar = ({ onOpenLogin, onOpenAdmission }) => {
         <div className="flex items-center justify-between h-20">
           {/* Logo & Branding */}
           <a href="#home" className="flex items-center gap-3 group">
-            {/* Custom Sunrise Emblem Logo */}
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-orange-600 via-amber-500 to-yellow-400 p-0.5 shadow-md shadow-orange-500/20 group-hover:scale-105 transition">
-              <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center relative overflow-hidden">
-                <div className="absolute -bottom-2 w-8 h-8 rounded-full bg-orange-500/30 blur-xs"></div>
-                <GraduationCap className="text-amber-400 w-7 h-7 relative z-10" />
-              </div>
+            {/* Saryoday Official Logo */}
+            <div className="relative group-hover:scale-105 transition shrink-0">
+              <img
+                src="./logo.jpg"
+                alt="Saryoday Academics Logo"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-contain bg-white shadow-md shadow-orange-500/20 border-2 border-orange-500/40 p-0.5"
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">

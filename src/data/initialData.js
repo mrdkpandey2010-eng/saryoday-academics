@@ -16,10 +16,12 @@ export const initialInstituteInfo = {
     qualification: "B.Tech (IIT BHU), 14+ Years Experience",
     role: "Director & Senior Physics Faculty",
     message: "सर्वोदय एकेडेमिक्स में हमारा लक्ष्य सिर्फ किताबी ज्ञान देना नहीं, बल्कि प्रत्येक छात्र के भीतर तार्किक सोच और विषय की गहरी समझ विकसित करना है। गोरखपुर के छात्रों को महानगरों जैसा गुणवत्तापूर्ण शिक्षण उनके अपने शहर में प्रदान करना ही हमारा संकल्प है।",
-    photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80"
+    photo: "./director-pic.jpg"
   },
   established: "2018",
-  affiliations: "CBSE | ICSE | UP Board | IIT-JEE (Main & Adv) | NEET (UG)"
+  affiliations: "CBSE | ICSE | UP Board | IIT-JEE (Main & Adv) | NEET (UG)",
+  instagram: "https://www.instagram.com/saryoday_gorakhpur/",
+  facebook: "https://www.facebook.com/saryoday/"
 };
 
 export const initialBanners = [
@@ -32,7 +34,7 @@ export const initialBanners = [
     ctaSecondary: "कोर्स विवरण देखें",
     bgGradient: "from-blue-900 via-indigo-900 to-slate-900",
     accentColor: "border-orange-500",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+    image: "./banner.jpg"
   },
   {
     id: 2,
@@ -50,7 +52,7 @@ export const initialBanners = [
     badge: "कक्षा 9वीं, 10वीं, 11वीं एवं 12वीं बोर्ड स्पेशल",
     title: "CBSE, ICSE एवं UP Board में 95%+ स्कोर की गारंटीड तैयारी",
     subtitle: "दैनिक अभ्यास पत्रक (DPP), साप्ताहिक टेस्ट सीरीज और विशेषज्ञ शिक्षकों द्वारा व्यक्तिगत डाउट निवारण",
-    ctaPrimary: "फ्री डेमो क्लास बुक करें",
+    ctaPrimary: "निःशुल्क ट्रायल क्लास बुक करें",
     ctaSecondary: "फैकल्टी टीम देखें",
     bgGradient: "from-emerald-950 via-teal-900 to-slate-900",
     accentColor: "border-emerald-400",
@@ -282,42 +284,120 @@ export const initialToppers = [
   }
 ];
 
+export const initialAlbums = [
+  {
+    id: "alb-felicitation",
+    title: "मेधावी छात्र-छात्रा सम्मान समारोह",
+    hindiTitle: "वार्षिक टॉपर सम्मान एवं पुरस्कार वितरण",
+    category: "सम्मान समारोह (Felicitation)",
+    date: "सत्र 2024-25",
+    description: "गोरखपुर के बोर्ड व प्रतियोगी परीक्षाओं (IIT-JEE / NEET) में उत्कृष्ट अंक प्राप्त करने वाले छात्र-छात्राओं का भव्य सम्मान समारोह।",
+    coverImage: "./galary.jpg",
+    photos: [
+      {
+        id: "p-fel-01",
+        url: "./galary.jpg",
+        title: "मुख्य मंच पर पुरस्कार वितरण समारोह",
+        caption: "निदेशक एवं वरिष्ठ शिक्षकों द्वारा मेडल व स्मृति चिन्ह प्रदान करते हुए"
+      },
+      {
+        id: "p-fel-02",
+        url: "./galary1.jpg",
+        title: "शिक्षकों संग मेधावी विद्यार्थियों का समूह",
+        caption: "सफलता का उत्सव मनाते सर्वोदय एकेडेमिक्स के सितारे"
+      },
+      {
+        id: "p-fel-03",
+        url: "./galary2.jpg",
+        title: "मंच सम्मान एवं छात्रों का उत्साहवर्धन",
+        caption: "कठिन परिश्रम और निरंतर अभ्यास से मिली यह शानदार उपलब्धि"
+      }
+    ]
+  },
+  {
+    id: "alb-classroom",
+    title: "कक्षा अध्यापन एवं संवादात्मक सत्र",
+    hindiTitle: "स्मार्ट क्लासरूम एवं व्यक्तिगत मार्गदर्शन",
+    category: "क्लासरूम (Classroom)",
+    date: "सत्र 2024-25",
+    description: "आधुनिक क्लासरूम, अनुभवी शिक्षकों द्वारा विषय का गहन विश्लेषण एवं विद्यार्थियों की सक्रिय सहभागिता।",
+    coverImage: "./galary3.jpg",
+    photos: [
+      {
+        id: "p-cls-01",
+        url: "./galary3.jpg",
+        title: "भौतिकी एवं गणित गहन क्लासरूम व्याख्यान",
+        caption: "कॉन्सेप्ट क्लीयरेंस और समस्या निवारण सत्र"
+      },
+      {
+        id: "p-cls-02",
+        url: "./galary4.jpg",
+        title: "विद्यार्थियों के साथ संकाय सदस्य एवं डाउट काउंटर",
+        caption: "कक्षा के बाद व्यक्तिगत डाउट समाधान"
+      }
+    ]
+  },
+  {
+    id: "alb-campus",
+    title: "सर्वोदय कैंपस एवं अध्ययन वातावरण",
+    hindiTitle: "अनुशासित एवं प्रेरणादायी परिवेश",
+    category: "कैंपस (Campus)",
+    date: "सत्र 2024-25",
+    description: "बी-कॉलोनी शाहपुर स्थित सर्वोदय एकेडेमिक्स का सुव्यवस्थित, शांत एवं प्रेरक शैक्षणिक परिवेश।",
+    coverImage: "./galary1.jpg",
+    photos: [
+      {
+        id: "p-cmp-01",
+        url: "./galary1.jpg",
+        title: "सर्वोदय एकेडेमिक्स शाहपुर कैंपस प्रांगण",
+        caption: "छात्रों के समग्र विकास हेतु उत्कृष्ट इंफ्रास्ट्रक्चर"
+      },
+      {
+        id: "p-cmp-02",
+        url: "./galary2.jpg",
+        title: "वार्षिक सम्मेलन एवं छात्र संवाद",
+        caption: "अनुशासन और सफलता की परंपरा"
+      },
+      {
+        id: "p-cmp-03",
+        url: "./galary4.jpg",
+        title: "अध्ययन एवं ग्रुप डिस्कशन",
+        caption: "सहपाठियों संग शैक्षणिक विचार-विमर्श"
+      }
+    ]
+  }
+];
+
 export const initialGallery = [
   {
     id: "gal-01",
-    title: "डिजिटल स्मार्ट क्लासरूम सत्र",
-    category: "Classroom",
-    image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80"
+    title: "मेधावी छात्र-छात्रा सम्मान समारोह",
+    category: "Felicitation",
+    image: "./galary.jpg"
   },
   {
     id: "gal-02",
-    title: "मेधावी छात्र-छात्रा सम्मान समारोह",
+    title: "शिक्षकों संग मेधावी विद्यार्थियों का समूह",
     category: "Felicitation",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
+    image: "./galary1.jpg"
   },
   {
     id: "gal-03",
-    title: "अभिभावक-शिक्षक बैठक (PTM) शाहपुर",
+    title: "स्मृति चिन्ह एवं मेडल वितरण",
     category: "Events",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80"
+    image: "./galary2.jpg"
   },
   {
     id: "gal-04",
-    title: "लाइब्रेरी एवं सेल्फ़-स्टडी रूम",
-    category: "Campus",
-    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80"
+    title: "डिजिटल स्मार्ट क्लासरूम सत्र",
+    category: "Classroom",
+    image: "./galary3.jpg"
   },
   {
     id: "gal-05",
-    title: "साप्ताहिक ओएमआर आधारित टेस्ट परीक्षा",
-    category: "Exam",
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "gal-06",
-    title: "व्यक्तिगत डाउट सॉल्विंग काउंटर",
-    category: "Classroom",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80"
+    title: "संकाय सदस्यों संग व्यक्तिगत डाउट सत्र",
+    category: "Campus",
+    image: "./galary4.jpg"
   }
 ];
 

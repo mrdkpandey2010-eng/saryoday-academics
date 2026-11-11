@@ -1,5 +1,6 @@
 import React from 'react';
-import { GraduationCap, MapPin, Phone, Mail, Clock, Heart, Shield, LogIn } from 'lucide-react';
+import { GraduationCap, MapPin, Phone, Mail, Clock, Heart, Shield, LogIn, MessageSquare } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
 
 export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
   return (
@@ -8,10 +9,12 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Col 1: Institute Info */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white font-black shadow-md">
-                <GraduationCap size={22} className="text-amber-300" />
-              </div>
+            <div className="flex items-center gap-3">
+              <img
+                src="./logo.jpg"
+                alt="Saryoday Academics Logo"
+                className="w-11 h-11 rounded-xl object-contain bg-white shadow-md border border-slate-700 p-0.5 shrink-0"
+              />
               <div>
                 <span className="text-lg font-black text-white tracking-tight">SARYODAY </span>
                 <span className="text-lg font-black text-orange-500 tracking-tight">ACADEMICS</span>
@@ -22,6 +25,40 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
             <p className="text-slate-400 text-xs leading-relaxed">
               गोरखपुर का अग्रणी कोचिंग संस्थान जो IIT-JEE, NEET, CBSE, ICSE एवं UP Board के विद्यार्थियों को गुणवत्तापूर्ण और परिणाम-उन्मुख शिक्षा प्रदान करता है।
             </p>
+
+            {/* Social Media Connect Buttons */}
+            <div className="pt-1">
+              <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">सोशल मीडिया पर जुड़ें:</p>
+              <div className="flex items-center gap-2">
+                <a
+                  href={instituteInfo?.instagram || "https://www.instagram.com/saryoday_gorakhpur/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white hover:opacity-90 transition shadow"
+                  title="Follow on Instagram"
+                >
+                  <InstagramIcon size={16} />
+                </a>
+                <a
+                  href={instituteInfo?.facebook || "https://www.facebook.com/saryoday/"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-8 h-8 rounded-lg bg-[#1877F2] flex items-center justify-center text-white hover:opacity-90 transition shadow"
+                  title="Follow on Facebook"
+                >
+                  <FacebookIcon size={16} />
+                </a>
+                <a
+                  href="https://wa.me/918400100814"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white hover:opacity-90 transition shadow"
+                  title="Chat on WhatsApp"
+                >
+                  <MessageSquare size={16} />
+                </a>
+              </div>
+            </div>
 
             <div className="pt-1 text-[11px] text-slate-500 space-y-1">
               <p>संबद्धता: CBSE | ICSE | UP Board</p>

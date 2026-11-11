@@ -28,9 +28,11 @@ export const IdCardModal = ({ student, instituteInfo, onClose }) => {
           {/* Header Banner */}
           <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white p-4 text-center relative">
             <div className="flex items-center justify-center gap-2 mb-1">
-              <div className="w-8 h-8 rounded-full bg-white text-orange-600 font-black text-sm flex items-center justify-center shadow">
-                SA
-              </div>
+              <img
+                src="./logo.jpg"
+                alt="Logo"
+                className="w-9 h-9 rounded-full object-cover bg-white p-0.5 shadow border border-white shrink-0"
+              />
               <div>
                 <h4 className="text-base font-black tracking-tight leading-tight">
                   {instituteInfo?.name || "SARYODAY ACADEMICS"}

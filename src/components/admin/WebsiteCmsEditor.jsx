@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import {
   Globe, Home, Info, BookOpen, Users, Trophy, Image, Bell, Phone,
-  Plus, Edit3, Trash2, CheckCircle2, Save, X, ExternalLink, Sparkles
+  Plus, Edit3, Trash2, CheckCircle2, Save, X, ExternalLink, Sparkles,
+  Folder, Upload, Camera, Layers, Calendar
 } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
 import { useData } from '../../context/DataContext';
 
 export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
@@ -12,6 +14,7 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
     courses, addCourse, updateCourse, deleteCourse,
     faculty, addFaculty, updateFaculty, deleteFaculty,
     toppers, addTopper, updateTopper, deleteTopper,
+    albums, addAlbum, updateAlbum, deleteAlbum, addPhotoToAlbum, deletePhotoFromAlbum, setAlbumCover,
     gallery, addGalleryItem, deleteGalleryItem,
     notices, addNotice, updateNotice, deleteNotice
   } = useData();
@@ -70,12 +73,33 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
     image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80'
   });
 
-  // Gallery Modal state
+  // Gallery & Albums State
+  const [gallerySubTab, setGallerySubTab] = useState('albums'); // 'albums' | 'photos'
   const [showGalleryModal, setShowGalleryModal] = useState(false);
   const [galleryForm, setGalleryForm] = useState({
     title: '',
     category: 'Classroom',
-    image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80'
+    image: './galary.jpg'
+  });
+
+  // Album Modal state
+  const [showAlbumModal, setShowAlbumModal] = useState(false);
+  const [editingAlbum, setEditingAlbum] = useState(null);
+  const [albumForm, setAlbumForm] = useState({
+    title: '',
+    category: 'सम्मान समारोह',
+    date: 'सत्र 2024-25',
+    description: '',
+    coverImage: './galary.jpg'
+  });
+
+  // Album Photos Manage Modal
+  const [activeAlbumForPhotos, setActiveAlbumForPhotos] = useState(null);
+  const [showAddPhotoToAlbumModal, setShowAddPhotoToAlbumModal] = useState(false);
+  const [newPhotoForm, setNewPhotoForm] = useState({
+    title: '',
+    caption: '',
+    url: './galary.jpg'
   });
 
   // Contact form state
@@ -85,7 +109,9 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
     phone2: instituteInfo?.phones?.[1] || '+91 84001 00813',
     whatsapp: instituteInfo?.whatsapp || '+918400100814',
     email: instituteInfo?.email || 'saryodayacademics@gmail.com',
-    timings: instituteInfo?.timings || ''
+    timings: instituteInfo?.timings || '',
+    instagram: instituteInfo?.instagram || 'https://www.instagram.com/saryoday_gorakhpur/',
+    facebook: instituteInfo?.facebook || 'https://www.facebook.com/saryoday/'
   });
 
   // Director form state
@@ -599,52 +625,189 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
         </div>
       )}
 
-      {/* PAGE 6: GALLERY EDITOR */}
+      {/* PAGE 6: GALLERY & ALBUMS MANAGER */}
       {activeTab === 'gallery' && (
         <div className="p-5 space-y-5">
+          {/* Top Header & Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900">फोटो गैलरी संपादन (Photo Gallery Manager)</h3>
-              <p className="text-xs text-slate-500">क्लासरूम, सम्मान समारोह और कैंपस की नई तस्वीरें जोड़ें</p>
+              <h3 className="text-base font-bold text-slate-900">चित्र दीर्घा एवं एलबम प्रबंधक (Gallery & Albums CMS)</h3>
+              <p className="text-xs text-slate-500">एलबम बनाएं, एक से अधिक फोटो अपलोड करें अथवा एकल तस्वीरें प्रबंधित करें</p>
             </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setAlbumForm({
+                    title: '',
+                    category: 'सम्मान समारोह',
+                    date: 'सत्र 2024-25',
+                    description: '',
+                    coverImage: './galary.jpg'
+                  });
+                  setEditingAlbum(null);
+                  setShowAlbumModal(true);
+                }}
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus size={15} /> नया एलबम बनाएं (Create Album)
+              </button>
+
+              <button
+                onClick={() => {
+                  setGalleryForm({
+                    title: '',
+                    category: 'Classroom',
+                    image: './galary.jpg'
+                  });
+                  setShowGalleryModal(true);
+                }}
+                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+              >
+                <Plus size={14} /> एकल फोटो
+              </button>
+            </div>
+          </div>
+
+          {/* Sub Navigation: Albums vs Standalone Photos */}
+          <div className="flex items-center gap-2">
             <button
-              onClick={() => {
-                setGalleryForm({
-                  title: '',
-                  category: 'Classroom',
-                  image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80'
-                });
-                setShowGalleryModal(true);
-              }}
-              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5"
+              onClick={() => setGallerySubTab('albums')}
+              className={`px-4 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                gallerySubTab === 'albums'
+                  ? 'bg-orange-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
             >
-              <Plus size={15} /> नई फोटो जोड़ें (Add Photo)
+              <Folder size={14} />
+              <span>एलबम सूची ({albums?.length || 0})</span>
+            </button>
+            <button
+              onClick={() => setGallerySubTab('photos')}
+              className={`px-4 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                gallerySubTab === 'photos'
+                  ? 'bg-orange-600 text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Layers size={14} />
+              <span>सभी एकल फोटो ({gallery?.length || 0})</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {gallery.map((g) => (
-              <div key={g.id} className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 group">
-                <img src={g.image} alt={g.title} className="w-full h-32 object-cover" />
-                <div className="p-2 bg-white text-xs">
-                  <span className="text-[10px] font-bold text-orange-600 block">{g.category}</span>
-                  <p className="font-semibold text-slate-800 truncate">{g.title}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    if (confirm(`क्या आप इस फोटो को हटाना चाहते हैं?`)) {
-                      deleteGalleryItem(g.id);
-                      showSuccess('फोटो हटाई गई!');
-                    }
-                  }}
-                  className="absolute top-2 right-2 p-1 bg-red-600/90 text-white rounded-md opacity-0 group-hover:opacity-100 transition"
-                  title="हटाएं"
+          {/* ALBUMS GRID */}
+          {gallerySubTab === 'albums' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {(albums || []).map((alb) => (
+                <div
+                  key={alb.id}
+                  className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between"
                 >
-                  <Trash2 size={13} />
-                </button>
-              </div>
-            ))}
-          </div>
+                  <div>
+                    {/* Album Cover & Badges */}
+                    <div className="relative aspect-16/10 bg-slate-900 overflow-hidden">
+                      <img
+                        src={alb.coverImage || alb.photos?.[0]?.url || './galary.jpg'}
+                        alt={alb.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2.5 left-2.5 bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        {alb.category}
+                      </div>
+                      <div className="absolute top-2.5 right-2.5 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                        📷 {alb.photos?.length || 0} फोटो
+                      </div>
+                      {alb.date && (
+                        <div className="absolute bottom-2 left-2.5 text-white/90 text-[11px] font-medium bg-black/50 px-2 py-0.5 rounded">
+                          {alb.date}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-4 space-y-1.5">
+                      <h4 className="text-sm font-black text-slate-900 leading-snug">
+                        {alb.title}
+                      </h4>
+                      {alb.description && (
+                        <p className="text-xs text-slate-500 line-clamp-2">
+                          {alb.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Album Action Buttons */}
+                  <div className="p-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <button
+                      onClick={() => setActiveAlbumForPhotos(alb)}
+                      className="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-xs"
+                    >
+                      <Camera size={13} />
+                      <span>फोटो प्रबंधित करें ({alb.photos?.length || 0})</span>
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          setEditingAlbum(alb);
+                          setAlbumForm({
+                            title: alb.title,
+                            category: alb.category,
+                            date: alb.date || 'सत्र 2024-25',
+                            description: alb.description || '',
+                            coverImage: alb.coverImage || './galary.jpg'
+                          });
+                          setShowAlbumModal(true);
+                        }}
+                        className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold"
+                        title="एलबम विवरण एडिट करें"
+                      >
+                        <Edit3 size={13} />
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (confirm(`क्या आप एलबम "${alb.title}" और इसकी सभी फोटो हटाना चाहते हैं?`)) {
+                            deleteAlbum(alb.id);
+                            showSuccess('एलबम सफलतापूर्वक हटाया गया!');
+                          }
+                        }}
+                        className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold"
+                        title="एलबम हटाएं"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* STANDALONE PHOTOS GRID */
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {(gallery || []).map((g) => (
+                <div key={g.id} className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 group">
+                  <img src={g.image} alt={g.title} className="w-full h-32 object-cover" />
+                  <div className="p-2 bg-white text-xs">
+                    <span className="text-[10px] font-bold text-orange-600 block">{g.category}</span>
+                    <p className="font-semibold text-slate-800 truncate">{g.title}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (confirm(`क्या आप इस फोटो को हटाना चाहते हैं?`)) {
+                        deleteGalleryItem(g.id);
+                        showSuccess('फोटो हटाई गई!');
+                      }
+                    }}
+                    className="absolute top-2 right-2 p-1 bg-red-600/90 text-white rounded-md opacity-0 group-hover:opacity-100 transition"
+                    title="हटाएं"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -718,6 +881,43 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
               onChange={(e) => setContactState({ ...contactState, timings: e.target.value })}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
             />
+          </div>
+
+          {/* Social Media Links (Instagram & Facebook) */}
+          <div className="p-4 bg-orange-50/60 border border-orange-200 rounded-xl space-y-3">
+            <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span>सोशल मीडिया प्रोफाइल्स (Social Media Links)</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <InstagramIcon size={13} className="text-pink-600" />
+                  <span>इंस्टाग्राम प्रोफाइल लिंक (Instagram URL)</span>
+                </label>
+                <input
+                  type="url"
+                  value={contactState.instagram}
+                  onChange={(e) => setContactState({ ...contactState, instagram: e.target.value })}
+                  placeholder="https://www.instagram.com/saryoday_gorakhpur/"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <FacebookIcon size={13} className="text-blue-600" />
+                  <span>फेसबुक पेज लिंक (Facebook Page URL)</span>
+                </label>
+                <input
+                  type="url"
+                  value={contactState.facebook}
+                  onChange={(e) => setContactState({ ...contactState, facebook: e.target.value })}
+                  placeholder="https://www.facebook.com/saryoday/"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                />
+              </div>
+            </div>
           </div>
 
           <button
@@ -1082,6 +1282,310 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
                   className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow"
                 >
                   सहेजें
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: CREATE / EDIT ALBUM */}
+      {showAlbumModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-7 relative max-h-[92vh] overflow-y-auto">
+            <button
+              onClick={() => {
+                setShowAlbumModal(false);
+                setEditingAlbum(null);
+              }}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+                <Folder size={18} />
+              </div>
+              <h3 className="text-lg font-black text-slate-900">
+                {editingAlbum ? 'एलबम संपादित करें (Edit Album)' : 'नया एलबम बनाएं (Create New Album)'}
+              </h3>
+            </div>
+
+            <form onSubmit={handleAlbumSubmit} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">एलबम शीर्षक (Album Title)*</label>
+                <input
+                  type="text"
+                  required
+                  value={albumForm.title}
+                  onChange={(e) => setAlbumForm({ ...albumForm, title: e.target.value })}
+                  placeholder="उदा. मेधावी छात्र-छात्रा सम्मान समारोह"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">श्रेणी (Category)</label>
+                  <select
+                    value={albumForm.category}
+                    onChange={(e) => setAlbumForm({ ...albumForm, category: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+                  >
+                    <option value="सम्मान समारोह">सम्मान समारोह (Felicitation)</option>
+                    <option value="क्लासरूम">क्लासरूम (Classroom)</option>
+                    <option value="कैंपस">कैंपस (Campus)</option>
+                    <option value="कार्यक्रम">कार्यक्रम व PTM</option>
+                    <option value="परीक्षा">टेस्ट व परीक्षा</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">वर्ष / सत्र (Session/Date)</label>
+                  <input
+                    type="text"
+                    value={albumForm.date}
+                    onChange={(e) => setAlbumForm({ ...albumForm, date: e.target.value })}
+                    placeholder="सत्र 2024-25"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">एलबम का संक्षिप्त विवरण (Description)</label>
+                <textarea
+                  rows={2}
+                  value={albumForm.description}
+                  onChange={(e) => setAlbumForm({ ...albumForm, description: e.target.value })}
+                  placeholder="इस एलबम में शामिल कार्यक्रम या तस्वीरों का विवरण लिखें..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">कवर फोटो (Cover Image URL या अपने कंप्यूटर से चुनें)</label>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    value={albumForm.coverImage}
+                    onChange={(e) => setAlbumForm({ ...albumForm, coverImage: e.target.value })}
+                    placeholder="./galary.jpg अथवा इमेज लिंक"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs"
+                  />
+                  <div className="flex items-center gap-2">
+                    <label className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold cursor-pointer flex items-center gap-1.5 border border-slate-300">
+                      <Upload size={13} />
+                      <span>कंप्यूटर से कवर फोटो चुनें</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAlbumCoverUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-200 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAlbumModal(false);
+                    setEditingAlbum(null);
+                  }}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold"
+                >
+                  रद्द करें
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold shadow-md cursor-pointer"
+                >
+                  {editingAlbum ? 'अपडेट करें' : 'एलबम बनाएं'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: MANAGE PHOTOS INSIDE AN ALBUM */}
+      {activeAlbumForPhotos && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full p-6 sm:p-7 relative max-h-[92vh] overflow-y-auto">
+            <button
+              onClick={() => setActiveAlbumForPhotos(null)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Album Photos Manager Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
+                  {activeAlbumForPhotos.category}
+                </span>
+                <h3 className="text-xl font-black text-slate-900 mt-1">
+                  {activeAlbumForPhotos.title}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  कुल तस्वीरें: {(activeAlbumForPhotos.photos || []).length} • नई तस्वीरें अपलोड करें या हटाएं
+                </p>
+              </div>
+
+              {/* Action Buttons: Add Photo & Multiple Files Upload */}
+              <div className="flex items-center gap-2">
+                <label className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5 cursor-pointer">
+                  <Upload size={14} />
+                  <span>कंप्यूटर से कई फोटो अपलोड करें</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleMultipleFilesToAlbum}
+                    className="hidden"
+                  />
+                </label>
+
+                <button
+                  onClick={() => setShowAddPhotoToAlbumModal(true)}
+                  className="px-3.5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={14} /> फोटो लिंक जोड़ें
+                </button>
+              </div>
+            </div>
+
+            {/* Photos Grid Inside Album */}
+            {activeAlbumForPhotos.photos && activeAlbumForPhotos.photos.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {activeAlbumForPhotos.photos.map((p, idx) => (
+                  <div
+                    key={p.id || idx}
+                    className="group relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 aspect-square flex flex-col justify-end"
+                  >
+                    <img src={p.url} alt={p.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition"></div>
+
+                    <div className="relative p-2.5 text-white z-10">
+                      <p className="text-xs font-bold truncate">{p.title || `फोटो #${idx + 1}`}</p>
+                      {p.caption && (
+                        <p className="text-[10px] text-slate-300 truncate">{p.caption}</p>
+                      )}
+                    </div>
+
+                    {/* Actions: Delete & Set Cover */}
+                    <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition z-20">
+                      <button
+                        onClick={() => {
+                          setAlbumCover(activeAlbumForPhotos.id, p.url);
+                          showSuccess('कवर फोटो सेट की गई!');
+                        }}
+                        className="p-1 bg-black/70 hover:bg-orange-600 text-white rounded text-[10px] font-bold"
+                        title="कवर फोटो बनाएं"
+                      >
+                        कवर
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (confirm('क्या आप इस फोटो को एलबम से हटाना चाहते हैं?')) {
+                            deletePhotoFromAlbum(activeAlbumForPhotos.id, p.id);
+                            setActiveAlbumForPhotos(prev => ({
+                              ...prev,
+                              photos: prev.photos.filter(item => item.id !== p.id)
+                            }));
+                            showSuccess('फोटो हटाई गई!');
+                          }
+                        }}
+                        className="p-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                        title="हटाएं"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                <Folder size={36} className="text-slate-400 mx-auto mb-2" />
+                <p className="text-sm font-bold text-slate-700">इस एलबम में अभी कोई फोटो नहीं है</p>
+                <p className="text-xs text-slate-500 mt-1">ऊपर दिए गए हरे बटन से अपने कंप्यूटर से तस्वीरें अपलोड करें</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: ADD PHOTO LINK TO ACTIVE ALBUM */}
+      {showAddPhotoToAlbumModal && activeAlbumForPhotos && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setShowAddPhotoToAlbumModal(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 className="text-base font-black text-slate-900 mb-3">
+              "{activeAlbumForPhotos.title}" में फोटो जोड़ें
+            </h3>
+
+            <form onSubmit={handleAddPhotoToAlbum} className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">फोटो शीर्षक (Title)</label>
+                <input
+                  type="text"
+                  required
+                  value={newPhotoForm.title}
+                  onChange={(e) => setNewPhotoForm({ ...newPhotoForm, title: e.target.value })}
+                  placeholder="उदा. सभागार में पुरस्कार वितरण"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">कैप्शन / संक्षिप्त विवरण</label>
+                <input
+                  type="text"
+                  value={newPhotoForm.caption}
+                  onChange={(e) => setNewPhotoForm({ ...newPhotoForm, caption: e.target.value })}
+                  placeholder="उदा. निदेशक द्वारा स्मृति चिन्ह प्रदान करते हुए"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">फोटो यूआरएल (Image URL या स्थानीय पाथ)*</label>
+                <input
+                  type="text"
+                  required
+                  value={newPhotoForm.url}
+                  onChange={(e) => setNewPhotoForm({ ...newPhotoForm, url: e.target.value })}
+                  placeholder="./galary1.jpg या https://..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddPhotoToAlbumModal(false)}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-bold"
+                >
+                  रद्द करें
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow"
+                >
+                  जोड़ें
                 </button>
               </div>
             </form>

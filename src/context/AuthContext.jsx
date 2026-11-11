@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
         }
       }
 
-      // Fallback for default seed demo student
+      // Fallback for default seed student
       if (cleanId === 'student@saryoday.com' && (cleanPass === 'student123' || cleanPass === '123456')) {
         const defaultStudent = initialUsers.find(u => u.role === 'student');
         setCurrentUser(defaultStudent);

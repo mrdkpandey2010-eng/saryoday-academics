@@ -27,7 +27,7 @@ import { WebsiteCmsEditor } from './components/admin/WebsiteCmsEditor';
 import { Edit3, Globe, Sparkles, X, Shield, ArrowLeft, LogOut } from 'lucide-react';
 
 export function App() {
-  const { currentUser, role, logout, quickDemoLogin } = useAuth();
+  const { currentUser, role, logout } = useAuth();
   const {
     instituteInfo,
     banners,
@@ -35,6 +35,7 @@ export function App() {
     courses,
     faculty,
     toppers,
+    albums,
     gallery,
     testimonials,
     submitInquiry
@@ -269,8 +270,8 @@ export function App() {
           </div>
         )}
 
-        {/* 10. Photo Gallery */}
-        <GallerySection gallery={gallery} />
+        {/* 10. Photo Gallery with Albums */}
+        <GallerySection gallery={gallery} albums={albums} />
 
         {/* 11. Interactive Admission & Scholarship Form */}
         <AdmissionInquirySection

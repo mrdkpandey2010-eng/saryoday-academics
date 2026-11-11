@@ -107,7 +107,7 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
-                  <span>2 दिन की निःशुल्क डेमो क्लासेज (Free Demo Classes)</span>
+                  <span>2 दिन की निःशुल्क ट्रायल क्लास (2-Day Free Trial Classes)</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />

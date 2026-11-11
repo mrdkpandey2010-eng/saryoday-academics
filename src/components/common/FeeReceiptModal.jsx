@@ -29,9 +29,11 @@ export const FeeReceiptModal = ({ txn, instituteInfo, onClose }) => {
           {/* Receipt Header */}
           <div className="border-b-2 border-orange-500 pb-4 text-center">
             <div className="flex items-center justify-center gap-3 mb-1">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-md">
-                SA
-              </div>
+              <img
+                src="./logo.jpg"
+                alt="Logo"
+                className="w-12 h-12 rounded-xl object-contain bg-white shadow-sm border border-orange-300 p-0.5 shrink-0"
+              />
               <div>
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">
                   {instituteInfo?.name || "Saryoday Academics"}

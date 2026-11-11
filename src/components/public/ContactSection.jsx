@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, ExternalLink } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from '../common/SocialIcons';
 
 export const ContactSection = ({ instituteInfo }) => {
   return (
@@ -70,7 +71,7 @@ export const ContactSection = ({ instituteInfo }) => {
             </div>
 
             {/* WhatsApp Direct */}
-            <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-200 flex items-center justify-between">
+            <div className="bg-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-200 flex items-center justify-between">
               <div>
                 <h4 className="text-sm font-bold text-emerald-900">तत्काल व्हाट्सएप सहायता</h4>
                 <p className="text-xs text-emerald-700">सिलेबस व फीस विवरण सीधे व्हाट्सएप पर पाएं</p>
@@ -79,10 +80,53 @@ export const ContactSection = ({ instituteInfo }) => {
                 href="https://wa.me/918400100814?text=नमस्ते%20सर्वोदय%20एकेडेमिक्स,%20कृपया%20कोर्स%20और%20फीस%20की%20जानकारी%20साझा%20करें।"
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow"
+                className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow shrink-0"
               >
                 <MessageSquare size={14} />
                 <span>Chat Now</span>
+              </a>
+            </div>
+
+            {/* Social Media Connect (Instagram & Facebook) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {/* Instagram Card */}
+              <a
+                href={instituteInfo?.instagram || "https://www.instagram.com/saryoday_gorakhpur/"}
+                target="_blank"
+                rel="noreferrer"
+                className="group p-3.5 rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-50/80 via-white to-rose-50/50 hover:shadow-md hover:border-pink-300 transition flex items-center gap-3"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition">
+                  <InstagramIcon size={20} />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1">
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-rose-600 transition">Instagram</h4>
+                    <ExternalLink size={10} className="text-slate-400 group-hover:text-rose-500" />
+                  </div>
+                  <p className="text-[11px] font-bold text-rose-600 truncate">@saryoday_gorakhpur</p>
+                  <p className="text-[10px] text-slate-500">फॉलो करें व रील्स देखें</p>
+                </div>
+              </a>
+
+              {/* Facebook Card */}
+              <a
+                href={instituteInfo?.facebook || "https://www.facebook.com/saryoday/"}
+                target="_blank"
+                rel="noreferrer"
+                className="group p-3.5 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-sky-50/50 hover:shadow-md hover:border-blue-300 transition flex items-center gap-3"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#1877F2] flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition">
+                  <FacebookIcon size={20} />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1">
+                    <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">Facebook</h4>
+                    <ExternalLink size={10} className="text-slate-400 group-hover:text-blue-500" />
+                  </div>
+                  <p className="text-[11px] font-bold text-[#1877F2] truncate">/saryoday</p>
+                  <p className="text-[10px] text-slate-500">फेसबुक पेज से जुड़ें</p>
+                </div>
               </a>
             </div>
           </div>

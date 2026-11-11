@@ -208,9 +208,11 @@ export const AdminDashboard = ({ onBackToPublic }) => {
       <header className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center text-white font-black text-sm shadow">
-              SA
-            </div>
+            <img
+              src="./logo.jpg"
+              alt="Logo"
+              className="w-10 h-10 rounded-xl object-contain bg-white p-0.5 shadow border border-orange-500/50 shrink-0"
+            />
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black tracking-tight text-white">
