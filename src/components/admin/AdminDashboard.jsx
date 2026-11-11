@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Users, UserPlus, CreditCard, CalendarCheck, BookOpen, Bell, MessageSquare,
   DollarSign, Download, Upload, RotateCcw, Search, Trash2, Edit3, Printer,
-  Eye, Plus, ShieldCheck, CheckCircle2, X, Phone, UserCheck, Award, Globe, Sparkles
+  Eye, Plus, ShieldCheck, CheckCircle2, X, Phone, UserCheck, Award, Globe, Sparkles, Key, Lock
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
@@ -229,9 +229,10 @@ export const AdminDashboard = ({ onBackToPublic }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={onBackToPublic}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition border border-slate-700"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-bold rounded-lg transition shadow flex items-center gap-1.5"
             >
-              वेबसाइट देखें (View Site)
+              <Edit3 size={13} />
+              <span>लाइव वेबसाइट पर एडिट करें</span>
             </button>
             <button
               onClick={logout}
@@ -422,6 +423,15 @@ export const AdminDashboard = ({ onBackToPublic }) => {
                             className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition"
                           >
                             <Award size={15} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              alert(`विद्यार्थी व अभिभावक क्रेडेंशियल्स:\n\n🎓 छात्र लॉगिन आईडी: ${stu.rollNo}\n🔑 छात्र पासवर्ड: ${stu.password || stu.phone || 'student123'}\n\n👨‍👩‍👧 अभिभावक लॉगिन आईडी: ${stu.parentPhone || stu.phone}\n🔑 अभिभावक पासवर्ड: ${stu.parentPassword || stu.phone || 'parent123'}\n\n(छात्र/अभिभावक पोर्टल पर जाकर सीधे लॉगिन किया जा सकता है)`);
+                            }}
+                            title="लॉगिन पासवर्ड देखें"
+                            className="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg transition font-bold"
+                          >
+                            <Key size={15} />
                           </button>
                           <button
                             onClick={() => {
@@ -961,6 +971,22 @@ export const AdminDashboard = ({ onBackToPublic }) => {
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  लॉगिन पासवर्ड (Login Password)
+                </label>
+                <input
+                  type="text"
+                  value={studentForm.password !== undefined ? studentForm.password : studentForm.phone}
+                  onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-bold text-orange-600"
+                  placeholder="डिफ़ॉल्ट: मोबाइल नंबर"
+                />
+                <p className="text-[10px] text-slate-400 mt-0.5">
+                  विद्यार्थी एवं अभिभावक इसी पासवर्ड से पोर्टल में लॉगिन करेंगे। (डिफ़ॉल्ट: मोबाइल नंबर)
+                </p>
               </div>
 
               <div>

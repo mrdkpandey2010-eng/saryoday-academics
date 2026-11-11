@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle2, Printer, Award, Sparkles, Phone, HelpCircle } from 'lucide-react';
+import { Send, CheckCircle2, Printer, Award, Sparkles, Phone, HelpCircle, Key, Lock, UserCheck } from 'lucide-react';
+import { useData } from '../../context/DataContext';
 
 export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, instituteInfo }) => {
+  const { students, addStudent } = useData();
+
   const [formData, setFormData] = useState({
     name: '',
     fatherName: '',
@@ -29,6 +32,8 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
 
     setIsSubmitting(true);
     setTimeout(() => {
+      const generatedRollNo = `SA-2025-0${students.length + 101}`;
+
       const inquiryRecord = {
         name: formData.name,
         fatherName: formData.fatherName,
@@ -40,10 +45,30 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
         message: formData.message
       };
 
-      const created = onSubmitInquiry(inquiryRecord);
+      onSubmitInquiry(inquiryRecord);
+
+      // Automatically enroll student in database with login credentials!
+      addStudent({
+        name: formData.name,
+        rollNo: generatedRollNo,
+        fatherName: formData.fatherName || 'श्री अभिभावक',
+        phone: formData.phone,
+        parentPhone: formData.phone,
+        password: formData.phone, // Default password is mobile number!
+        parentPassword: formData.phone, // Default parent password is mobile number!
+        className: formData.classSelected,
+        batch: formData.course,
+        address: formData.area || 'शाहपुर, गोरखपुर',
+        totalFee: 36000,
+        paidFee: 0,
+        dueFee: 36000
+      });
+
       setSubmittedSlip({
         ...inquiryRecord,
         regId: `SA-REG-${Date.now().toString().slice(-6)}`,
+        rollNo: generatedRollNo,
+        password: formData.phone,
         date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })
       });
       setIsSubmitting(false);
@@ -86,7 +111,7 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
-                  <span>निःशुल्क करियर काउंसलिंग एवं स्टडी किट वितरण</span>
+                  <span>तुरंत छात्र एवं अभिभावक पोर्टल लॉगिन क्रेडेंशियल्स उपलब्ध</span>
                 </li>
               </ul>
             </div>
@@ -111,7 +136,7 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                   ऑनलाइन प्रवेश / स्कॉलरशिप टेस्ट फॉर्म
                 </h3>
                 <p className="text-xs text-slate-500 mb-6">
-                  नीचे दी गई जानकारी भरें। हमारे प्रवेश परामर्शदाता 2 घंटे के भीतर आपसे संपर्क करेंगे।
+                  नीचे दी गई जानकारी भरें। फॉर्म सबमिट होते ही आपकी छात्र व अभिभावक लॉगिन पर्ची जारी हो जाएगी।
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -149,7 +174,7 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        मोबाइल नंबर (Mobile No)*
+                        मोबाइल नंबर (यही आपका लॉगिन पासवर्ड होगा)*
                       </label>
                       <input
                         type="tel"
@@ -272,11 +297,11 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                     बधाई! आपका पंजीकरण सफलतापूर्वक दर्ज हो गया है
                   </h3>
                   <p className="text-xs text-slate-500 mt-1">
-                    सर्वोदय एकेडेमिक्स में आपकी रुचि के लिए धन्यवाद।
+                    सर्वोदय एकेडेमिक्स में आपका नामांकन पूरा हुआ। आपके लॉगिन क्रेडेंशियल्स नीचे दिए गए हैं:
                   </p>
                 </div>
 
-                <div className="printable-area bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs sm:text-sm space-y-2">
+                <div className="printable-area bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs sm:text-sm space-y-2.5">
                   <div className="flex justify-between font-bold text-slate-800 border-b border-slate-200 pb-2">
                     <span>Registration ID:</span>
                     <span className="text-orange-600">{submittedSlip.regId}</span>
@@ -286,10 +311,6 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                     <span className="font-semibold text-slate-800">{submittedSlip.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Contact Number:</span>
-                    <span className="font-semibold text-slate-800">{submittedSlip.phone}</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span className="text-slate-500">Course / Class:</span>
                     <span className="font-semibold text-slate-800">{submittedSlip.course} ({submittedSlip.classSelected})</span>
                   </div>
@@ -297,7 +318,33 @@ export const AdmissionInquirySection = ({ preSelectedCourse, onSubmitInquiry, in
                     <span className="text-slate-500">Registration Date:</span>
                     <span className="font-medium text-slate-800">{submittedSlip.date}</span>
                   </div>
-                  <div className="pt-2 text-[11px] text-slate-500 italic">
+
+                  {/* Highlighting Login Credentials */}
+                  <div className="p-3 bg-emerald-100/70 border border-emerald-300 rounded-xl space-y-1.5 my-2">
+                    <div className="flex items-center gap-1.5 font-bold text-emerald-950 text-xs border-b border-emerald-200 pb-1">
+                      <Key size={14} className="text-emerald-700" />
+                      <span>पोर्टल लॉगिन क्रेडेंशियल्स (Portal Login Details):</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
+                      <div className="bg-white p-2 rounded-lg border border-emerald-200">
+                        <span className="text-[11px] font-bold text-slate-500 block">🎓 छात्र लॉगिन रोल नंबर:</span>
+                        <span className="font-black text-orange-600">{submittedSlip.rollNo}</span>
+                        <span className="text-[11px] font-bold text-slate-500 block mt-1">🔑 छात्र पासवर्ड:</span>
+                        <span className="font-bold text-slate-900">{submittedSlip.password}</span>
+                      </div>
+                      <div className="bg-white p-2 rounded-lg border border-emerald-200">
+                        <span className="text-[11px] font-bold text-slate-500 block">👨‍👩‍👧 अभिभावक लॉगिन आईडी:</span>
+                        <span className="font-bold text-slate-900">{submittedSlip.phone}</span>
+                        <span className="text-[11px] font-bold text-slate-500 block mt-1">🔑 अभिभावक पासवर्ड:</span>
+                        <span className="font-bold text-slate-900">{submittedSlip.password}</span>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-emerald-800 pt-1">
+                      * आप वेबसाइट के शीर्ष पर दिए गए <strong>"लॉगिन पोर्टल"</strong> पर जाकर इन क्रेडेंशियल्स से तुरंत छात्र या अभिभावक पोर्टल में लॉगिन कर सकते हैं।
+                    </p>
+                  </div>
+
+                  <div className="pt-1 text-[11px] text-slate-500 italic">
                     📍 कृपया इस रजिस्ट्रेशन स्लिप के साथ बी-कॉलोनी, शाहपुर, गोरखपुर स्थित कार्यालय में संपर्क करें।
                   </div>
                 </div>

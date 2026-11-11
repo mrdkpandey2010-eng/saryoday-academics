@@ -87,6 +87,10 @@ export const IdCardModal = ({ student, instituteInfo, onClose }) => {
                 <span className="text-slate-500">आपातकालीन संपर्क:</span>
                 <span className="font-medium text-slate-800">{student.parentPhone || student.phone}</span>
               </div>
+              <div className="flex justify-between border-t border-slate-200/80 pt-1 text-[11px]">
+                <span className="text-orange-600 font-bold">पोर्टल पासवर्ड (Password):</span>
+                <span className="font-bold text-slate-800">{student.phone}</span>
+              </div>
             </div>
 
             {/* Bottom Bar with QR and Signature */}

@@ -79,8 +79,8 @@ export function App() {
         <TeacherDashboard
           onBackToPublic={logout}
           onSwitchToAdmin={() => {
-            quickDemoLogin('admin');
-            setAdminViewingPublic(false);
+            logout();
+            handleOpenLogin('admin');
           }}
         />
       );
@@ -302,21 +302,6 @@ export function App() {
         onOpenLogin={handleOpenLogin}
         onOpenAdmission={scrollToAdmission}
       />
-
-      {/* Floating Quick CMS Access Pill for Admin */}
-      {!isAdminActive && (
-        <button
-          onClick={() => {
-            quickDemoLogin('admin');
-            setAdminViewingPublic(true);
-          }}
-          title="वेबसाइट के किसी भी पेज को एडिट करने हेतु एडमिन मोड चालू करें"
-          className="fixed bottom-5 right-5 z-40 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-3.5 py-2 rounded-full shadow-2xl border-2 border-white text-xs font-black flex items-center gap-1.5 transition hover:scale-105"
-        >
-          <Edit3 size={14} />
-          <span>पेज एडिट मोड (Admin CMS)</span>
-        </button>
-      )}
 
       {/* Login Portal Modal */}
       {showLoginModal && (

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { X, ShieldAlert, User, Lock, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, ShieldAlert, User, Lock, ArrowRight, Sparkles, CheckCircle2, HelpCircle, Key } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 
 export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) => {
   const { login, quickDemoLogin } = useAuth();
-  const { students } = useData();
+  const { students, faculty } = useData();
 
   const [activeRole, setActiveRole] = useState(initialRole);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPasswordHelp, setShowPasswordHelp] = useState(true);
 
   const roles = [
     { id: 'admin', label: 'संचालक (Admin)', icon: '👑', color: 'from-orange-600 to-amber-600' },
@@ -34,7 +35,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
       setIdentifier('SA-2025-0101');
       setPassword('student123');
     } else if (roleId === 'parent') {
-      setIdentifier('parent@saryoday.com');
+      setIdentifier('9450123456');
       setPassword('parent123');
     }
   };
@@ -45,7 +46,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
     setIsLoading(true);
 
     setTimeout(() => {
-      const res = login(activeRole, identifier.trim(), password.trim(), students);
+      const res = login(activeRole, identifier.trim(), password.trim(), students, faculty);
       setIsLoading(false);
       if (res.success) {
         if (onLoginSuccess) onLoginSuccess(res.user);
@@ -66,7 +67,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm animate-fadeIn">
-      <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100">
+      <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 max-h-[95vh] overflow-y-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -110,7 +111,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
         </div>
 
         {/* Form Body */}
-        <div className="p-6 sm:p-7 space-y-5">
+        <div className="p-6 sm:p-7 space-y-4">
           {error && (
             <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 animate-shake">
               <ShieldAlert size={16} className="shrink-0" />
@@ -121,7 +122,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                {activeRole === 'student' ? 'रोल नंबर अथवा ईमेल (Roll No / Email)' : activeRole === 'parent' ? 'अभिभावक मोबाइल नंबर या ईमेल' : 'ईमेल पता (Email Address)'}
+                {activeRole === 'student' ? 'रोल नंबर अथवा मोबाइल नंबर (Roll No / Mobile No)' : activeRole === 'parent' ? 'अभिभावक का मोबाइल नंबर' : 'ईमेल पता (Email Address)'}
               </label>
               <div className="relative">
                 <input
@@ -135,8 +136,8 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                       : activeRole === 'teacher'
                       ? 'teacher@saryoday.com'
                       : activeRole === 'student'
-                      ? 'SA-2025-0101'
-                      : '9450123456 या parent@saryoday.com'
+                      ? 'SA-2025-0101 या आपका मोबाइल नंबर'
+                      : '9450123456 (अभिभावक मोबाइल नंबर)'
                   }
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
                 />
@@ -145,9 +146,14 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                पासवर्ड (Password)
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-slate-700">
+                  पासवर्ड (Password)
+                </label>
+                <span className="text-[11px] text-orange-600 font-semibold">
+                  {activeRole === 'student' || activeRole === 'parent' ? '(डिफ़ॉल्ट: आपका मोबाइल नंबर)' : ''}
+                </span>
+              </div>
               <div className="relative">
                 <input
                   type="password"
@@ -177,12 +183,30 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
             </button>
           </form>
 
+          {/* Transparent Password Helper Box */}
+          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-2">
+            <div className="flex items-center justify-between text-slate-700 font-bold">
+              <span className="flex items-center gap-1.5 text-orange-600">
+                <Key size={14} /> पासवर्ड कहां से मिलेगा? (Password Guide)
+              </span>
+            </div>
+            <div className="text-[11px] text-slate-600 space-y-1">
+              <p>• <strong>एडमिन (Director):</strong> <code>admin@saryoday.com</code> / पासवर्ड: <code>admin123</code></p>
+              <p>• <strong>अध्यापक (Teacher):</strong> <code>teacher@saryoday.com</code> / पासवर्ड: <code>teacher123</code></p>
+              <p>• <strong>विद्यार्थी (Student):</strong> रोल नंबर या मोबाइल / पासवर्ड: <strong>आपका मोबाइल नंबर</strong> अथवा <code>student123</code></p>
+              <p>• <strong>अभिभावक (Parent):</strong> मोबाइल नंबर / पासवर्ड: <strong>आपका मोबाइल नंबर</strong> अथवा <code>parent123</code></p>
+              <p className="text-orange-700 font-semibold pt-1">
+                * नया रजिस्ट्रेशन करने के बाद छात्र व अभिभावक का पासवर्ड उनका पंजीकृत 10 अंकों का मोबाइल नंबर होता है।
+              </p>
+            </div>
+          </div>
+
           {/* Quick 1-Click Demo Login Bar */}
-          <div className="pt-4 border-t border-slate-200">
+          <div className="pt-2 border-t border-slate-200">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
                 <Sparkles size={12} className="text-orange-500" />
-                <span>त्वरित डेमो लॉगिन (1-Click Test Login):</span>
+                <span>त्वरित परीक्षण (1-Click Test Demo):</span>
               </span>
             </div>
 
