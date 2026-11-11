@@ -85,15 +85,14 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
                 </a>
               </div>
 
-              {/* Ultra-compact Visitor Counter */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] text-slate-400">
+              {/* Ultra-compact Real-time Visitor Counter */}
+              <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] text-slate-400">
                 <Eye size={12} className="text-orange-400 shrink-0" />
-                <span className="hidden sm:inline">Visitors:</span>
                 <img
-                  src="https://komarev.com/ghpvc/?username=saryoday-academics-gorakhpur&label=&color=ea580c&style=flat-square"
-                  alt="Visitors"
-                  className="h-3.5 inline rounded"
-                  loading="lazy"
+                  src="https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=18"
+                  alt="Live Visitors Counter"
+                  className="h-4 inline rounded"
+                  loading="eager"
                 />
               </div>
             </div>

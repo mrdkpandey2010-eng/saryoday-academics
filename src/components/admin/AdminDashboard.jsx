@@ -44,6 +44,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
   const [adminPassConfirm, setAdminPassConfirm] = useState('');
   const [adminPassMsg, setAdminPassMsg] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
+  const [visitorBadgeKey, setVisitorBadgeKey] = useState(Date.now());
 
   // New Student Form State
   const [studentForm, setStudentForm] = useState({
@@ -922,7 +923,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
             </div>
 
             {/* Live Visitor Counter & Stats */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-3">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
@@ -930,20 +931,41 @@ export const AdminDashboard = ({ onBackToPublic }) => {
                   </div>
                   <div>
                     <h4 className="font-bold text-sm text-slate-900">वेबसाइट विजिटर काउन्टर (Live Real-time Visitors)</h4>
-                    <p className="text-xs text-slate-500">लाइव क्लाउड सर्वर द्वारा प्रत्येक वास्तविक आगंतुक की गणना</p>
+                    <p className="text-xs text-slate-500">प्रत्येक वास्तविक विजिट का लाइव क्लाउड रिकॉर्ड</p>
                   </div>
                 </div>
-                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                  सर्वर ऑनलाइन
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setVisitorBadgeKey(Date.now())}
+                    className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-orange-600 hover:bg-orange-50 transition text-xs flex items-center gap-1 font-medium cursor-pointer"
+                    title="ताज़ा संख्या देखें"
+                  >
+                    <RotateCcw size={12} />
+                    <span>रिफ्रेश</span>
+                  </button>
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    सर्वर लाइव
+                  </span>
+                </div>
               </div>
-              <div className="pt-2">
-                <img
-                  src="https://komarev.com/ghpvc/?username=saryoday-academics-gorakhpur&label=%E0%A4%95%E0%A5%81%E0%A4%B2+%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A4%BF%E0%A4%9F%E0%A4%B0+(Visitors)&color=ea580c&style=flat-square"
-                  alt="Visitor Counter"
-                  className="rounded shadow-sm"
-                />
+              <div className="flex flex-wrap items-center gap-4 pt-1">
+                <div className="p-3 bg-slate-950 rounded-xl inline-block shadow-inner">
+                  <img
+                    key={visitorBadgeKey}
+                    src={`https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Total%20Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=24&_t=${visitorBadgeKey}`}
+                    alt="Visitor Counter"
+                    className="h-6 rounded"
+                  />
+                </div>
+                <div className="text-xs text-slate-600 space-y-1">
+                  <p className="font-semibold text-slate-800">
+                    पंजीकृत विजिटर लीड्स: <span className="text-orange-600 font-bold">{inquiries.filter(i => i.classSelected === 'Website Visitor Lead').length}</span>
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    वेबसाइट में प्रवेश करते समय जिन विजिटर्स ने अपना मोबाइल नंबर दर्ज किया
+                  </p>
+                </div>
               </div>
             </div>
 
