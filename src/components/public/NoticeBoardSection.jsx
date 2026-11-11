@@ -58,46 +58,52 @@ export const NoticeBoardSection = ({ notices }) => {
 
         {/* Notices Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredNotices.map((notice) => (
-            <div
-              key={notice.id}
-              onClick={() => setSelectedNotice(notice)}
-              className="bg-white p-5 rounded-2xl border border-slate-200/90 hover:border-orange-500/60 shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  <span className="flex items-center gap-1 text-[11px] font-semibold text-slate-500">
-                    <Calendar size={13} className="text-orange-500" />
-                    <span>{notice.date}</span>
-                  </span>
+          {filteredNotices.map((notice) => {
+            const noticeTitle = isHindi ? (notice.titleHi || notice.title) : notice.title;
+            const noticeDate = isHindi ? (notice.dateHi || notice.date) : (notice.date || notice.dateHi);
+            const noticeContent = isHindi ? (notice.contentHi || notice.content) : notice.content;
 
-                  <div className="flex items-center gap-2">
-                    {notice.isNew && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-red-600 text-white animate-pulse">
-                        NEW
-                      </span>
-                    )}
-                    <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                      {notice.category}
+            return (
+              <div
+                key={notice.id}
+                onClick={() => setSelectedNotice(notice)}
+                className="bg-white p-5 rounded-2xl border border-slate-200/90 hover:border-orange-500/60 shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <span className="flex items-center gap-1 text-[11px] font-semibold text-slate-500">
+                      <Calendar size={13} className="text-orange-500" />
+                      <span>{noticeDate}</span>
                     </span>
+
+                    <div className="flex items-center gap-2">
+                      {notice.isNew && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-red-600 text-white animate-pulse">
+                          NEW
+                        </span>
+                      )}
+                      <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                        {notice.category}
+                      </span>
+                    </div>
                   </div>
+
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-orange-600 transition leading-snug">
+                    {noticeTitle}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+                    {noticeContent}
+                  </p>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-orange-600 transition leading-snug">
-                  {notice.title}
-                </h3>
-
-                <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
-                  {notice.content}
-                </p>
+                <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-orange-600">
+                  <span>{isHindi ? "विस्तार से पढ़ें" : "Read Notice Details"}</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition" />
+                </div>
               </div>
-
-              <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-orange-600">
-                <span>विस्तार से पढ़ें (Read Details)</span>
-                <ChevronRight size={16} className="group-hover:translate-x-1 transition" />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -107,7 +113,7 @@ export const NoticeBoardSection = ({ notices }) => {
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-7 border border-slate-100">
             <button
               onClick={() => setSelectedNotice(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -117,27 +123,28 @@ export const NoticeBoardSection = ({ notices }) => {
                 {selectedNotice.category}
               </span>
               <span className="text-xs text-slate-500 flex items-center gap-1">
-                <Calendar size={13} /> {selectedNotice.date}
+                <Calendar size={13} />
+                <span>{isHindi ? (selectedNotice.dateHi || selectedNotice.date) : (selectedNotice.date || selectedNotice.dateHi)}</span>
               </span>
             </div>
 
             <h3 className="text-lg sm:text-xl font-black text-slate-900 mb-4 leading-tight">
-              {selectedNotice.title}
+              {isHindi ? (selectedNotice.titleHi || selectedNotice.title) : selectedNotice.title}
             </h3>
 
             <div className="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
-              {selectedNotice.content}
+              {isHindi ? (selectedNotice.contentHi || selectedNotice.content) : selectedNotice.content}
             </div>
 
             <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
               <div className="text-xs text-slate-500">
-                सर्वोदय एकेडेमिक्स, शाहपुर गोरखपुर
+                {isHindi ? "सर्वोदय एकेडेमिक्स, शाहपुर गोरखपुर" : "Saryoday Academics, Shahpur Gorakhpur"}
               </div>
               <button
                 onClick={() => setSelectedNotice(null)}
-                className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-orange-600 transition"
+                className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-orange-600 transition cursor-pointer"
               >
-                बंद करें
+                {isHindi ? "बंद करें" : "Close"}
               </button>
             </div>
           </div>

@@ -29,7 +29,31 @@ import {
 import { validateEnglishOnly } from '../utils/validation';
 
 const DataContext = createContext(null);
-const STORAGE_KEY = 'SARYODAY_ACADEMICS_SECURE_V5';
+const STORAGE_KEY = 'SARYODAY_ACADEMICS_SECURE_V6';
+
+// Helper to merge default items with rich English/Hindi properties while preserving admin additions
+const mergeSeedWithUpdatedEnglish = (existingList = [], defaultList = []) => {
+  if (!existingList || existingList.length === 0) return defaultList;
+  const defaultMap = new Map(defaultList.map(item => [item.id, item]));
+  const seenIds = new Set();
+  
+  const merged = existingList.map(item => {
+    seenIds.add(item.id);
+    if (defaultMap.has(item.id)) {
+      return { ...item, ...defaultMap.get(item.id) };
+    }
+    return item;
+  });
+
+  // Include any new default items if not present
+  defaultList.forEach(item => {
+    if (!seenIds.has(item.id)) {
+      merged.push(item);
+    }
+  });
+
+  return merged;
+};
 
 // Filter out any legacy mock data IDs so they NEVER pollute the live database
 const filterOutMockData = (loadedData) => {
@@ -54,6 +78,14 @@ const filterOutMockData = (loadedData) => {
         ...(loadedData.instituteInfo?.director || {})
       }
     },
+    banners: mergeSeedWithUpdatedEnglish(loadedData.banners, initialBanners),
+    courses: mergeSeedWithUpdatedEnglish(loadedData.courses, initialCourses),
+    faculty: mergeSeedWithUpdatedEnglish(loadedData.faculty, initialFaculty),
+    toppers: mergeSeedWithUpdatedEnglish(loadedData.toppers, initialToppers),
+    notices: mergeSeedWithUpdatedEnglish(loadedData.notices, initialNotices),
+    testimonials: mergeSeedWithUpdatedEnglish(loadedData.testimonials, initialTestimonials),
+    albums: mergeSeedWithUpdatedEnglish(loadedData.albums, initialAlbums),
+    gallery: mergeSeedWithUpdatedEnglish(loadedData.gallery, initialGallery),
     students: cleanStudents,
     feeTransactions: (loadedData.feeTransactions || []).filter(t => !mockTxnIds.includes(t.id)),
     attendance: (loadedData.attendance || []).filter(a => !mockAttIds.includes(a.id)),
@@ -70,13 +102,13 @@ export const DataProvider = ({ children }) => {
   // Load state from localStorage or initialize with clean seed data
   const [data, setData] = useState(() => {
     try {
-      const savedV5 = localStorage.getItem(STORAGE_KEY);
-      if (savedV5) {
-        return filterOutMockData(JSON.parse(savedV5));
+      const savedV6 = localStorage.getItem(STORAGE_KEY);
+      if (savedV6) {
+        return filterOutMockData(JSON.parse(savedV6));
       }
 
       // Check older storage keys and sanitize
-      const oldKeys = ['SARYODAY_ACADEMICS_DB_V2', 'SARYODAY_ACADEMICS_DB_V1'];
+      const oldKeys = ['SARYODAY_ACADEMICS_SECURE_V5', 'SARYODAY_ACADEMICS_DB_V2', 'SARYODAY_ACADEMICS_DB_V1'];
       for (const k of oldKeys) {
         const oldData = localStorage.getItem(k);
         if (oldData) {

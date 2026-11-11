@@ -24,43 +24,30 @@ export const HeroBannerSlider = ({ banners, onOpenAdmission, onExploreCourses })
 
   const slide = banners[currentSlide] || banners[0];
 
-  // Default English adaptations if slide has Hindi only
+  // Language-aware slide text getters (English default + Hindi)
   const getSlideBadge = () => {
-    if (isHindi) return slide.badge;
-    if (slide.badgeEn) return slide.badgeEn;
-    if (slide.id === 1) return "Admissions Open Session 2025-26";
-    if (slide.id === 2) return "Scholarship Exam (SST 2025)";
-    return "Class 9th to 12th Board Booster";
+    if (isHindi) return slide.badgeHi || slide.badge;
+    return slide.badge || slide.badgeHi || "Admissions Open Session 2025-26";
   };
 
   const getSlideTitle = () => {
-    if (isHindi) return slide.title;
-    if (slide.titleEn) return slide.titleEn;
-    if (slide.id === 1) return "Committed to Top Ranks in IIT-JEE & NEET";
-    if (slide.id === 2) return "Saryoday Scholarship Test (SST) - Up to 100% Scholarship";
-    return "CBSE, ICSE & UP Board 95%+ Target Preparation";
+    if (isHindi) return slide.titleHi || slide.title;
+    return slide.title || slide.titleHi || "Committed to Top Ranks in IIT-JEE & NEET";
   };
 
   const getSlideSubtitle = () => {
-    if (isHindi) return slide.subtitle;
-    if (slide.subtitleEn) return slide.subtitleEn;
-    if (slide.id === 1) return "Saryoday Academics, Shahpur Gorakhpur - Limited Batch Size, Personalized Mentorship & Expert Faculty Team.";
-    if (slide.id === 2) return "Premier talent reward examination for Class 6th to 12th and Dropper students. Empower your academic potential.";
-    return "Daily Practice Problems (DPP), Weekly CBT Mock Test Series & Dedicated 1-on-1 Doubt Removal.";
+    if (isHindi) return slide.subtitleHi || slide.subtitle;
+    return slide.subtitle || slide.subtitleHi || "Saryoday Academics, Shahpur Gorakhpur — Limited Batch Size, 1-on-1 Mentorship & Distinguished Faculty";
   };
 
   const getCtaPrimary = () => {
-    if (isHindi) return slide.ctaPrimary;
-    if (slide.ctaPrimaryEn) return slide.ctaPrimaryEn;
-    if (slide.id === 1) return "Apply Online / Admission Form";
-    if (slide.id === 2) return "Register for Scholarship Test";
-    return "Book Free Trial Class";
+    if (isHindi) return slide.ctaPrimaryHi || slide.ctaPrimary;
+    return slide.ctaPrimary || slide.ctaPrimaryHi || "Apply Online / Admission Form";
   };
 
   const getCtaSecondary = () => {
-    if (isHindi) return slide.ctaSecondary;
-    if (slide.ctaSecondaryEn) return slide.ctaSecondaryEn;
-    return "Explore Courses & Fees";
+    if (isHindi) return slide.ctaSecondaryHi || slide.ctaSecondary;
+    return slide.ctaSecondary || slide.ctaSecondaryHi || "Explore Programs & Fees";
   };
 
   return (

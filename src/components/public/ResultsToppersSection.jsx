@@ -31,84 +31,96 @@ export const ResultsToppersSection = ({ toppers, testimonials }) => {
 
         {/* Toppers Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {toppers.map((topper) => (
-            <div
-              key={topper.id}
-              className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 hover:border-amber-400/60 shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative mb-4">
-                  <img
-                    src={topper.photo}
-                    alt={topper.name}
-                    className="w-full h-52 object-cover object-top rounded-xl border border-slate-700"
-                  />
-                  <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
-                    <Trophy size={12} />
-                    <span>{topper.score}</span>
+          {toppers.map((topper) => {
+            const topperName = isHindi ? (topper.nameHi || topper.name) : topper.name;
+            const topperRank = isHindi ? (topper.rankHi || topper.rank) : topper.rank;
+            const topperQuote = isHindi ? (topper.quoteHi || topper.quote) : (topper.quote || topper.quoteHi);
+
+            return (
+              <div
+                key={topper.id}
+                className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 hover:border-amber-400/60 shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative mb-4">
+                    <img
+                      src={topper.photo}
+                      alt={topper.name}
+                      className="w-full h-52 object-cover object-top rounded-xl border border-slate-700"
+                    />
+                    <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
+                      <Trophy size={12} />
+                      <span>{topper.score}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/60">
+                      {topper.exam}
+                    </span>
+                    <h3 className="text-base font-bold text-white pt-1">
+                      {topperName}
+                    </h3>
+                    <p className="text-xs font-semibold text-emerald-400">
+                      {topperRank}
+                    </p>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-slate-700/70 text-xs text-slate-300 italic flex gap-1.5 leading-relaxed">
+                    <Quote size={18} className="text-slate-500 shrink-0 mt-0.5" />
+                    <span>"{topperQuote}"</span>
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/60">
-                    {topper.exam}
-                  </span>
-                  <h3 className="text-base font-bold text-white pt-1">
-                    {topper.name}
-                  </h3>
-                  <p className="text-xs font-semibold text-emerald-400">
-                    {topper.rank}
-                  </p>
-                </div>
-
-                <div className="mt-3 pt-3 border-t border-slate-700/70 text-xs text-slate-300 italic flex gap-1.5 leading-relaxed">
-                  <Quote size={18} className="text-slate-500 shrink-0 mt-0.5" />
-                  <span>"{topper.quote}"</span>
+                <div className="mt-4 pt-3 border-t border-slate-700/50 flex items-center justify-between text-[11px] text-slate-400">
+                  <span>{isHindi ? "सत्र 2024 Achiever" : "Batch 2024 Achiever"}</span>
+                  <span className="text-amber-400 font-bold">Gorakhpur Proud</span>
                 </div>
               </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-700/50 flex items-center justify-between text-[11px] text-slate-400">
-                <span>सत्र 2024 Achiever</span>
-                <span className="text-amber-400 font-bold">Gorakhpur Proud</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Testimonials from Parents & Students */}
         <div className="pt-6 border-t border-slate-800">
           <div className="text-center mb-8">
             <h3 className="text-xl sm:text-2xl font-black text-white">
-              अभिभावक एवं छात्र क्या कहते हैं?
+              {isHindi ? "अभिभावक एवं छात्र क्या कहते हैं?" : "What Parents & Students Say"}
             </h3>
             <p className="text-xs text-slate-400 mt-1">
-              गोरखपुर के संतुष्ट परिवारों के अनुभव
+              {isHindi ? "गोरखपुर के संतुष्ट परिवारों के अनुभव" : "Trusted Experiences from Gorakhpur Families"}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((test) => (
-              <div
-                key={test.id}
-                className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-1 text-amber-400 mb-3">
-                    {[...Array(test.rating)].map((_, i) => (
-                      <Star key={i} size={15} fill="currentColor" />
-                    ))}
-                  </div>
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed italic">
-                    "{test.text}"
-                  </p>
-                </div>
+            {testimonials.map((test) => {
+              const testText = isHindi ? (test.textHi || test.text) : test.text;
+              const testName = isHindi ? (test.nameHi || test.name) : test.name;
+              const testRole = isHindi ? (test.roleHi || test.role) : test.role;
 
-                <div className="mt-4 pt-3 border-t border-slate-700/60">
-                  <h4 className="text-sm font-bold text-white">{test.name}</h4>
-                  <p className="text-xs text-orange-400">{test.role}</p>
+              return (
+                <div
+                  key={test.id}
+                  className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center gap-1 text-amber-400 mb-3">
+                      {[...Array(test.rating)].map((_, i) => (
+                        <Star key={i} size={15} fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed italic">
+                      "{testText}"
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-700/60">
+                    <h4 className="text-sm font-bold text-white">{testName}</h4>
+                    <p className="text-xs text-orange-400">{testRole}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -194,7 +194,7 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                   className="inline-flex items-center gap-2 text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-xl transition border border-orange-200 mb-2"
                 >
                   <ArrowLeft size={14} />
-                  <span>← सभी एलबम पर वापस जाएं (Back to All Albums)</span>
+                  <span>{isHindi ? "← सभी एलबम पर वापस जाएं" : "← Back to All Albums"}</span>
                 </button>
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -207,7 +207,7 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                     </span>
                   )}
                   <span className="text-xs font-bold text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
-                    📷 {selectedAlbum.photos?.length || 0} तस्वीरें
+                    📷 {selectedAlbum.photos?.length || 0} {isHindi ? "तस्वीरें" : "Photos"}
                   </span>
                 </div>
 
