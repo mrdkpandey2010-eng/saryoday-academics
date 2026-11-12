@@ -12,14 +12,21 @@ export const initialInstituteInfo = {
   email: "saryodayacademics@gmail.com",
   timings: "Monday – Saturday: 07:00 AM to 07:00 PM (Sunday Special Doubt Sessions)",
   timingsHi: "सोमवार - शनिवार: प्रातः 07:00 AM से सायं 07:00 PM (रविवार: विशेष डाउट सत्र)",
+  tickerNotice: "📢 Admissions Open for Session 2025-26 • Saryoday Scholarship Test (SST) Registration Live • 90-Day Booster Crash Course for Class 10th & 12th Board Aspirants • Sunday NTA Pattern IIT-JEE & NEET All-India Mock Tests with 1-on-1 Doubt Sessions • Shahpur Gorakhpur Campus Helpline: +91 8400100814 📢",
+  tickerNoticeHi: "📢 सत्र 2025-26 के लिए Saryoday Scholarship Test (SST) रजिस्ट्रेशन प्रारंभ • कक्षा 10वीं व 12वीं बोर्ड परीक्षार्थियों हेतु 90-दिवसीय क्रैश कोर्स 15 नवम्बर से • प्रत्येक रविवार NTA पैटर्न पर NEET व JEE मॉक टेस्ट एवं विशेष डाउट क्लासेज • शाहपुर गोरखपुर ब्रांच में प्रवेश हेतु कॉल करें: 8400100814 📢",
   director: {
     name: "Er. R.K. Mishra",
     nameHi: "इंजी. आर.के. मिश्रा",
     qualification: "B.Tech (IIT BHU), 14+ Years Experience",
+    qualificationHi: "बी.टेक (आईआईटी बीएचयू), 14+ वर्ष शिक्षण अनुभव",
     role: "Director & Senior Physics Faculty",
     roleHi: "निदेशक एवं विभागाध्यक्ष भौतिकी",
-    message: "At Saryoday Academics, our mission is not merely textbook rote-learning, but instilling deep conceptual clarity and scientific inquiry in every student. We bring Kota and Delhi level coaching right here to Gorakhpur with personal mentorship.",
-    messageHi: "सर्वोदय एकेडेमिक्स में हमारा लक्ष्य सिर्फ किताबी ज्ञान देना नहीं, बल्कि प्रत्येक छात्र के भीतर तार्किक सोच और विषय की गहरी समझ विकसित करना है। गोरखपुर के छात्रों को महानगरों जैसा गुणवत्तापूर्ण शिक्षण उनके अपने शहर में प्रदान करना ही हमारा संकल्प है।",
+    experienceBadge: "14+ Years Teaching Experience",
+    experienceBadgeHi: "14+ वर्ष का शिक्षण अनुभव",
+    visionHeadline: '"Our mission is to empower every Gorakhpur student to secure top ranks in premier national institutes."',
+    visionHeadlineHi: '"गोरखपुर के हर छात्र को देश के शीर्ष संस्थानों में पहुंचाना हमारा ध्येय है"',
+    message: "At Saryoday Academics, our mission is not merely textbook rote-learning, but instilling deep conceptual clarity and scientific inquiry in every student. We bring Kota and Delhi level coaching right here to Gorakhpur with personal mentorship.\n\nWe firmly believe that every child possesses immense cognitive potential. What transforms effort into rank is systematic conceptual mentoring, daily practice problem (DPP) discipline, and relentless 1-on-1 doubt resolution.",
+    messageHi: "सर्वोदय एकेडेमिक्स में हमारा लक्ष्य सिर्फ किताबी ज्ञान देना नहीं, बल्कि प्रत्येक छात्र के भीतर तार्किक सोच और विषय की गहरी समझ विकसित करना है। गोरखपुर के छात्रों को महानगरों जैसा गुणवत्तापूर्ण शिक्षण उनके अपने शहर में प्रदान करना ही हमारा संकल्प है।\n\nहमारा मानना है कि हर बच्चे के भीतर असीम क्षमता होती है। आवश्यकता केवल सही मार्गदर्शन, निरंतर अभ्यास और संकोच-रहित डाउट क्लीयरिंग की होती है। सर्वोदय में हम प्रत्येक विद्यार्थी पर व्यक्तिगत ध्यान देते हैं।",
     photo: "./director-pic.jpg"
   },
   established: "2018",
@@ -33,6 +40,8 @@ export const initialInstituteInfo = {
 export const initialBanners = [
   {
     id: 1,
+    imageOpacity: 30,
+    highlightText: "IIT-JEE & NEET Premier Coaching",
     badge: "Admissions Open Session 2025-26",
     badgeHi: "सत्र 2025-26 प्रवेश प्रारंभ",
     title: "Committed to Top Ranks in IIT-JEE & NEET",
@@ -49,6 +58,8 @@ export const initialBanners = [
   },
   {
     id: 2,
+    imageOpacity: 30,
+    highlightText: "Up to 100% Scholarship",
     badge: "Scholarship Exam (SST 2025)",
     badgeHi: "छात्रवृत्ति परीक्षा (SST 2025)",
     title: "Saryoday Scholarship Test (SST) — Up to 100% Fee Waiver",
@@ -65,6 +76,8 @@ export const initialBanners = [
   },
   {
     id: 3,
+    imageOpacity: 30,
+    highlightText: "Guaranteed 95%+ Board Success",
     badge: "Class 9th to 12th Board Booster",
     badgeHi: "कक्षा 9वीं, 10वीं, 11वीं एवं 12वीं बोर्ड स्पेशल",
     title: "Guaranteed Preparation for 95%+ in CBSE, ICSE & UP Boards",
@@ -585,6 +598,16 @@ export const initialTestimonials = [
 // Registered Staff Authentication (Admin and Faculty)
 export const initialUsers = [
   {
+    id: "usr-staff",
+    role: "staff",
+    name: "Management Team / Reception Desk",
+    email: "staff@saryoday.com",
+    password: "Staff@Saryoday2025#",
+    title: "Front Desk & Operations Manager",
+    phone: "8400100813",
+    avatar: "./logo.jpg"
+  },
+  {
     id: "usr-admin",
     role: "admin",
     name: "Er. R.K. Mishra",
@@ -679,3 +702,104 @@ export const initialStudyMaterials = [];
 
 // Clean Inquiries from Website
 export const initialInquiries = [];
+
+// Library Information - CMS Managed
+export const initialLibraryInfo = {
+  badge: "Saryoday Knowledge Center",
+  badgeHi: "सर्वोदय ज्ञान केंद्र",
+  title: "Air-Conditioned Self-Study & Digital Library",
+  titleHi: "वातानुकूलित शांत सेल्फ-स्टडी एवं डिजिटल लाइब्रेरी",
+  subtitle: "A tranquil, scholarly sanctuary designed specifically for serious IIT-JEE and NEET aspirants in Gorakhpur",
+  subtitleHi: "गोरखपुर के गंभीर जेईई और नीट अभ्यर्थियों हेतु अनुशासित, वातानुकूलित एवं प्रेरक अध्ययन केंद्र",
+  timings: "Open 7:00 AM to 9:00 PM (7 Days a Week)",
+  timingsHi: "प्रातः 7:00 AM से रात्रि 9:00 PM (सातों दिन खुला)",
+  totalTitles: "5,000+ Reference Titles",
+  totalTitlesHi: "5,000+ संदर्भ पुस्तकें",
+  features: [
+    {
+      id: "lib-f1",
+      title: "5,000+ Reference Titles",
+      titleHi: "5,000+ प्रामाणिक पुस्तकें",
+      desc: "HC Verma, Irodov, Cengage Series, DC Pandey, MS Chouhan, OP Tandon, NCERT at Fingertips & 20+ Years Solved Papers.",
+      descHi: "एचसी वर्मा, इरोडोव, सेंगेज सीरीज, डीसी पांडे, एमएस चौहान, ओपी टंडन एवं पिछले 20 वर्षों के हल प्रश्न पत्र।"
+    },
+    {
+      id: "lib-f2",
+      title: "Extended Study Hours",
+      titleHi: "विस्तारित अध्ययन समय",
+      desc: "Open 7:00 AM to 9:00 PM, 7 days a week, facilitating deep self-study after classroom lecture hours.",
+      descHi: "सुबह 7 बजे से रात 9 बजे तक खुला, ताकि क्लास के बाद छात्र बिना किसी व्यवधान के स्वाध्याय कर सकें।"
+    },
+    {
+      id: "lib-f3",
+      title: "High-Speed Wi-Fi & CBT Stations",
+      titleHi: "हाई-स्पीड वाई-फाई एवं सीबीटी टर्मिनल",
+      desc: "Dedicated computer terminals configured for NTA pattern Computer Based Tests (CBT) and video lecture analysis.",
+      descHi: "एनटीए पैटर्न कंप्यूटर आधारित टेस्ट (CBT) और वीडियो लेक्चर देखने हेतु कंप्यूटर टर्मिनल उपलब्ध।"
+    },
+    {
+      id: "lib-f4",
+      title: "Soundproof Air-Conditioned Hall",
+      titleHi: "शांत वातानुकूलित अध्ययन हॉल",
+      desc: "Ergonomic seating with individual power sockets and LED desk lamps providing distraction-free focus.",
+      descHi: "आरामदायक बैठक व्यवस्था, प्रत्येक डेस्क पर चार्जिंग सॉकेट एवं एलईडी लैम्प की उत्कृष्ट सुविधा।"
+    }
+  ],
+  popularBooks: [
+    { subject: "Physics", titles: ["Concepts of Physics - HC Verma", "Problems in General Physics - Irodov", "Understanding Physics - DC Pandey (5 Volumes)"] },
+    { subject: "Chemistry", titles: ["Organic Chemistry - MS Chouhan", "Physical Chemistry - N. Awasthi", "Inorganic Chemistry - VK Jaiswal & JD Lee"] },
+    { subject: "Mathematics", titles: ["Cengage JEE Advanced Series - G. Tewani", "Play with Graphs - Amit M. Agarwal", "Problems in Calculus of One Variable - IA Maron"] },
+    { subject: "Biology (NEET)", titles: ["NCERT Biology Line-by-Line Fingertips (MTG)", "Trueman's Elementary Biology Vol 1 & 2", "Dr. Ali Objective Biology for NEET"] }
+  ]
+};
+
+// Career Guidance & Opportunities - CMS Managed
+export const initialCareerInfo = {
+  badge: "Join Saryoday Team & Career Guidance",
+  badgeHi: "सर्वोदय टीम से जुड़ें एवं करियर मार्गदर्शन",
+  title: "Faculty Opportunities & Career Mentoring",
+  titleHi: "फैकल्टी भर्ती एवं विशेषज्ञ करियर काउंसलिंग",
+  subtitle: "Shape the future of young aspirants or receive personalized counseling from our expert faculty team",
+  subtitleHi: "मेधावी छात्रों का भविष्य संवारें अथवा हमारे विशेषज्ञ मार्गदर्शकों से व्यक्तिगत करियर काउंसलिंग प्राप्त करें",
+  counselorName: "Director & Senior Mentors",
+  counselingNote: "Unsure between Engineering (IIT-JEE) and Medicine (NEET)? Complimentary 30-minute diagnostic counseling for students and parents.",
+  counselingNoteHi: "इंजीनियरिंग (IIT-JEE) अथवा मेडिकल (NEET) चयन में असमंजस? छात्रों एवं अभिभावकों हेतु 30 मिनट की निःशुल्क व्यक्तिगत काउंसलिंग।",
+  openPositions: [
+    {
+      id: "pos-1",
+      role: "Senior Faculty - IIT-JEE (Physics)",
+      department: "Engineering Wing",
+      qualification: "B.Tech (IIT/NIT) or M.Sc Physics",
+      experience: "4+ years in premier coaching institute",
+      type: "Full-Time (Shahpur Campus)",
+      compensation: "Industry Best + Performance Bonus"
+    },
+    {
+      id: "pos-2",
+      role: "Faculty - NEET Medical (Chemistry)",
+      department: "Medical Wing",
+      qualification: "M.Sc Organic/Inorganic Chemistry or B.Tech",
+      experience: "3+ years delivering top medical ranks",
+      type: "Full-Time",
+      compensation: "Competitive Package"
+    },
+    {
+      id: "pos-3",
+      role: "Mathematics Faculty (Class 10th - 12th)",
+      department: "Foundation & Board Booster",
+      qualification: "M.Sc / B.Tech / B.Ed",
+      experience: "2+ years teaching CBSE/ICSE Board pattern",
+      type: "Full-Time / Part-Time",
+      compensation: "Attractive Salary"
+    },
+    {
+      id: "pos-4",
+      role: "Academic Counselor & Telecaller",
+      department: "Student Admissions & Operations",
+      qualification: "Graduate with fluent communication",
+      experience: "1+ years in education counseling",
+      type: "Full-Time",
+      compensation: "Fixed + Incentives"
+    }
+  ]
+};

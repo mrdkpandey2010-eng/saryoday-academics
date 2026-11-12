@@ -11,8 +11,9 @@ import { FeeReceiptModal } from '../common/FeeReceiptModal';
 import { WebsiteCmsEditor } from './WebsiteCmsEditor';
 import { validateEnglishOnly, validateIndianMobile } from '../../utils/validation';
 
-export const AdminDashboard = ({ onBackToPublic }) => {
+export const AdminDashboard = ({ onBackToPublic, isStaffOnly = false }) => {
   const { logout, currentUser, updateAdminPassword } = useAuth();
+  const isStaff = isStaffOnly || currentUser?.role === 'staff' || currentUser?.role === 'reception' || currentUser?.role === 'office';
   const {
     students, addStudent, updateStudent, deleteStudent,
     batches, addBatch,
@@ -207,7 +208,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
       txnRef: feeForm.txnRef || `REF-${Date.now().toString().slice(-6)}`,
       remarks: feeForm.remarks,
       date: new Date().toISOString().split('T')[0],
-      collectedBy: currentUser?.name || 'Er. R.K. Mishra (Director)'
+      collectedBy: (instituteInfo?.director?.name ? `${instituteInfo.director.name} (Director)` : currentUser?.name) || 'Director'
     });
 
     setShowAddFeeModal(false);
@@ -292,29 +293,39 @@ export const AdminDashboard = ({ onBackToPublic }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black tracking-tight text-white">
-                  सर्वोदय एकेडेमिक्स — कोचिंग संचालक (एडमिन) पैनल
+                  {isStaff
+                    ? 'सर्वोदय एकेडेमिक्स — मैनेजमेंट एवं रिसेप्शन डेस्क'
+                    : 'सर्वोदय एकेडेमिक्स — कोचिंग संचालक (एडमिन) पैनल'}
                 </h1>
-                <span className="hidden sm:inline text-[10px] bg-orange-500/30 text-orange-400 font-bold px-2 py-0.5 rounded-full border border-orange-500/40">
-                  Director Portal
+                <span className={`hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                  isStaff
+                    ? 'bg-blue-500/30 text-blue-300 border-blue-400/40'
+                    : 'bg-orange-500/30 text-orange-400 border-orange-500/40'
+                }`}>
+                  {isStaff ? 'Management Portal' : 'Director Portal'}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                संचालक: {currentUser?.name || "Er. R.K. Mishra"} | शाहपुर, गोरखपुर
+                {isStaff
+                  ? `स्टाफ सदस्य: ${currentUser?.name || "कार्यालय अधीक्षक"} | शाहपुर, गोरखपुर`
+                  : `संचालक: ${instituteInfo?.director?.name || currentUser?.name || "Director"} | शाहपुर, गोरखपुर`}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={onBackToPublic}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-bold rounded-lg transition shadow flex items-center gap-1.5"
-            >
-              <Edit3 size={13} />
-              <span>लाइव वेबसाइट पर एडिट करें</span>
-            </button>
+            {!isStaff && onBackToPublic && (
+              <button
+                onClick={onBackToPublic}
+                className="px-3.5 py-1.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-bold rounded-lg transition shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Edit3 size={13} />
+                <span>लाइव वेबसाइट पर एडिट करें</span>
+              </button>
+            )}
             <button
               onClick={logout}
-              className="px-3 py-1.5 bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold rounded-lg transition shadow"
+              className="px-3 py-1.5 bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold rounded-lg transition shadow cursor-pointer"
             >
               लॉगआउट
             </button>
@@ -373,22 +384,32 @@ export const AdminDashboard = ({ onBackToPublic }) => {
 
         {/* Tab Navigation */}
         <div className="flex flex-wrap items-center gap-1.5 bg-white p-2 rounded-2xl border border-slate-200 shadow-xs mb-6 overflow-x-auto">
-          {[
-            { id: 'students', label: 'विद्यार्थी (Students)', icon: Users },
-            { id: 'cms', label: 'वेबसाइट पेज संपादक (CMS Editor)', icon: Globe },
-            { id: 'fees', label: 'फीस प्रबंधन (Fees)', icon: CreditCard },
-            { id: 'attendance', label: 'दैनिक उपस्थिति (Attendance)', icon: CalendarCheck },
-            { id: 'batches', label: 'बैच व फैकल्टी (Batches)', icon: BookOpen },
-            { id: 'notices', label: 'सूचनाएं (Notices)', icon: Bell },
-            { id: 'inquiries', label: `ऑनलाइन पूछताछ (${pendingInquiriesCount})`, icon: MessageSquare },
-            { id: 'settings', label: 'डेटाबेस बैकअप (Backup)', icon: Upload },
-          ].map((tab) => {
+          {(isStaff
+            ? [
+                { id: 'students', label: 'विद्यार्थी (Students)', icon: Users },
+                { id: 'fees', label: 'फीस प्रबंधन (Fees)', icon: CreditCard },
+                { id: 'attendance', label: 'दैनिक उपस्थिति (Attendance)', icon: CalendarCheck },
+                { id: 'batches', label: 'बैच व फैकल्टी (Batches)', icon: BookOpen },
+                { id: 'notices', label: 'सूचनाएं (Notices)', icon: Bell },
+                { id: 'inquiries', label: `ऑनलाइन पूछताछ (${pendingInquiriesCount})`, icon: MessageSquare },
+              ]
+            : [
+                { id: 'students', label: 'विद्यार्थी (Students)', icon: Users },
+                { id: 'cms', label: 'वेबसाइट पेज संपादक (CMS Editor)', icon: Globe },
+                { id: 'fees', label: 'फीस प्रबंधन (Fees)', icon: CreditCard },
+                { id: 'attendance', label: 'दैनिक उपस्थिति (Attendance)', icon: CalendarCheck },
+                { id: 'batches', label: 'बैच व फैकल्टी (Batches)', icon: BookOpen },
+                { id: 'notices', label: 'सूचनाएं (Notices)', icon: Bell },
+                { id: 'inquiries', label: `ऑनलाइन पूछताछ (${pendingInquiriesCount})`, icon: MessageSquare },
+                { id: 'settings', label: 'डेटाबेस बैकअप (Backup)', icon: Upload },
+              ]
+          ).map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                   activeTab === tab.id
                     ? 'bg-orange-600 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -884,7 +905,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
         )}
 
         {/* TAB 7: DATABASE BACKUP & SETTINGS */}
-        {activeTab === 'settings' && (
+        {activeTab === 'settings' && !isStaff && (
           <div className="space-y-6 max-w-4xl">
             {/* Cloud & Data Persistence Guarantee Banner */}
             <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-950 border border-emerald-500/40 rounded-2xl p-5 text-white shadow-md">
@@ -953,7 +974,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
                 <div className="p-3 bg-slate-950 rounded-xl inline-block shadow-inner">
                   <img
                     key={visitorBadgeKey}
-                    src={`https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Total%20Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=24&_t=${visitorBadgeKey}`}
+                    src={`https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Total%20Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=24&query_only=true&_t=${visitorBadgeKey}`}
                     alt="Visitor Counter"
                     className="h-6 rounded"
                   />
@@ -1093,7 +1114,7 @@ export const AdminDashboard = ({ onBackToPublic }) => {
         )}
 
         {/* TAB CMS: WEBSITE PAGE EDITOR */}
-        {activeTab === 'cms' && (
+        {activeTab === 'cms' && !isStaff && (
           <WebsiteCmsEditor initialTab={cmsPageTab} />
         )}
       </div>

@@ -90,6 +90,9 @@ export function App() {
     if (role === 'admin' && !adminViewingPublic) {
       return <AdminDashboard onBackToPublic={() => setAdminViewingPublic(true)} />;
     }
+    if (role === 'staff') {
+      return <AdminDashboard isStaffOnly={true} onBackToPublic={logout} />;
+    }
     if (role === 'teacher') {
       return (
         <TeacherDashboard
@@ -251,10 +254,36 @@ export function App() {
         {/* 8. Faculty Team */}
         <FacultySection faculty={faculty} />
 
-        {/* 9. Self-Study & Digital Library Section (NEW) */}
+        {/* Quick Admin Section Edit Badge for Library */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>Air-Conditioned Self-Study & Digital Library</span>
+            <button
+              onClick={() => setCmsModalTab('library')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1 cursor-pointer"
+            >
+              <Edit3 size={12} /> Edit Library
+            </button>
+          </div>
+        )}
+
+        {/* 9. Self-Study & Digital Library Section */}
         <LibrarySection onOpenAdmission={scrollToAdmission} />
 
-        {/* 10. Career & Faculty Recruitment Section (NEW) */}
+        {/* Quick Admin Section Edit Badge for Career */}
+        {isAdminActive && (
+          <div className="bg-orange-600 text-white py-1.5 px-4 text-xs font-bold flex items-center justify-between">
+            <span>Faculty Recruitment & Career Opportunities</span>
+            <button
+              onClick={() => setCmsModalTab('career')}
+              className="px-2.5 py-0.5 bg-black/40 hover:bg-black/70 rounded flex items-center gap-1 cursor-pointer"
+            >
+              <Edit3 size={12} /> Manage Career & Jobs
+            </button>
+          </div>
+        )}
+
+        {/* 10. Career & Faculty Recruitment Section */}
         <CareerSection />
 
         {/* Quick Admin Section Edit Badge for Toppers */}

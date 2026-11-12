@@ -1,31 +1,39 @@
 import React from 'react';
 import { BookOpen, Wifi, Clock, ShieldCheck, CheckCircle2, Search, Sparkles, Coffee, Laptop } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { useData } from '../../context/DataContext';
 
 export const LibrarySection = ({ onOpenAdmission }) => {
-  const libraryFeatures = [
+  const { isHindi } = useLanguage();
+  const { libraryInfo } = useData();
+
+  const defaultIcons = [
+    <BookOpen className="text-orange-500" size={24} />,
+    <Clock className="text-blue-500" size={24} />,
+    <Wifi className="text-emerald-500" size={24} />,
+    <Coffee className="text-purple-500" size={24} />
+  ];
+
+  const features = libraryInfo?.features || [
     {
-      icon: <BookOpen className="text-orange-500" size={24} />,
       title: "5,000+ Reference Titles",
       desc: "HC Verma, Irodov, Cengage Series, DC Pandey, MS Chouhan, OP Tandon, NCERT at Fingertips & 20+ Years Solved Papers."
     },
     {
-      icon: <Clock className="text-blue-500" size={24} />,
       title: "Extended Study Hours",
       desc: "Open 7:00 AM to 9:00 PM, 7 days a week, facilitating deep self-study after classroom lecture hours."
     },
     {
-      icon: <Wifi className="text-emerald-500" size={24} />,
       title: "High-Speed Wi-Fi & CBT Stations",
       desc: "Dedicated computer terminals configured for NTA pattern Computer Based Tests (CBT) and video lecture analysis."
     },
     {
-      icon: <Coffee className="text-purple-500" size={24} />,
       title: "Soundproof Air-Conditioned Hall",
       desc: "Ergonomic seating with individual power sockets and LED desk lamps providing distraction-free focus."
     }
   ];
 
-  const popularBooks = [
+  const popularBooks = libraryInfo?.popularBooks || [
     { subject: "Physics", titles: ["Concepts of Physics - HC Verma", "Problems in General Physics - Irodov", "Understanding Physics - DC Pandey (5 Volumes)"] },
     { subject: "Chemistry", titles: ["Organic Chemistry - MS Chouhan", "Physical Chemistry - N. Awasthi", "Inorganic Chemistry - VK Jaiswal & JD Lee"] },
     { subject: "Mathematics", titles: ["Cengage JEE Advanced Series - G. Tewani", "Play with Graphs - Amit M. Agarwal", "Problems in Calculus of One Variable - IA Maron"] },
@@ -38,25 +46,29 @@ export const LibrarySection = ({ onOpenAdmission }) => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            Saryoday Knowledge Center
+            {isHindi ? (libraryInfo?.badgeHi || libraryInfo?.badge || "सर्वोदय ज्ञान केंद्र") : (libraryInfo?.badge || "Saryoday Knowledge Center")}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            Air-Conditioned Self-Study & Digital Library
+            {isHindi ? (libraryInfo?.titleHi || libraryInfo?.title || "वातानुकूलित शांत सेल्फ-स्टडी एवं डिजिटल लाइब्रेरी") : (libraryInfo?.title || "Air-Conditioned Self-Study & Digital Library")}
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            A tranquil, scholarly sanctuary designed specifically for serious IIT-JEE and NEET aspirants in Gorakhpur
+            {isHindi ? (libraryInfo?.subtitleHi || libraryInfo?.subtitle || "गोरखपुर के गंभीर जेईई और नीट अभ्यर्थियों हेतु अनुशासित अध्ययन केंद्र") : (libraryInfo?.subtitle || "A tranquil, scholarly sanctuary designed specifically for serious IIT-JEE and NEET aspirants in Gorakhpur")}
           </p>
         </div>
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-          {libraryFeatures.map((f, idx) => (
+          {features.map((f, idx) => (
             <div key={idx} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
               <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-4 border border-slate-100">
-                {f.icon}
+                {defaultIcons[idx % defaultIcons.length]}
               </div>
-              <h3 className="font-bold text-sm text-slate-900 mb-1.5">{f.title}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">{f.desc}</p>
+              <h3 className="font-bold text-sm text-slate-900 mb-1.5">
+                {isHindi ? (f.titleHi || f.title) : (f.title || f.titleHi)}
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                {isHindi ? (f.descHi || f.desc) : (f.desc || f.descHi)}
+              </p>
             </div>
           ))}
         </div>

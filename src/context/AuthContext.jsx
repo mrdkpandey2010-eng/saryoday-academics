@@ -184,6 +184,31 @@ export const AuthProvider = ({ children }) => {
       };
     }
 
+    // 5. STAFF / MANAGEMENT / RECEPTIONIST LOGIN
+    if (role === 'staff' || role === 'management') {
+      const savedStaffPass = localStorage.getItem('SARYODAY_STAFF_PASSWORD') || 'Staff@Saryoday2025#';
+      if (
+        (cleanId === 'staff@saryoday.com' || cleanId === 'staff' || cleanId === 'reception' || cleanId === 'office' || cleanId === 'management') &&
+        (cleanPass === savedStaffPass)
+      ) {
+        const staffUser = initialUsers.find(u => u.role === 'staff') || {
+          id: "usr-staff",
+          role: "staff",
+          name: "Management Team / Reception Desk",
+          email: "staff@saryoday.com",
+          title: "Front Desk & Operations Manager",
+          phone: "8400100813",
+          avatar: "./logo.jpg"
+        };
+        setCurrentUser(staffUser);
+        return { success: true, user: staffUser };
+      }
+      return {
+        success: false,
+        message: 'अमान्य मैनेजमेंट आईडी अथवा पासवर्ड। (डिफ़ॉल्ट यूजर: staff, पासवर्ड: Staff@Saryoday2025#)'
+      };
+    }
+
     return {
       success: false,
       message: 'अमान्य लॉगिन अनुरोध।'
@@ -202,6 +227,14 @@ export const AuthProvider = ({ children }) => {
     return { success: true, message: 'एडमिन पासवर्ड सफलतापूर्वक अपडेट कर दिया गया।' };
   };
 
+  const updateStaffPassword = (newPassword) => {
+    if (!newPassword || newPassword.length < 6) {
+      return { success: false, message: 'नया पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।' };
+    }
+    localStorage.setItem('SARYODAY_STAFF_PASSWORD', newPassword);
+    return { success: true, message: 'मैनेजमेंट/स्टाफ पासवर्ड सफलतापूर्वक अपडेट कर दिया गया।' };
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -209,6 +242,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updateAdminPassword,
+        updateStaffPassword,
         isAuthenticated: !!currentUser,
         role: currentUser?.role || null
       }}

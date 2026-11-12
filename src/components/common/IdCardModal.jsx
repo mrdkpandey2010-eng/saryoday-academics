@@ -106,7 +106,7 @@ export const IdCardModal = ({ student, instituteInfo, onClose }) => {
               <div className="text-right">
                 <div className="w-20 border-b border-slate-400 mb-0.5"></div>
                 <p className="text-[9px] font-bold text-slate-700">Director Sign</p>
-                <p className="text-[8px] text-slate-400">Er. R.K. Mishra</p>
+                <p className="text-[8px] text-slate-400">{instituteInfo?.director?.name || 'Director'}</p>
               </div>
             </div>
           </div>

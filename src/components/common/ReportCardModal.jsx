@@ -125,7 +125,7 @@ export const ReportCardModal = ({ student, result, instituteInfo, onClose }) => 
             </div>
             <div className="text-center">
               <div className="w-28 border-b border-slate-400 mb-1"></div>
-              <p className="font-semibold text-slate-700">Er. R.K. Mishra (Director)</p>
+              <p className="font-semibold text-slate-700">{instituteInfo?.director?.name ? `${instituteInfo.director.name} (Director)` : 'Director'}</p>
             </div>
           </div>
         </div>

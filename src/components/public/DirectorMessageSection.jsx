@@ -18,16 +18,18 @@ export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
               <div className="relative bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                 <img
                   src={director?.photo || "./director-pic.jpg"}
-                  alt={director?.name || "Er. R.K. Mishra"}
+                  alt={director?.name || "Director"}
                   className="w-full h-80 object-cover object-top"
                 />
 
                 <div className="p-5 text-white bg-slate-950/90 backdrop-blur-md">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-xl font-black text-white">{director?.name}</h4>
+                      <h4 className="text-xl font-black text-white">
+                        {isHindi ? (director?.nameHi || director?.name) : (director?.name || director?.nameHi || "Director")}
+                      </h4>
                       <p className="text-xs font-semibold text-orange-400">
-                        {isHindi ? director?.role : "Director & Senior Physics Faculty"}
+                        {isHindi ? (director?.roleHi || director?.role || "संस्थान निदेशक") : (director?.role || director?.roleHi || "Institute Director")}
                       </p>
                     </div>
                     <div className="w-10 h-10 rounded-full bg-orange-600/30 border border-orange-500 flex items-center justify-center text-orange-400">
@@ -35,7 +37,7 @@ export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 mt-2 font-medium">
-                    {director?.qualification}
+                    {isHindi ? (director?.qualificationHi || director?.qualification) : (director?.qualification || director?.qualificationHi)}
                   </p>
                 </div>
               </div>
@@ -43,7 +45,11 @@ export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
               {/* Float Experience Badge */}
               <div className="absolute -bottom-4 -right-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white py-2 px-4 rounded-xl shadow-lg border-2 border-white text-xs font-bold flex items-center gap-2">
                 <Award size={18} />
-                <span>{isHindi ? "14+ वर्ष का शिक्षण अनुभव" : "14+ Years Teaching Experience"}</span>
+                <span>
+                  {isHindi
+                    ? (director?.experienceBadgeHi || director?.experienceBadge || "14+ वर्ष का शिक्षण अनुभव")
+                    : (director?.experienceBadge || director?.experienceBadgeHi || "14+ Years Teaching Experience")}
+                </span>
               </div>
             </div>
           </div>
@@ -57,33 +63,14 @@ export const DirectorMessageSection = ({ director, onOpenAdmission }) => {
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 leading-tight">
               {isHindi
-                ? '"गोरखपुर के हर छात्र को देश के शीर्ष संस्थानों में पहुंचाना हमारा ध्येय है"'
-                : '"Our mission is to empower every Gorakhpur student to secure top ranks in premier national institutes."'
-              }
+                ? (director?.visionHeadlineHi || director?.visionHeadline || '"गोरखपुर के हर छात्र को देश के शीर्ष संस्थानों में पहुंचाना हमारा ध्येय है"')
+                : (director?.visionHeadline || director?.visionHeadlineHi || '"Our mission is to empower every Gorakhpur student to secure top ranks in premier national institutes."')}
             </h2>
 
-            <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed">
-              {isHindi ? (
-                <>
-                  <p>प्रिय विद्यार्थियों एवं अभिभावकों,</p>
-                  <p>
-                    सर्वोदय एकेडेमिक्स (शाहपुर, गोरखपुर) की स्थापना इसी उद्देश्य से की गई थी कि पूर्वांचल के विद्यार्थियों को कोटा या दिल्ली जैसे बड़े शहरों में जाए बिना, अपने ही शहर में राष्ट्रीय स्तर की गुणवत्तापूर्ण शिक्षा मिल सके।
-                  </p>
-                  <p>
-                    हमारा मानना है कि हर बच्चे के भीतर असीम क्षमता होती है। आवश्यकता केवल सही मार्गदर्शन, निरंतर अभ्यास और संकोच-रहित डाउट क्लीयरिंग की होती है। सर्वोदय में हम प्रत्येक विद्यार्थी पर व्यक्तिगत ध्यान देते हैं ताकि कमजोर से कमजोर छात्र भी आत्मविश्वास के साथ 95%+ अंक और प्रतियोगी परीक्षाओं में उच्च रैंक हासिल कर सके।
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>Dear Aspirants and Respected Parents,</p>
-                  <p>
-                    Saryoday Academics was established in Shahpur, Gorakhpur with a single uncompromising mission: to provide the highest echelon of competitive coaching right here, eliminating the necessity for students to relocate to Kota or Delhi.
-                  </p>
-                  <p>
-                    We firmly believe that every child possesses immense cognitive potential. What transforms effort into rank is systematic conceptual mentoring, daily practice problem (DPP) discipline, and relentless 1-on-1 doubt resolution. At Saryoday, our rigorous classroom methodology guarantees that students build deep foundational mastery to excel in IIT-JEE, NEET, and Board Examinations.
-                  </p>
-                </>
-              )}
+            <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+              {isHindi
+                ? (director?.messageHi || director?.message)
+                : (director?.message || director?.messageHi)}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">

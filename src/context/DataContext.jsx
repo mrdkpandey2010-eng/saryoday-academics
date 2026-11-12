@@ -15,7 +15,9 @@ import {
   initialAttendance,
   initialExamResults,
   initialStudyMaterials,
-  initialInquiries
+  initialInquiries,
+  initialLibraryInfo,
+  initialCareerInfo
 } from '../data/initialData';
 import {
   requestStoragePersistence,
@@ -50,9 +52,9 @@ const mergeSeedWithUpdatedEnglish = (existingList = [], defaultList = []) => {
           }
           return p;
         });
-        return { ...item, ...def, photos: mergedPhotos };
+        return { ...def, ...item, photos: mergedPhotos };
       }
-      return { ...item, ...def };
+      return { ...def, ...item };
     }
     return item;
   });
@@ -98,6 +100,14 @@ const filterOutMockData = (loadedData) => {
     testimonials: mergeSeedWithUpdatedEnglish(loadedData.testimonials, initialTestimonials),
     albums: mergeSeedWithUpdatedEnglish(loadedData.albums, initialAlbums),
     gallery: mergeSeedWithUpdatedEnglish(loadedData.gallery, initialGallery),
+    libraryInfo: {
+      ...initialLibraryInfo,
+      ...(loadedData.libraryInfo || {})
+    },
+    careerInfo: {
+      ...initialCareerInfo,
+      ...(loadedData.careerInfo || {})
+    },
     students: cleanStudents,
     feeTransactions: (loadedData.feeTransactions || []).filter(t => !mockTxnIds.includes(t.id)),
     attendance: (loadedData.attendance || []).filter(a => !mockAttIds.includes(a.id)),
@@ -152,7 +162,9 @@ export const DataProvider = ({ children }) => {
       attendance: initialAttendance,
       examResults: initialExamResults,
       studyMaterials: initialStudyMaterials,
-      inquiries: initialInquiries
+      inquiries: initialInquiries,
+      libraryInfo: initialLibraryInfo,
+      careerInfo: initialCareerInfo
     };
   });
 
@@ -214,6 +226,35 @@ export const DataProvider = ({ children }) => {
         }
       };
       saveSnapshot(next, 'संस्थान संपर्क विवरण अपडेट');
+      return next;
+    });
+  }, []);
+
+  
+  const updateLibraryInfo = useCallback((updatedFields) => {
+    setData(prev => {
+      const next = {
+        ...prev,
+        libraryInfo: {
+          ...prev.libraryInfo,
+          ...updatedFields
+        }
+      };
+      saveSnapshot(next, 'लाइब्रेरी विवरण अपडेट');
+      return next;
+    });
+  }, []);
+
+  const updateCareerInfo = useCallback((updatedFields) => {
+    setData(prev => {
+      const next = {
+        ...prev,
+        careerInfo: {
+          ...prev.careerInfo,
+          ...updatedFields
+        }
+      };
+      saveSnapshot(next, 'करियर एवं फैकल्टी अवसर अपडेट');
       return next;
     });
   }, []);
@@ -879,6 +920,8 @@ export const DataProvider = ({ children }) => {
         ...data,
         updateInstituteInfo,
         updateDirector,
+        updateLibraryInfo,
+        updateCareerInfo,
         addBanner,
         updateBanner,
         deleteBanner,

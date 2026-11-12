@@ -16,6 +16,7 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
 
   const roles = [
     { id: 'admin', label: 'संचालक (Admin)', icon: '👑', color: 'from-orange-600 to-amber-600' },
+    { id: 'staff', label: 'मैनेजमेंट (Staff)', icon: '💼', color: 'from-indigo-600 to-cyan-600' },
     { id: 'teacher', label: 'अध्यापक (Teacher)', icon: '👨‍🏫', color: 'from-blue-600 to-indigo-600' },
     { id: 'student', label: 'छात्र (Student)', icon: '🎓', color: 'from-emerald-600 to-teal-600' },
     { id: 'parent', label: 'अभिभावक (Parent)', icon: '👨‍👩‍👧', color: 'from-purple-600 to-pink-600' },
@@ -81,20 +82,20 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
           </div>
 
           {/* Role Tabs */}
-          <div className="grid grid-cols-4 gap-1.5 mt-4 bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800">
+          <div className="grid grid-cols-5 gap-1 mt-4 bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800">
             {roles.map((r) => (
               <button
                 key={r.id}
                 type="button"
                 onClick={() => handleRoleChange(r.id)}
-                className={`py-2 px-1 text-center rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
+                className={`py-2 px-0.5 text-center rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 cursor-pointer ${
                   activeRole === r.id
                     ? 'bg-orange-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <span className="text-base">{r.icon}</span>
-                <span className="text-[11px] truncate w-full">{r.label.split(' ')[0]}</span>
+                <span className="text-[10px] truncate w-full">{r.label.split(' ')[0]}</span>
               </button>
             ))}
           </div>
@@ -116,7 +117,9 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                   ? 'रोल नंबर अथवा मोबाइल नंबर (Roll No / Mobile No)'
                   : activeRole === 'parent'
                   ? 'अभिभावक का पंजीकृत मोबाइल नंबर'
-                  : 'ईमेल पता (Email Address)'}
+                  : activeRole === 'staff'
+                  ? 'मैनेजमेंट यूजरनेम अथवा ईमेल'
+                  : 'संचालक ईमेल अथवा यूजरनेम (Director Email)'}
               </label>
               <div className="relative">
                 <input
@@ -126,7 +129,9 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder={
                     activeRole === 'admin'
-                      ? 'admin@saryoday.com'
+                      ? 'admin@saryoday.com अथवा admin'
+                      : activeRole === 'staff'
+                      ? 'staff अथवा staff@saryoday.com'
                       : activeRole === 'teacher'
                       ? 'teacher@saryoday.com'
                       : activeRole === 'student'
@@ -170,6 +175,12 @@ export const LoginModal = ({ initialRole = 'admin', onClose, onLoginSuccess }) =
                 </button>
               </div>
             </div>
+
+            {activeRole === 'staff' && (
+              <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] leading-relaxed">
+                💼 <strong>मैनेजमेंट डेस्क:</strong> छात्र प्रवेश, फीस, रसीद, विज़िटर पूछताछ व उपस्थिति। (यूजर: <code>staff</code>, पासवर्ड: <code>Staff@Saryoday2025#</code>)
+              </div>
+            )}
 
             <button
               type="submit"

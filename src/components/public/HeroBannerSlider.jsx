@@ -26,8 +26,8 @@ export const HeroBannerSlider = ({ banners, onOpenAdmission, onExploreCourses })
 
   // Language-aware slide text getters (English default + Hindi)
   const getSlideBadge = () => {
-    if (isHindi) return slide.badgeHi || slide.badge;
-    return slide.badge || slide.badgeHi || "Admissions Open Session 2025-26";
+    if (isHindi) return slide.highlightTextHi || slide.badgeHi || slide.highlightText || slide.badge || "सत्र 2025-26 प्रवेश प्रारंभ";
+    return slide.highlightText || slide.badge || slide.highlightTextHi || slide.badgeHi || "Admissions Open Session 2025-26";
   };
 
   const getSlideTitle = () => {
@@ -57,9 +57,10 @@ export const HeroBannerSlider = ({ banners, onOpenAdmission, onExploreCourses })
         <img
           src={slide.image}
           alt={getSlideTitle()}
-          className="w-full h-full object-cover opacity-25 scale-105 transition-all duration-1000 ease-out"
+          className="w-full h-full object-cover scale-105 transition-all duration-1000 ease-out"
+          style={{ opacity: (slide.imageOpacity !== undefined && slide.imageOpacity !== null ? slide.imageOpacity : 30) / 100 }}
         />
-        <div className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} opacity-90 backdrop-blur-xs`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient || 'from-slate-950 via-slate-900 to-slate-950'} opacity-90 backdrop-blur-xs`}></div>
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 bg-[radial-gradient(#f97316_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
       </div>

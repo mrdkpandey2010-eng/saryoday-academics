@@ -113,7 +113,7 @@ export const ParentDashboard = ({ onBackToPublic }) => {
                 कक्षा व बैच: <span className="font-bold text-amber-400">{child?.batch || "कक्षा 12वीं IIT-JEE"}</span> • रोल नंबर: {child?.rollNo || "पंजीकरण प्रक्रियाधीन"}
               </p>
               <p className="text-xs text-slate-400 mt-0.5">
-                शाहपुर परिसर, गोरखपुर | मेंटर: Er. R.K. Mishra
+                शाहपुर परिसर, गोरखपुर | मेंटर: {instituteInfo?.director?.name || 'Director'}
               </p>
             </div>
           </div>

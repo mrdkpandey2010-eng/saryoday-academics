@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Globe, Home, Info, BookOpen, Users, Trophy, Image, Bell, Phone,
   Plus, Edit3, Trash2, CheckCircle2, Save, X, ExternalLink, Sparkles,
-  Folder, Upload, Camera, Layers, Calendar
+  Folder, Upload, Camera, Layers, Calendar, Library, Briefcase, Sliders
 } from 'lucide-react';
 import { InstagramIcon, FacebookIcon, YoutubeIcon, PlayStoreIcon } from '../common/SocialIcons';
 import { useData } from '../../context/DataContext';
@@ -16,7 +16,9 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
     toppers, addTopper, updateTopper, deleteTopper,
     albums, addAlbum, updateAlbum, deleteAlbum, addPhotoToAlbum, deletePhotoFromAlbum, setAlbumCover,
     gallery, addGalleryItem, deleteGalleryItem,
-    notices, addNotice, updateNotice, deleteNotice
+    notices, addNotice, updateNotice, deleteNotice,
+    libraryInfo, updateLibraryInfo,
+    careerInfo, updateCareerInfo
   } = useData();
 
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -65,12 +67,26 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
   const [editingBanner, setEditingBanner] = useState(null);
   const [showBannerModal, setShowBannerModal] = useState(false);
   const [bannerForm, setBannerForm] = useState({
-    badge: 'सत्र 2025-26 प्रवेश प्रारंभ',
+    badge: 'Admissions Open 2025-26',
+    badgeHi: 'सत्र 2025-26 प्रवेश प्रारंभ',
+    highlightText: 'Admissions Open 2025-26',
+    highlightTextHi: 'सत्र 2025-26 प्रवेश प्रारंभ',
     title: '',
+    titleHi: '',
     subtitle: '',
-    ctaPrimary: 'ऑनलाइन प्रवेश करें',
-    ctaSecondary: 'कोर्स विवरण देखें',
-    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80'
+    subtitleHi: '',
+    ctaPrimary: 'Apply Online',
+    ctaPrimaryHi: 'ऑनलाइन प्रवेश करें',
+    ctaSecondary: 'Explore Courses',
+    ctaSecondaryHi: 'कोर्स विवरण देखें',
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
+    imageOpacity: 30
+  });
+
+  // Ticker Notice state (Topmost Flashing Marquee Notice)
+  const [tickerState, setTickerState] = useState({
+    tickerNotice: instituteInfo?.tickerNotice || "Admissions Open for Session 2025-26. Scholarship Test (SST) Every Sunday at Shahpur Campus.",
+    tickerNoticeHi: instituteInfo?.tickerNoticeHi || "सत्र 2025-26 हेतु प्रवेश प्रारंभ। सर्वोदय स्कॉलरशिप टेस्ट (SST) प्रत्येक रविवार शाहपुर परिसर में।"
   });
 
   // Gallery & Albums State
@@ -119,10 +135,56 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
   // Director form state
   const [directorState, setDirectorState] = useState({
     name: instituteInfo?.director?.name || 'Er. R.K. Mishra',
+    nameHi: instituteInfo?.director?.nameHi || 'इंजी. आर.के. मिश्रा',
     qualification: instituteInfo?.director?.qualification || 'B.Tech (IIT BHU), 14+ Years Experience',
+    qualificationHi: instituteInfo?.director?.qualificationHi || 'बी.टेक (आईआईटी बीएचयू), 14+ वर्ष शिक्षण अनुभव',
     role: instituteInfo?.director?.role || 'Director & Senior Physics Faculty',
+    roleHi: instituteInfo?.director?.roleHi || 'संस्थान निदेशक एवं वरिष्ठ भौतिकी संकाय',
+    experienceBadge: instituteInfo?.director?.experienceBadge || '14+ Years Teaching Experience',
+    experienceBadgeHi: instituteInfo?.director?.experienceBadgeHi || '14+ वर्ष का शिक्षण अनुभव',
+    visionHeadline: instituteInfo?.director?.visionHeadline || '"Our mission is to empower every Gorakhpur student to secure top ranks in premier national institutes."',
+    visionHeadlineHi: instituteInfo?.director?.visionHeadlineHi || '"गोरखपुर के हर छात्र को देश के शीर्ष संस्थानों में पहुंचाना हमारा ध्येय है"',
     message: instituteInfo?.director?.message || '',
-    photo: instituteInfo?.director?.photo || ''
+    messageHi: instituteInfo?.director?.messageHi || '',
+    photo: instituteInfo?.director?.photo || './director-pic.jpg'
+  });
+
+  // Library State
+  const [libraryState, setLibraryState] = useState({
+    badge: libraryInfo?.badge || "Saryoday Knowledge Center",
+    badgeHi: libraryInfo?.badgeHi || "सर्वोदय ज्ञान केंद्र",
+    title: libraryInfo?.title || "Air-Conditioned Self-Study & Digital Library",
+    titleHi: libraryInfo?.titleHi || "वातानुकूलित शांत सेल्फ-स्टडी एवं डिजिटल लाइब्रेरी",
+    subtitle: libraryInfo?.subtitle || "A tranquil, scholarly sanctuary designed specifically for serious IIT-JEE and NEET aspirants in Gorakhpur",
+    subtitleHi: libraryInfo?.subtitleHi || "गोरखपुर के गंभीर जेईई और नीट अभ्यर्थियों हेतु अनुशासित अध्ययन केंद्र",
+    timings: libraryInfo?.timings || "Open 7:00 AM to 9:00 PM (7 Days a Week)",
+    timingsHi: libraryInfo?.timingsHi || "प्रातः 7:00 AM से रात्रि 9:00 PM (सातों दिन खुला)",
+    features: libraryInfo?.features || []
+  });
+
+  // Career State
+  const [careerState, setCareerState] = useState({
+    badge: careerInfo?.badge || "Join Saryoday Team & Career Guidance",
+    badgeHi: careerInfo?.badgeHi || "सर्वोदय टीम से जुड़ें एवं करियर मार्गदर्शन",
+    title: careerInfo?.title || "Faculty Opportunities & Career Mentoring",
+    titleHi: careerInfo?.titleHi || "फैकल्टी भर्ती एवं विशेषज्ञ करियर काउंसलिंग",
+    subtitle: careerInfo?.subtitle || "Shape the future of young aspirants or receive personalized counseling from our expert faculty team",
+    subtitleHi: careerInfo?.subtitleHi || "मेधावी छात्रों का भविष्य संवारें अथवा विशेषज्ञ करियर काउंसलिंग प्राप्त करें",
+    counselingNote: careerInfo?.counselingNote || "Unsure between Engineering (IIT-JEE) and Medicine (NEET)? Complimentary 30-minute diagnostic counseling for students and parents.",
+    counselingNoteHi: careerInfo?.counselingNoteHi || "इंजीनियरिंग (IIT-JEE) अथवा मेडिकल (NEET) चयन में असमंजस? छात्रों एवं अभिभावकों हेतु 30 मिनट की निःशुल्क व्यक्तिगत काउंसलिंग।",
+    openPositions: careerInfo?.openPositions || []
+  });
+
+  // Career Position Modal State
+  const [showPositionModal, setShowPositionModal] = useState(false);
+  const [editingPosition, setEditingPosition] = useState(null);
+  const [positionForm, setPositionForm] = useState({
+    role: '',
+    department: 'Engineering Wing',
+    qualification: '',
+    experience: '',
+    type: 'Full-Time (Shahpur Campus)',
+    compensation: 'Industry Best'
   });
 
   const showSuccess = (msg) => {
@@ -224,7 +286,53 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
   const handleSaveDirector = (e) => {
     e.preventDefault();
     updateDirector(directorState);
-    showSuccess('निदेशक एवं हमारे बारे में (About Us) विवरण अपडेट हो गया!');
+    showSuccess('निदेशक प्रोफाइल एवं संदेश (Director Profile & Message) सफलतापूर्वक अपडेट हो गया!');
+  };
+
+  // LIBRARY SUBMIT
+  const handleSaveLibrary = (e) => {
+    e.preventDefault();
+    updateLibraryInfo(libraryState);
+    showSuccess('लाइब्रेरी विवरण सफलतापूर्वक अपडेट हो गया!');
+  };
+
+  // CAREER SUBMIT
+  const handleSaveCareer = (e) => {
+    e.preventDefault();
+    updateCareerInfo(careerState);
+    showSuccess('करियर व फैकल्टी भर्ती विवरण सफलतापूर्वक अपडेट हो गया!');
+  };
+
+  // CAREER POSITION SUBMIT
+  const handlePositionSubmit = (e) => {
+    e.preventDefault();
+    if (!positionForm.role) return;
+
+    if (editingPosition) {
+      const updated = (careerState.openPositions || []).map(p =>
+        p.id === editingPosition.id ? { ...positionForm, id: editingPosition.id } : p
+      );
+      setCareerState({ ...careerState, openPositions: updated });
+      updateCareerInfo({ ...careerState, openPositions: updated });
+      showSuccess(`पद "${positionForm.role}" अपडेट किया गया!`);
+    } else {
+      const newPos = { ...positionForm, id: `pos-${Date.now()}` };
+      const updated = [...(careerState.openPositions || []), newPos];
+      setCareerState({ ...careerState, openPositions: updated });
+      updateCareerInfo({ ...careerState, openPositions: updated });
+      showSuccess(`नया पद "${positionForm.role}" जोड़ा गया!`);
+    }
+    setShowPositionModal(false);
+    setEditingPosition(null);
+  };
+
+  const handleDeletePosition = (posId) => {
+    if (confirm('क्या आप इस पद को हटाना चाहते हैं?')) {
+      const updated = (careerState.openPositions || []).filter(p => p.id !== posId);
+      setCareerState({ ...careerState, openPositions: updated });
+      updateCareerInfo({ ...careerState, openPositions: updated });
+      showSuccess('पद हटाया गया!');
+    }
   };
 
   return (
@@ -252,13 +360,15 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
       {/* Pages Navigation Bar */}
       <div className="flex items-center gap-1.5 p-2 bg-slate-50 border-b border-slate-200 overflow-x-auto">
         {[
-          { id: 'courses', label: 'कोर्सेज', icon: BookOpen, count: courses.length },
-          { id: 'faculty', label: 'फैकल्टी', icon: Users, count: faculty.length },
-          { id: 'about', label: 'हमारे बारे में', icon: Info },
-          { id: 'home', label: 'होम बैनर', icon: Home, count: banners.length },
+          { id: 'home', label: 'होम बैनर व फ्लैश नोटिस', icon: Home, count: banners.length },
+          { id: 'about', label: 'निदेशक प्रोफाइल व परिचय', icon: Info },
+          { id: 'courses', label: 'कोर्सेज व फीस', icon: BookOpen, count: courses.length },
+          { id: 'faculty', label: 'फैकल्टी टीम', icon: Users, count: faculty.length },
+          { id: 'library', label: 'लाइब्रेरी केंद्र', icon: Library },
+          { id: 'career', label: 'करियर व भर्ती', icon: Briefcase, count: careerState.openPositions?.length },
           { id: 'toppers', label: 'टॉपर्स व परिणाम', icon: Trophy, count: toppers.length },
           { id: 'gallery', label: 'गैलरी व एलबम', icon: Image, count: gallery.length },
-          { id: 'contact', label: 'संपर्क व पता', icon: Phone },
+          { id: 'contact', label: 'संपर्क व सोशल', icon: Phone },
         ].map((tab) => {
           const Icon = tab.icon;
           return (
@@ -428,138 +538,366 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
 
       {/* PAGE 3: ABOUT US & DIRECTOR MESSAGE EDITOR */}
       {activeTab === 'about' && (
-        <form onSubmit={handleSaveDirector} className="p-5 space-y-4 max-w-2xl">
-          <div className="border-b border-slate-200 pb-3">
-            <h3 className="text-base font-bold text-slate-900">हमारे बारे में एवं निदेशक संदेश (About & Director)</h3>
-            <p className="text-xs text-slate-500">निदेशक का नाम, योग्यता, फोटो व वेबसाइट पर प्रदर्शित संदेश एडिट करें</p>
+        <form onSubmit={handleSaveDirector} className="p-5 space-y-5 max-w-4xl">
+          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">निदेशक प्रोफाइल एवं संदेश संपादक (Director Profile & Message)</h3>
+              <p className="text-xs text-slate-500">
+                यहाँ किया गया कोई भी बदलाव पूरी वेबसाइट, आईडी कार्ड, रिपोर्ट कार्ड एवं एडमिन पैनल पर तुरंत एक साथ लागू होगा।
+              </p>
+            </div>
+            <button
+              type="submit"
+              className="px-5 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer shrink-0"
+            >
+              <Save size={15} /> प्रोफाइल व संदेश सहेजें (Save Director Info)
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Photo Preview and URL */}
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center gap-4">
+            <img
+              src={directorState.photo || "./director-pic.jpg"}
+              alt={directorState.name}
+              className="w-20 h-20 rounded-2xl object-cover border-2 border-orange-500 shadow-sm shrink-0"
+            />
+            <div className="flex-1 w-full space-y-1">
+              <label className="block text-xs font-bold text-slate-700">निदेशक फोटो URL (Director Photo URL)</label>
+              <input
+                type="text"
+                value={directorState.photo}
+                onChange={(e) => setDirectorState({ ...directorState, photo: e.target.value })}
+                placeholder="./director-pic.jpg या ऑनलाइन इमेज URL"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+              />
+              <p className="text-[11px] text-slate-400">वेबसाइट पर सर्वोत्तम प्रदर्शन हेतु स्क्वायर अथवा 4:5 अनुपात वाली फोटो का प्रयोग करें।</p>
+            </div>
+          </div>
+
+          {/* Names */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">निदेशक का नाम (Director Name)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                निदेशक का नाम (Director Name - English) *
+              </label>
               <input
                 type="text"
                 required
                 value={directorState.name}
                 onChange={(e) => setDirectorState({ ...directorState, name: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                placeholder="e.g. Er. R.K. Mishra"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">पद / भूमिका (Role)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                निदेशक का नाम (Director Name - Hindi)
+              </label>
+              <input
+                type="text"
+                value={directorState.nameHi}
+                onChange={(e) => setDirectorState({ ...directorState, nameHi: e.target.value })}
+                placeholder="उदा. इंजी. आर.के. मिश्रा"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
+              />
+            </div>
+          </div>
+
+          {/* Role & Title */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">पद / भूमिका (Role - English)</label>
               <input
                 type="text"
                 value={directorState.role}
                 onChange={(e) => setDirectorState({ ...directorState, role: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                placeholder="e.g. Director & Senior Physics Faculty"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">पद / भूमिका (Role - Hindi)</label>
+              <input
+                type="text"
+                value={directorState.roleHi}
+                onChange={(e) => setDirectorState({ ...directorState, roleHi: e.target.value })}
+                placeholder="उदा. निदेशक एवं वरिष्ठ भौतिकी संकाय"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Qualification */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">योग्यता व अनुभव (Qualification)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">शैक्षणिक योग्यता (Qualification - English)</label>
               <input
                 type="text"
                 value={directorState.qualification}
                 onChange={(e) => setDirectorState({ ...directorState, qualification: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                placeholder="e.g. B.Tech (IIT BHU), 14+ Years Mentoring IIT-JEE / NEET"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">फोटो URL (Director Photo)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">शैक्षणिक योग्यता (Qualification - Hindi)</label>
               <input
                 type="text"
-                value={directorState.photo}
-                onChange={(e) => setDirectorState({ ...directorState, photo: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                value={directorState.qualificationHi}
+                onChange={(e) => setDirectorState({ ...directorState, qualificationHi: e.target.value })}
+                placeholder="उदा. बी.टेक (आईआईटी बीएचयू), 14+ वर्ष शिक्षण अनुभव"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">निदेशक का संदेश (Director's Message)</label>
-            <textarea
-              rows="4"
-              value={directorState.message}
-              onChange={(e) => setDirectorState({ ...directorState, message: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs leading-relaxed"
-            ></textarea>
+          {/* Experience Badge */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">अनुभव बैज (Experience Badge - English)</label>
+              <input
+                type="text"
+                value={directorState.experienceBadge}
+                onChange={(e) => setDirectorState({ ...directorState, experienceBadge: e.target.value })}
+                placeholder="e.g. 14+ Years Teaching Experience"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">अनुभव बैज (Experience Badge - Hindi)</label>
+              <input
+                type="text"
+                value={directorState.experienceBadgeHi}
+                onChange={(e) => setDirectorState({ ...directorState, experienceBadgeHi: e.target.value })}
+                placeholder="उदा. 14+ वर्ष का शिक्षण अनुभव"
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+              />
+            </div>
           </div>
 
-          <button
-            type="submit"
-            className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5"
-          >
-            <Save size={15} /> बदलाव सहेजें (Save Changes)
-          </button>
+          {/* Vision Headline */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य ध्येय / विज़न कोट (Vision Headline - English)</label>
+              <input
+                type="text"
+                value={directorState.visionHeadline}
+                onChange={(e) => setDirectorState({ ...directorState, visionHeadline: e.target.value })}
+                placeholder='e.g. "Our mission is to empower every Gorakhpur student to secure top ranks."'
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य ध्येय / विज़न कोट (Vision Headline - Hindi)</label>
+              <input
+                type="text"
+                value={directorState.visionHeadlineHi}
+                onChange={(e) => setDirectorState({ ...directorState, visionHeadlineHi: e.target.value })}
+                placeholder='उदा. "गोरखपुर के हर छात्र को देश के शीर्ष संस्थानों में पहुंचाना हमारा ध्येय है"'
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+              />
+            </div>
+          </div>
+
+          {/* Full Message Text */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                विस्तृत निदेशक संदेश (Full Message - English)
+              </label>
+              <textarea
+                rows="6"
+                value={directorState.message}
+                onChange={(e) => setDirectorState({ ...directorState, message: e.target.value })}
+                placeholder="Enter complete message for students and parents..."
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs leading-relaxed bg-white"
+              ></textarea>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                विस्तृत निदेशक संदेश (Full Message - Hindi)
+              </label>
+              <textarea
+                rows="6"
+                value={directorState.messageHi}
+                onChange={(e) => setDirectorState({ ...directorState, messageHi: e.target.value })}
+                placeholder="छात्रों एवं अभिभावकों के लिए सम्पूर्ण संदेश यहाँ लिखें..."
+                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs leading-relaxed bg-white"
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="pt-2 flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer"
+            >
+              <Save size={15} /> निदेशक प्रोफाइल सहेजें (Save Changes)
+            </button>
+          </div>
         </form>
       )}
 
-      {/* PAGE 4: HOME BANNERS EDITOR */}
+      {/* PAGE 4: HOME BANNERS & NOTICE TICKER EDITOR */}
       {activeTab === 'home' && (
-        <div className="p-5 space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-            <div>
-              <h3 className="text-base font-bold text-slate-900">होम पेज बैनर स्लाइडर (Home Slider Banners)</h3>
-              <p className="text-xs text-slate-500">मुख्य पृष्ठ पर घूमने वाले पोस्टर्स व शीर्षकों को बदलें</p>
+        <div className="p-5 space-y-6">
+          {/* LATEST NOTICE FLASH TICKER EDITOR */}
+          <div className="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 p-4 sm:p-5 rounded-2xl border-2 border-orange-200 shadow-xs space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-orange-200 pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+                <h4 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                  होम स्क्रीन फ्लैश नोटिस टिकर (LATEST NOTICE Ticker)
+                </h4>
+              </div>
+              <span className="text-[10px] bg-orange-600 text-white font-extrabold px-2.5 py-0.5 rounded-full uppercase self-start sm:self-auto">
+                Header Marquee Bar
+              </span>
             </div>
-            <button
-              onClick={() => {
-                setEditingBanner(null);
-                setBannerForm({
-                  badge: 'सत्र 2025-26 प्रवेश प्रारंभ',
-                  title: '',
-                  subtitle: '',
-                  ctaPrimary: 'ऑनलाइन प्रवेश करें',
-                  ctaSecondary: 'कोर्स विवरण देखें',
-                  image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80'
-                });
-                setShowBannerModal(true);
-              }}
-              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5"
-            >
-              <Plus size={15} /> नया स्लाइडर बैनर जोड़ें
-            </button>
+            <p className="text-xs text-slate-600">
+              यह महत्वपूर्ण सूचना मुख्य स्क्रीन के सबसे शीर्ष पर नारंगी पट्टी में लगातार स्क्रॉल होती है।
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  फ्लैश नोटिस (English Default) *
+                </label>
+                <input
+                  type="text"
+                  value={tickerState.tickerNotice}
+                  onChange={(e) => setTickerState({ ...tickerState, tickerNotice: e.target.value })}
+                  placeholder="e.g. Admissions Open for Session 2025-26. Scholarship Test (SST) Every Sunday..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  फ्लैश नोटिस (हिंदी अनुवाद - Hindi)
+                </label>
+                <input
+                  type="text"
+                  value={tickerState.tickerNoticeHi}
+                  onChange={(e) => setTickerState({ ...tickerState, tickerNoticeHi: e.target.value })}
+                  placeholder="उदा. सत्र 2025-26 हेतु प्रवेश प्रारंभ। सर्वोदय स्कॉलरशिप टेस्ट (SST) प्रत्येक रविवार..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  updateInstituteInfo({
+                    tickerNotice: tickerState.tickerNotice,
+                    tickerNoticeHi: tickerState.tickerNoticeHi
+                  });
+                  showSuccess('होम स्क्रीन फ्लैश नोटिस (LATEST NOTICE) सफलतापूर्वक अपडेट हो गया!');
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Save size={14} />
+                <span>फ्लैश नोटिस सहेजें (Save Ticker)</span>
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-3">
-            {banners.map((b) => (
-              <div key={b.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <img src={b.image} alt={b.title} className="w-24 h-16 rounded-xl object-cover border" />
-                  <div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-800">{b.badge}</span>
-                    <h4 className="font-bold text-slate-900 text-sm mt-1">{b.title}</h4>
-                    <p className="text-xs text-slate-500 line-clamp-1">{b.subtitle}</p>
+          {/* HOME SLIDER BANNERS */}
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">होम पेज बैनर स्लाइडर (Hero Banners)</h3>
+                <p className="text-xs text-slate-500">
+                  मुख्य पृष्ठ पर घूमने वाले पोस्टर्स, हाइलाइटेड टेक्स्ट एवं बैकग्राउंड विजिबिलिटी (Opacity %) बदलें
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingBanner(null);
+                  setBannerForm({
+                    badge: 'Admissions Open 2025-26',
+                    badgeHi: 'सत्र 2025-26 प्रवेश प्रारंभ',
+                    highlightText: 'Admissions Open 2025-26',
+                    highlightTextHi: 'सत्र 2025-26 प्रवेश प्रारंभ',
+                    title: '',
+                    titleHi: '',
+                    subtitle: '',
+                    subtitleHi: '',
+                    ctaPrimary: 'Apply Online',
+                    ctaPrimaryHi: 'ऑनलाइन प्रवेश करें',
+                    ctaSecondary: 'Explore Courses',
+                    ctaSecondaryHi: 'कोर्स विवरण देखें',
+                    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
+                    imageOpacity: 30
+                  });
+                  setShowBannerModal(true);
+                }}
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus size={15} /> नया स्लाइडर बैनर जोड़ें
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {banners.map((b) => (
+                <div key={b.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-24 h-16 rounded-xl overflow-hidden border shrink-0 bg-slate-900">
+                      <img
+                        src={b.image}
+                        alt={b.title}
+                        className="w-full h-full object-cover"
+                        style={{ opacity: (b.imageOpacity ?? 30) / 100 }}
+                      />
+                      <span className="absolute bottom-1 right-1 bg-black/80 text-[9px] text-white px-1 py-0.5 rounded font-bold">
+                        {b.imageOpacity ?? 30}% Opacity
+                      </span>
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-800">
+                          {b.highlightText || b.badge}
+                        </span>
+                        <span className="text-[10px] bg-slate-200 text-slate-700 font-semibold px-2 py-0.5 rounded">
+                          विजिबिलिटी: {b.imageOpacity ?? 30}%
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-slate-900 text-sm mt-1">{b.title}</h4>
+                      <p className="text-xs text-slate-500 line-clamp-1">{b.subtitle}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => {
+                        setEditingBanner(b);
+                        setBannerForm({
+                          ...b,
+                          highlightText: b.highlightText || b.badge || '',
+                          imageOpacity: b.imageOpacity ?? 30
+                        });
+                        setShowBannerModal(true);
+                      }}
+                      className="p-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Edit3 size={13} /> एडिट
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`क्या आप इस बैनर को हटाना चाहते हैं?`)) {
+                          deleteBanner(b.id);
+                          showSuccess('बैनर हटाया गया!');
+                        }
+                      }}
+                      className="p-1.5 px-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold cursor-pointer"
+                    >
+                      <Trash2 size={13} />
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => {
-                      setEditingBanner(b);
-                      setBannerForm(b);
-                      setShowBannerModal(true);
-                    }}
-                    className="p-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1"
-                  >
-                    <Edit3 size={13} /> एडिट
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (confirm(`क्या आप इस बैनर को हटाना चाहते हैं?`)) {
-                        deleteBanner(b.id);
-                        showSuccess('बैनर हटाया गया!');
-                      }
-                    }}
-                    className="p-1.5 px-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold"
-                  >
-                    <Trash2 size={13} />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -963,6 +1301,304 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
         </form>
       )}
 
+      {/* PAGE 8: LIBRARY SECTION EDITOR */}
+      {activeTab === 'library' && (
+        <form onSubmit={handleSaveLibrary} className="p-5 space-y-6 max-w-4xl">
+          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">लाइब्रेरी केंद्र संपादन (Library & Knowledge Center Editor)</h3>
+              <p className="text-xs text-slate-500">
+                वेबसाइट पर वातानुकूलित सेल्फ-स्टडी हॉल, संदर्भ पुस्तकें एवं समय-सारणी का विवरण अपडेट करें।
+              </p>
+            </div>
+            <button
+              type="submit"
+              className="px-5 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer shrink-0"
+            >
+              <Save size={15} /> लाइब्रेरी बदलाव सहेजें
+            </button>
+          </div>
+
+          {/* Section Headers */}
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3.5">
+            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider text-orange-600">शीर्षक एवं विवरण</h4>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">शीर्ष बैज (Badge - English)</label>
+                <input
+                  type="text"
+                  value={libraryState.badge}
+                  onChange={(e) => setLibraryState({ ...libraryState, badge: e.target.value })}
+                  placeholder="e.g. Saryoday Knowledge Center"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">शीर्ष बैज (Badge - Hindi)</label>
+                <input
+                  type="text"
+                  value={libraryState.badgeHi}
+                  onChange={(e) => setLibraryState({ ...libraryState, badgeHi: e.target.value })}
+                  placeholder="उदा. सर्वोदय ज्ञान केंद्र"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य शीर्षक (Title - English) *</label>
+                <input
+                  type="text"
+                  required
+                  value={libraryState.title}
+                  onChange={(e) => setLibraryState({ ...libraryState, title: e.target.value })}
+                  placeholder="e.g. Air-Conditioned Self-Study & Digital Library"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य शीर्षक (Title - Hindi)</label>
+                <input
+                  type="text"
+                  value={libraryState.titleHi}
+                  onChange={(e) => setLibraryState({ ...libraryState, titleHi: e.target.value })}
+                  placeholder="उदा. वातानुकूलित शांत सेल्फ-स्टडी एवं डिजिटल लाइब्रेरी"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">उप-शीर्षक (Subtitle - English)</label>
+                <textarea
+                  rows="2"
+                  value={libraryState.subtitle}
+                  onChange={(e) => setLibraryState({ ...libraryState, subtitle: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+                ></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">उप-शीर्षक (Subtitle - Hindi)</label>
+                <textarea
+                  rows="2"
+                  value={libraryState.subtitleHi}
+                  onChange={(e) => setLibraryState({ ...libraryState, subtitleHi: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+                ></textarea>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">लाइब्रेरी समय (Timings - English)</label>
+                <input
+                  type="text"
+                  value={libraryState.timings}
+                  onChange={(e) => setLibraryState({ ...libraryState, timings: e.target.value })}
+                  placeholder="e.g. Open 7:00 AM to 9:00 PM (7 Days a Week)"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">लाइब्रेरी समय (Timings - Hindi)</label>
+                <input
+                  type="text"
+                  value={libraryState.timingsHi}
+                  onChange={(e) => setLibraryState({ ...libraryState, timingsHi: e.target.value })}
+                  placeholder="उदा. प्रातः 7:00 AM से रात्रि 9:00 PM (सातों दिन खुला)"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2 flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer"
+            >
+              <Save size={15} /> लाइब्रेरी बदलाव सहेजें (Save Changes)
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* PAGE 9: CAREER & RECRUITMENT SECTION EDITOR */}
+      {activeTab === 'career' && (
+        <div className="p-5 space-y-6 max-w-4xl">
+          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">करियर एवं फैकल्टी भर्ती संपादन (Career & Recruitment)</h3>
+              <p className="text-xs text-slate-500">
+                वेबसाइट पर खुली रिक्तियों (Open Positions), योग्यता तथा व्यक्तिगत करियर काउंसलिंग नोट्स को बदलें।
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setEditingPosition(null);
+                  setPositionForm({
+                    role: '',
+                    department: 'Engineering Wing',
+                    qualification: '',
+                    experience: '',
+                    type: 'Full-Time (Shahpur Campus)',
+                    compensation: 'Industry Best'
+                  });
+                  setShowPositionModal(true);
+                }}
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus size={15} /> नया पद जोड़ें (Add Position)
+              </button>
+              <button
+                onClick={handleSaveCareer}
+                className="px-5 py-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Save size={15} /> सहेजें
+              </button>
+            </div>
+          </div>
+
+          {/* Section Headers & Counseling Note Form */}
+          <form onSubmit={handleSaveCareer} className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3.5">
+            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider text-orange-600">शीर्षक एवं करियर काउंसलिंग नोट</h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">शीर्ष बैज (Badge - English)</label>
+                <input
+                  type="text"
+                  value={careerState.badge}
+                  onChange={(e) => setCareerState({ ...careerState, badge: e.target.value })}
+                  placeholder="e.g. Join Saryoday Team & Career Guidance"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">शीर्ष बैज (Badge - Hindi)</label>
+                <input
+                  type="text"
+                  value={careerState.badgeHi}
+                  onChange={(e) => setCareerState({ ...careerState, badgeHi: e.target.value })}
+                  placeholder="उदा. सर्वोदय टीम से जुड़ें एवं करियर मार्गदर्शन"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य शीर्षक (Title - English) *</label>
+                <input
+                  type="text"
+                  required
+                  value={careerState.title}
+                  onChange={(e) => setCareerState({ ...careerState, title: e.target.value })}
+                  placeholder="e.g. Faculty Opportunities & Career Mentoring"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">मुख्य शीर्षक (Title - Hindi)</label>
+                <input
+                  type="text"
+                  value={careerState.titleHi}
+                  onChange={(e) => setCareerState({ ...careerState, titleHi: e.target.value })}
+                  placeholder="उदा. फैकल्टी भर्ती एवं विशेषज्ञ करियर काउंसलिंग"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white font-bold"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">करियर काउंसलिंग नोट (Counseling Note - English)</label>
+                <textarea
+                  rows="2"
+                  value={careerState.counselingNote}
+                  onChange={(e) => setCareerState({ ...careerState, counselingNote: e.target.value })}
+                  placeholder="e.g. Unsure between Engineering and Medicine? Free diagnostic counseling..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+                ></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">करियर काउंसलिंग नोट (Counseling Note - Hindi)</label>
+                <textarea
+                  rows="2"
+                  value={careerState.counselingNoteHi}
+                  onChange={(e) => setCareerState({ ...careerState, counselingNoteHi: e.target.value })}
+                  placeholder="उदा. इंजीनियरिंग अथवा मेडिकल चयन में असमंजस? निःशुल्क व्यक्तिगत काउंसलिंग..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white"
+                ></textarea>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="submit"
+                className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer"
+              >
+                <Save size={14} /> शीर्षक व काउंसलिंग नोट सहेजें
+              </button>
+            </div>
+          </form>
+
+          {/* Open Positions List */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-sm text-slate-900 flex items-center justify-between">
+              <span>वर्तमान खुली रिक्तियां (Active Job Openings - {careerState.openPositions?.length || 0})</span>
+              <span className="text-xs text-slate-500 font-normal">वेबसाइट करियर सेक्शन पर लाइव प्रदर्शित</span>
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {(careerState.openPositions || []).map((pos, idx) => (
+                <div key={pos.id || idx} className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between space-y-3">
+                  <div>
+                    <div className="flex items-start justify-between gap-2">
+                      <h5 className="font-bold text-slate-900 text-sm">{pos.role}</h5>
+                      <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded border border-blue-200 shrink-0">
+                        {pos.type}
+                      </span>
+                    </div>
+                    <p className="text-xs text-orange-600 font-semibold mt-0.5">{pos.department}</p>
+                    <div className="mt-2 text-xs text-slate-600 space-y-0.5">
+                      <p><strong>योग्यता:</strong> {pos.qualification}</p>
+                      <p><strong>अनुभव:</strong> {pos.experience}</p>
+                      <p className="text-emerald-700 font-bold"><strong>वेतन/पैकेज:</strong> {pos.compensation}</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingPosition(pos);
+                        setPositionForm(pos);
+                        setShowPositionModal(true);
+                      }}
+                      className="p-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Edit3 size={13} /> एडिट
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeletePosition(pos.id)}
+                      className="p-1.5 px-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold cursor-pointer"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* MODAL: ADD / EDIT COURSE */}
       {showCourseModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
@@ -1255,7 +1891,7 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
       {/* MODAL: ADD / EDIT BANNER */}
       {showBannerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowBannerModal(false)}
               className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full"
@@ -1263,59 +1899,129 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
               <X size={20} />
             </button>
             <h3 className="text-lg font-black text-slate-900 mb-4">
-              {editingBanner ? 'बैनर अपडेट करें' : 'नया होम स्लाइडर बैनर जोड़ें'}
+              {editingBanner ? 'बैनर एवं विजिबिलिटी अपडेट करें' : 'नया होम स्लाइडर बैनर जोड़ें'}
             </h3>
-            <form onSubmit={handleBannerSubmit} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">शीर्ष टैग / बैज (Badge)</label>
-                <input
-                  type="text"
-                  value={bannerForm.badge}
-                  onChange={(e) => setBannerForm({ ...bannerForm, badge: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                />
+            <form onSubmit={handleBannerSubmit} className="space-y-3.5 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">हाइलाइटेड बैज टेक्स्ट (English)</label>
+                  <input
+                    type="text"
+                    value={bannerForm.highlightText || bannerForm.badge || ''}
+                    onChange={(e) => setBannerForm({ ...bannerForm, highlightText: e.target.value, badge: e.target.value })}
+                    placeholder="e.g. Admissions Open 2025-26"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">हाइलाइटेड बैज टेक्स्ट (Hindi)</label>
+                  <input
+                    type="text"
+                    value={bannerForm.highlightTextHi || bannerForm.badgeHi || ''}
+                    onChange={(e) => setBannerForm({ ...bannerForm, highlightTextHi: e.target.value, badgeHi: e.target.value })}
+                    placeholder="उदा. सत्र 2025-26 प्रवेश प्रारंभ"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold"
+                  />
+                </div>
               </div>
+
               <div>
-                <label className="block font-bold text-slate-700 mb-1">मुख्य शीर्षक (Headline)*</label>
+                <label className="block font-bold text-slate-700 mb-1">मुख्य शीर्षक (Headline - English) *</label>
                 <input
                   type="text"
                   required
                   value={bannerForm.title}
                   onChange={(e) => setBannerForm({ ...bannerForm, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  placeholder="e.g. Committed to Top Ranks in IIT-JEE & NEET"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-bold"
                 />
               </div>
+
               <div>
-                <label className="block font-bold text-slate-700 mb-1">उप-शीर्षक (Subtitle)</label>
+                <label className="block font-bold text-slate-700 mb-1">मुख्य शीर्षक (Headline - Hindi)</label>
+                <input
+                  type="text"
+                  value={bannerForm.titleHi || ''}
+                  onChange={(e) => setBannerForm({ ...bannerForm, titleHi: e.target.value })}
+                  placeholder="उदा. IIT-JEE एवं NEET में सर्वोच्च रैंक हेतु समर्पित संस्थान"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">उप-शीर्षक (Subtitle - English)</label>
                 <textarea
                   rows="2"
                   value={bannerForm.subtitle}
                   onChange={(e) => setBannerForm({ ...bannerForm, subtitle: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  placeholder="Description or features..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs leading-relaxed"
                 ></textarea>
               </div>
+
               <div>
-                <label className="block font-bold text-slate-700 mb-1">बैकग्राउंड फोटो URL</label>
+                <label className="block font-bold text-slate-700 mb-1">उप-शीर्षक (Subtitle - Hindi)</label>
+                <textarea
+                  rows="2"
+                  value={bannerForm.subtitleHi || ''}
+                  onChange={(e) => setBannerForm({ ...bannerForm, subtitleHi: e.target.value })}
+                  placeholder="विवरण अथवा मुख्य विशेषताएं..."
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs leading-relaxed"
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">बैकग्राउंड फोटो URL (Image URL)</label>
                 <input
                   type="text"
                   value={bannerForm.image}
                   onChange={(e) => setBannerForm({ ...bannerForm, image: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  placeholder="https://images.unsplash.com/... या स्थानीय पाथ"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
                 />
               </div>
+
+              {/* Banner Background Visibility / Opacity Slider */}
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="font-bold text-slate-800 flex items-center gap-1.5">
+                    <Sliders size={14} className="text-orange-600" />
+                    <span>बैकग्राउंड फोटो दृश्यता / विजिबिलिटी (Opacity %)</span>
+                  </label>
+                  <span className="font-black text-orange-600 bg-orange-100 px-2 py-0.5 rounded border border-orange-300 text-xs">
+                    {bannerForm.imageOpacity ?? 30}% विजिबिलिटी
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  step="5"
+                  value={bannerForm.imageOpacity ?? 30}
+                  onChange={(e) => setBannerForm({ ...bannerForm, imageOpacity: Number(e.target.value) })}
+                  className="w-full accent-orange-600 cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                  <span>10% (हल्का बैकग्राउंड)</span>
+                  <span>30% (अनुशंसित मानक)</span>
+                  <span>60% (मध्यम दृश्यता)</span>
+                  <span>100% (पूर्ण स्पष्ट फोटो)</span>
+                </div>
+              </div>
+
               <div className="pt-2 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowBannerModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-bold"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold cursor-pointer"
                 >
                   रद्द करें
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow"
+                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow cursor-pointer"
                 >
-                  सहेजें
+                  सहेजें (Save Banner)
                 </button>
               </div>
             </form>
@@ -1687,6 +2393,110 @@ export const WebsiteCmsEditor = ({ initialTab = 'courses' }) => {
                   className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow"
                 >
                   जोड़ें
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: ADD / EDIT CAREER POSITION */}
+      {showPositionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowPositionModal(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full"
+            >
+              <X size={20} />
+            </button>
+            <h3 className="text-lg font-black text-slate-900 mb-4">
+              {editingPosition ? 'फैकल्टी रिक्ति पद अपडेट करें' : 'नया फैकल्टी/स्टाफ पद जोड़ें'}
+            </h3>
+            <form onSubmit={handlePositionSubmit} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">पद / भूमिका का नाम (Position Title) *</label>
+                <input
+                  type="text"
+                  required
+                  value={positionForm.role}
+                  onChange={(e) => setPositionForm({ ...positionForm, role: e.target.value })}
+                  placeholder="उदा. Senior Faculty - IIT-JEE (Physics)"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">विभाग / विंग (Department)</label>
+                <input
+                  type="text"
+                  value={positionForm.department}
+                  onChange={(e) => setPositionForm({ ...positionForm, department: e.target.value })}
+                  placeholder="उदा. Engineering Wing / Medical Wing / Foundation"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">अपेक्षित शैक्षणिक योग्यता (Qualification)</label>
+                <input
+                  type="text"
+                  value={positionForm.qualification}
+                  onChange={(e) => setPositionForm({ ...positionForm, qualification: e.target.value })}
+                  placeholder="उदा. B.Tech (IIT/NIT) अथवा M.Sc Physics"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">अपेक्षित शिक्षण अनुभव (Experience)</label>
+                <input
+                  type="text"
+                  value={positionForm.experience}
+                  onChange={(e) => setPositionForm({ ...positionForm, experience: e.target.value })}
+                  placeholder="उदा. 3+ years in premier coaching institute"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">नौकरी का प्रकार (Job Type)</label>
+                  <select
+                    value={positionForm.type}
+                    onChange={(e) => setPositionForm({ ...positionForm, type: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white"
+                  >
+                    <option value="Full-Time (Shahpur Campus)">Full-Time (शाहपुर)</option>
+                    <option value="Part-Time / Visiting">Part-Time / Visiting</option>
+                    <option value="Doubt Faculty">Doubt Faculty</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">वेतन/पैकेज (Compensation)</label>
+                  <input
+                    type="text"
+                    value={positionForm.compensation}
+                    onChange={(e) => setPositionForm({ ...positionForm, compensation: e.target.value })}
+                    placeholder="उदा. Industry Best + Bonus"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowPositionModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold cursor-pointer"
+                >
+                  रद्द करें
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-bold shadow cursor-pointer"
+                >
+                  {editingPosition ? 'अपडेट करें' : 'पद प्रकाशित करें'}
                 </button>
               </div>
             </form>

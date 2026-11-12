@@ -6,6 +6,22 @@ import { useLanguage } from '../../context/LanguageContext';
 export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
   const { isHindi } = useLanguage();
 
+  // Visitor Counter: Count only once per browser session.
+  // Appends query_only=true on refresh so page reloads never inflate the count.
+  const visitorBadgeUrl = React.useMemo(() => {
+    const base = "https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=18";
+    try {
+      const alreadyLogged = sessionStorage.getItem('SARYODAY_VISITOR_LOGGED');
+      if (alreadyLogged) {
+        return `${base}&query_only=true`;
+      }
+      sessionStorage.setItem('SARYODAY_VISITOR_LOGGED', 'true');
+      return base;
+    } catch {
+      return base;
+    }
+  }, []);
+
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -89,7 +105,7 @@ export const Footer = ({ instituteInfo, onOpenLogin, onOpenAdmission }) => {
               <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] text-slate-400">
                 <Eye size={12} className="text-orange-400 shrink-0" />
                 <img
-                  src="https://visitor-badge.laobi.icu/badge?page_id=saryoday-academics-gorakhpur&left_text=Visitors&left_color=%230f172a&right_color=%23ea580c&format=true&radius=4&height=18"
+                  src={visitorBadgeUrl}
                   alt="Live Visitors Counter"
                   className="h-4 inline rounded"
                   loading="eager"

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Briefcase, Send, CheckCircle2, GraduationCap, Award, Compass, ArrowRight, UserPlus, FileText } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const CareerSection = () => {
-  const { submitInquiry } = useData();
+  const { isHindi } = useLanguage();
+  const { submitInquiry, careerInfo, instituteInfo } = useData();
 
   const [activeTab, setActiveTab] = useState('faculty'); // 'faculty' | 'guidance'
   const [candidateForm, setCandidateForm] = useState({
@@ -17,7 +19,7 @@ export const CareerSection = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const openPositions = [
+  const openPositions = careerInfo?.openPositions || [
     {
       role: "Senior Faculty - IIT-JEE (Physics)",
       department: "Engineering Wing",
@@ -100,13 +102,13 @@ export const CareerSection = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full border border-orange-200">
-            Career & Recruitment
+            {isHindi ? (careerInfo?.badgeHi || careerInfo?.badge || "सर्वोदय टीम से जुड़ें एवं करियर मार्गदर्शन") : (careerInfo?.badge || "Join Saryoday Team & Career Guidance")}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
-            Shape Your Future with Saryoday Academics
+            {isHindi ? (careerInfo?.titleHi || careerInfo?.title || "फैकल्टी भर्ती एवं विशेषज्ञ करियर काउंसलिंग") : (careerInfo?.title || "Faculty Opportunities & Career Mentoring")}
           </h2>
           <p className="text-sm text-slate-600 mt-2">
-            Explore exciting teaching & leadership careers at Gorakhpur's fastest growing institute or access specialized student career counseling
+            {isHindi ? (careerInfo?.subtitleHi || careerInfo?.subtitle || "मेधावी छात्रों का भविष्य संवारें अथवा विशेषज्ञ करियर काउंसलिंग प्राप्त करें") : (careerInfo?.subtitle || "Shape the future of young aspirants or receive personalized counseling from our expert faculty team")}
           </p>
 
           {/* Tab Switcher */}
@@ -117,7 +119,7 @@ export const CareerSection = () => {
                 activeTab === 'faculty' ? 'bg-orange-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Faculty & Staff Recruitment ({openPositions.length} Openings)
+              {isHindi ? `फैकल्टी भर्ती (${openPositions.length} पद)` : `Faculty & Staff Recruitment (${openPositions.length} Openings)`}
             </button>
             <button
               onClick={() => setActiveTab('guidance')}
@@ -125,7 +127,7 @@ export const CareerSection = () => {
                 activeTab === 'guidance' ? 'bg-orange-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Student Career Roadmap
+              {isHindi ? "विद्यार्थी करियर रोडमैप" : "Student Career Roadmap"}
             </button>
           </div>
         </div>
@@ -305,9 +307,13 @@ export const CareerSection = () => {
 
             <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">Book 1-on-1 Career Mentorship with Director</h3>
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  {isHindi ? "संस्थान निदेशक के साथ 1-on-1 करियर मेंटरशिप" : "Book 1-on-1 Career Mentorship with Director"}
+                </h3>
                 <p className="text-xs text-slate-300 mt-1 max-w-2xl">
-                  Unsure between Engineering (IIT-JEE) and Medicine (NEET)? Er. R.K. Mishra (IIT BHU) provides complimentary 30-minute diagnostic counseling for students and parents.
+                  {isHindi
+                    ? (careerInfo?.counselingNoteHi || "इंजीनियरिंग (IIT-JEE) अथवा मेडिकल (NEET) चयन में असमंजस? छात्रों एवं अभिभावकों हेतु 30 मिनट की निःशुल्क व्यक्तिगत काउंसलिंग।")
+                    : (careerInfo?.counselingNote || `Unsure between Engineering (IIT-JEE) and Medicine (NEET)? ${instituteInfo?.director?.name || 'Director'} provides complimentary 30-minute diagnostic counseling for students and parents.`)}
                 </p>
               </div>
               <a
