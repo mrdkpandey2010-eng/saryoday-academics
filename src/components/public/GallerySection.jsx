@@ -18,16 +18,21 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
     const seenUrls = new Set();
 
     (albums || []).forEach(alb => {
+      const albTitle = isHindi ? (alb.titleHi || alb.hindiTitle || alb.title) : (alb.title || alb.titleHi);
+      const albDesc = isHindi ? (alb.descriptionHi || alb.description) : (alb.description || alb.descriptionHi);
+      const albCat = isHindi ? (alb.categoryHi || alb.category) : (alb.category || alb.categoryHi);
+
       (alb.photos || []).forEach(p => {
         if (!seenUrls.has(p.url)) {
           seenUrls.add(p.url);
           list.push({
             id: p.id,
-            title: p.title || alb.title,
-            caption: p.caption || alb.description,
-            category: alb.category,
+            title: isHindi ? (p.titleHi || p.title || albTitle) : (p.title || p.titleHi || albTitle),
+            caption: isHindi ? (p.captionHi || p.caption || albDesc) : (p.caption || p.captionHi || albDesc),
+            category: albCat,
+            rawCategory: alb.category,
             image: p.url,
-            albumTitle: alb.title,
+            albumTitle: albTitle,
             albumId: alb.id
           });
         }
@@ -39,37 +44,44 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
         seenUrls.add(g.image);
         list.push({
           id: g.id,
-          title: g.title,
+          title: isHindi ? (g.titleHi || g.title) : (g.title || g.titleHi),
           caption: '',
-          category: g.category,
+          category: isHindi ? (g.categoryHi || g.category) : (g.category || g.categoryHi),
+          rawCategory: g.category,
           image: g.image,
-          albumTitle: 'सामान्य गैलरी',
+          albumTitle: isHindi ? 'सामान्य कैंपस गैलरी' : 'General Campus Gallery',
           albumId: null
         });
       }
     });
 
     return list;
-  }, [albums, gallery]);
+  }, [albums, gallery, isHindi]);
 
   // Categories for filter
   const categories = [
-    { id: 'all', label: 'सभी तस्वीरें व एलबम (All)' },
-    { id: 'Felicitation', label: 'सम्मान समारोह (Toppers)' },
-    { id: 'Classroom', label: 'क्लासरूम्स (Classrooms)' },
-    { id: 'Campus', label: 'कैंपस व लाइब्रेरी (Campus)' },
-    { id: 'Events', label: 'कार्यक्रम व PTM' },
+    { id: 'all', label: isHindi ? 'सभी तस्वीरें व एलबम (All)' : 'All Photos & Albums' },
+    { id: 'Felicitation', label: isHindi ? 'सम्मान समारोह (Toppers)' : 'Felicitation & Awards' },
+    { id: 'Classroom', label: isHindi ? 'क्लासरूम्स (Classrooms)' : 'Smart Classrooms' },
+    { id: 'Campus', label: isHindi ? 'कैंपस व लाइब्रेरी (Campus)' : 'Campus & Facilities' },
+    { id: 'Events', label: isHindi ? 'कार्यक्रम व PTM' : 'Events & Seminars' },
   ];
 
   // Filtered albums
   const filteredAlbums = filter === 'all'
     ? albums
-    : (albums || []).filter(alb => alb.category?.toLowerCase().includes(filter.toLowerCase()) || filter.toLowerCase().includes(alb.category?.toLowerCase()));
+    : (albums || []).filter(alb => {
+        const cat = `${alb.category || ''} ${alb.categoryHi || ''}`.toLowerCase();
+        return cat.includes(filter.toLowerCase());
+      });
 
   // Filtered photos for all-photos view
   const filteredPhotos = filter === 'all'
     ? allPhotos
-    : allPhotos.filter(p => p.category?.toLowerCase().includes(filter.toLowerCase()) || filter.toLowerCase().includes(p.category?.toLowerCase()));
+    : allPhotos.filter(p => {
+        const cat = `${p.category || ''} ${p.rawCategory || ''}`.toLowerCase();
+        return cat.includes(filter.toLowerCase());
+      });
 
   // Open Lightbox
   const openLightbox = (photos, index) => {
@@ -199,11 +211,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
 
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[11px] font-bold text-white bg-orange-600 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    {selectedAlbum.category}
+                    {isHindi ? (selectedAlbum.categoryHi || selectedAlbum.category) : (selectedAlbum.category || selectedAlbum.categoryHi)}
                   </span>
-                  {selectedAlbum.date && (
+                  {(selectedAlbum.date || selectedAlbum.dateHi) && (
                     <span className="text-xs text-slate-500 flex items-center gap-1">
-                      <Calendar size={13} /> {selectedAlbum.date}
+                      <Calendar size={13} /> {isHindi ? (selectedAlbum.dateHi || selectedAlbum.date) : (selectedAlbum.date || selectedAlbum.dateHi)}
                     </span>
                   )}
                   <span className="text-xs font-bold text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
@@ -212,11 +224,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                 </div>
 
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
-                  {selectedAlbum.title}
+                  {isHindi ? (selectedAlbum.titleHi || selectedAlbum.hindiTitle || selectedAlbum.title) : (selectedAlbum.title || selectedAlbum.titleHi)}
                 </h3>
-                {selectedAlbum.description && (
+                {(selectedAlbum.description || selectedAlbum.descriptionHi) && (
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    {selectedAlbum.description}
+                    {isHindi ? (selectedAlbum.descriptionHi || selectedAlbum.description) : (selectedAlbum.description || selectedAlbum.descriptionHi)}
                   </p>
                 )}
               </div>
@@ -240,11 +252,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                     onClick={() => {
                       const list = selectedAlbum.photos.map(p => ({
                         id: p.id,
-                        title: p.title || selectedAlbum.title,
-                        caption: p.caption || '',
-                        category: selectedAlbum.category,
+                        title: isHindi ? (p.titleHi || p.title || selectedAlbum.title) : (p.title || p.titleHi || selectedAlbum.title),
+                        caption: isHindi ? (p.captionHi || p.caption || '') : (p.caption || p.captionHi || ''),
+                        category: isHindi ? (selectedAlbum.categoryHi || selectedAlbum.category) : (selectedAlbum.category || selectedAlbum.categoryHi),
                         image: p.url,
-                        albumTitle: selectedAlbum.title
+                        albumTitle: isHindi ? (selectedAlbum.titleHi || selectedAlbum.hindiTitle || selectedAlbum.title) : (selectedAlbum.title || selectedAlbum.titleHi)
                       }));
                       openLightbox(list, idx);
                     }}
@@ -259,11 +271,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
 
                     <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                       <p className="text-sm font-bold leading-snug drop-shadow-sm">
-                        {photo.title || `तस्वीर #${idx + 1}`}
+                        {isHindi ? (photo.titleHi || photo.title || `तस्वीर #${idx + 1}`) : (photo.title || photo.titleHi || `Photo #${idx + 1}`)}
                       </p>
-                      {photo.caption && (
+                      {(photo.caption || photo.captionHi) && (
                         <p className="text-xs text-slate-300 mt-1 line-clamp-2 font-medium">
-                          {photo.caption}
+                          {isHindi ? (photo.captionHi || photo.caption) : (photo.caption || photo.captionHi)}
                         </p>
                       )}
                     </div>
@@ -276,7 +288,9 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
               </div>
             ) : (
               <div className="p-12 text-center bg-slate-50 rounded-3xl border border-dashed border-slate-300">
-                <p className="text-sm text-slate-500 font-semibold">इस एलबम में अभी तस्वीरें जोड़ी जा रही हैं।</p>
+                <p className="text-sm text-slate-500 font-semibold">
+                  {isHindi ? "इस एलबम में अभी तस्वीरें जोड़ी जा रही हैं।" : "Photos are currently being added to this album."}
+                </p>
               </div>
             )}
           </div>
@@ -307,19 +321,19 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                     {/* Badge: Photo Count */}
                     <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
                       <Folder size={13} className="text-orange-400" />
-                      <span>{photoCount} {photoCount === 1 ? 'फोटो' : 'तस्वीरें'}</span>
+                      <span>{photoCount} {isHindi ? (photoCount === 1 ? 'फोटो' : 'तस्वीरें') : (photoCount === 1 ? 'Photo' : 'Photos')}</span>
                     </div>
 
                     {/* Category Badge */}
                     <div className="absolute top-3 left-3 bg-orange-600/90 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                      {album.category}
+                      {isHindi ? (album.categoryHi || album.category) : (album.category || album.categoryHi)}
                     </div>
 
                     {/* Session / Date Pill */}
-                    {album.date && (
+                    {(album.date || album.dateHi) && (
                       <div className="absolute bottom-3 left-3 text-white/90 text-xs font-medium flex items-center gap-1">
                         <Calendar size={13} className="text-amber-400" />
-                        <span>{album.date}</span>
+                        <span>{isHindi ? (album.dateHi || album.date) : (album.date || album.dateHi)}</span>
                       </div>
                     )}
                   </div>
@@ -328,11 +342,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div>
                       <h3 className="text-lg font-black text-slate-900 group-hover:text-orange-600 transition leading-snug">
-                        {album.title}
+                        {isHindi ? (album.titleHi || album.hindiTitle || album.title) : (album.title || album.titleHi)}
                       </h3>
-                      {album.description && (
+                      {(album.description || album.descriptionHi) && (
                         <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
-                          {album.description}
+                          {isHindi ? (album.descriptionHi || album.description) : (album.description || album.descriptionHi)}
                         </p>
                       )}
                     </div>
@@ -340,11 +354,11 @@ export const GallerySection = ({ gallery = [], albums = [] }) => {
                     {/* Footer Button */}
                     <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-orange-600">
                       <span className="flex items-center gap-1 group-hover:translate-x-1 transition">
-                        <span>एलबम खोलें (Open Album)</span>
+                        <span>{isHindi ? "एलबम खोलें (Open Album)" : "Open Album"}</span>
                         <ChevronRight size={15} />
                       </span>
                       <span className="text-slate-400 font-normal text-[11px]">
-                        क्लिक करके देखें
+                        {isHindi ? "क्लिक करके देखें" : "Click to view"}
                       </span>
                     </div>
                   </div>

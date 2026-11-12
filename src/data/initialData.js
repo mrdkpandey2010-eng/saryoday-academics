@@ -397,82 +397,110 @@ export const initialToppers = [
 export const initialAlbums = [
   {
     id: "alb-felicitation",
-    title: "Toppers Felicitation & Awards Ceremony",
+    title: "Toppers Felicitation and Awards Ceremony",
+    titleHi: "वार्षिक टॉपर सम्मान एवं पुरस्कार वितरण",
     hindiTitle: "वार्षिक टॉपर सम्मान एवं पुरस्कार वितरण",
     category: "Felicitation Ceremony",
+    categoryHi: "सम्मान समारोह (Felicitation)",
     date: "Session 2024-25",
+    dateHi: "सत्र 2024-25",
     description: "Grand annual felicitation celebrating outstanding students who secured premier ranks in IIT-JEE, NEET and Board Exams.",
+    descriptionHi: "गोरखपुर के बोर्ड व प्रतियोगी परीक्षाओं (IIT-JEE / NEET) में उत्कृष्ट अंक प्राप्त करने वाले छात्र-छात्राओं का भव्य सम्मान समारोह।",
     coverImage: "./galary.jpg",
     photos: [
       {
         id: "p-fel-01",
         url: "./galary.jpg",
         title: "Main Stage Felicitation Ceremony",
-        caption: "Director and senior faculty conferring medals and trophies"
+        titleHi: "मुख्य मंच पर पुरस्कार वितरण समारोह",
+        caption: "Director and senior faculty conferring medals and trophies",
+        captionHi: "निदेशक एवं वरिष्ठ शिक्षकों द्वारा मेडल व स्मृति चिन्ह प्रदान करते हुए"
       },
       {
         id: "p-fel-02",
         url: "./galary1.jpg",
         title: "Meritorious Students Group with Educators",
-        caption: "Celebrating high percentile success at Saryoday"
+        titleHi: "शिक्षकों संग मेधावी विद्यार्थियों का समूह",
+        caption: "Celebrating high percentile success at Saryoday",
+        captionHi: "सफलता का उत्सव मनाते सर्वोदय एकेडेमिक्स के सितारे"
       },
       {
         id: "p-fel-03",
         url: "./galary2.jpg",
-        title: "Stage Honors & Inspiration Address",
-        caption: "Dedication and systematic practice yielding excellence"
+        title: "Stage Honors and Inspiration Address",
+        titleHi: "मंच सम्मान एवं छात्रों का उत्साहवर्धन",
+        caption: "Dedication and systematic practice yielding excellence",
+        captionHi: "कठिन परिश्रम और निरंतर अभ्यास द्वारा उत्कृष्ट परीक्षा परिणाम"
       }
     ]
   },
   {
     id: "alb-classroom",
-    title: "Smart Classroom Teaching & Interaction",
+    title: "Smart Classroom Teaching and Interaction",
+    titleHi: "स्मार्ट क्लासरूम एवं व्यक्तिगत मार्गदर्शन",
     hindiTitle: "स्मार्ट क्लासरूम एवं व्यक्तिगत मार्गदर्शन",
     category: "Classroom Life",
+    categoryHi: "क्लासरूम शिक्षण (Classroom)",
     date: "Session 2024-25",
+    dateHi: "सत्र 2024-25",
     description: "Modern classrooms, deep conceptual delivery by senior faculty and active student participation.",
+    descriptionHi: "आधुनिक क्लासरूम, अनुभवी शिक्षकों द्वारा विषय का गहन विश्लेषण एवं विद्यार्थियों की सक्रिय सहभागिता।",
     coverImage: "./galary3.jpg",
     photos: [
       {
         id: "p-cls-01",
         url: "./galary3.jpg",
-        title: "Physics & Mathematics Interactive Lecture",
-        caption: "Concept clearance and problem-solving session"
+        title: "Physics and Mathematics Interactive Lecture",
+        titleHi: "भौतिकी एवं गणित गहन क्लासरूम व्याख्यान",
+        caption: "Concept clearance and problem-solving session",
+        captionHi: "कॉन्सेप्ट क्लीयरेंस और समस्या निवारण सत्र"
       },
       {
         id: "p-cls-02",
         url: "./galary4.jpg",
-        title: "1-on-1 Faculty Mentoring & Doubt Counters",
-        caption: "Post-class individual problem resolution"
+        title: "1-on-1 Faculty Mentoring and Doubt Counters",
+        titleHi: "विद्यार्थियों के साथ संकाय सदस्य एवं डाउट काउंटर",
+        caption: "Post-class individual problem resolution",
+        captionHi: "कक्षा के बाद व्यक्तिगत डाउट समाधान"
       }
     ]
   },
   {
     id: "alb-campus",
-    title: "Saryoday Campus & Learning Ambience",
+    title: "Saryoday Campus and Learning Ambience",
+    titleHi: "सर्वोदय कैंपस एवं अध्ययन वातावरण",
     hindiTitle: "अनुशासित एवं प्रेरणादायी परिवेश",
     category: "Campus Ambience",
+    categoryHi: "कैंपस परिवेश (Campus)",
     date: "Session 2024-25",
+    dateHi: "सत्र 2024-25",
     description: "Disciplined, peaceful and inspiring academic infrastructure at B-Colony Shahpur, Gorakhpur.",
+    descriptionHi: "बी-कॉलोनी शाहपुर स्थित सर्वोदय एकेडेमिक्स का सुव्यवस्थित, शांत एवं प्रेरक शैक्षणिक परिवेश।",
     coverImage: "./galary1.jpg",
     photos: [
       {
         id: "p-cmp-01",
         url: "./galary1.jpg",
         title: "Saryoday Shahpur Campus Grounds",
-        caption: "Optimal infrastructure for comprehensive student growth"
+        titleHi: "सर्वोदय एकेडेमिक्स शाहपुर कैंपस प्रांगण",
+        caption: "Optimal infrastructure for comprehensive student growth",
+        captionHi: "छात्रों के समग्र विकास हेतु उत्कृष्ट इंफ्रास्ट्रक्चर"
       },
       {
         id: "p-cmp-02",
         url: "./galary2.jpg",
-        title: "Annual Conclave & Student Dialogue",
-        caption: "Tradition of discipline and academic integrity"
+        title: "Annual Conclave and Student Dialogue",
+        titleHi: "वार्षिक सम्मेलन एवं छात्र संवाद",
+        caption: "Tradition of discipline and academic integrity",
+        captionHi: "अनुशासन और सफलता की परंपरा"
       },
       {
         id: "p-cmp-03",
         url: "./galary4.jpg",
-        title: "Library & Peer Study Discussions",
-        caption: "Aspirants engaged in academic discussions"
+        title: "Library and Peer Study Discussions",
+        titleHi: "लाइब्रेरी अध्ययन एवं ग्रुप डिस्कशन",
+        caption: "Aspirants engaged in academic discussions",
+        captionHi: "सहपाठियों संग गंभीर शैक्षणिक विचार-विमर्श"
       }
     ]
   }
@@ -482,31 +510,41 @@ export const initialGallery = [
   {
     id: "gal-01",
     title: "Merit Felicitation Ceremony",
+    titleHi: "मेधावी छात्र-छात्रा सम्मान समारोह",
     category: "Felicitation",
+    categoryHi: "सम्मान समारोह",
     image: "./galary.jpg"
   },
   {
     id: "gal-02",
     title: "Meritorious Aspirants with Educators",
+    titleHi: "शिक्षकों संग मेधावी विद्यार्थियों का समूह",
     category: "Felicitation",
+    categoryHi: "सम्मान समारोह",
     image: "./galary1.jpg"
   },
   {
     id: "gal-03",
-    title: "Medal & Trophy Distribution",
+    title: "Medal and Trophy Distribution",
+    titleHi: "स्मृति चिन्ह एवं मेडल वितरण",
     category: "Events",
+    categoryHi: "कार्यक्रम",
     image: "./galary2.jpg"
   },
   {
     id: "gal-04",
     title: "Digital Smart Classroom Session",
+    titleHi: "डिजिटल स्मार्ट क्लासरूम सत्र",
     category: "Classroom",
+    categoryHi: "क्लासरूम",
     image: "./galary3.jpg"
   },
   {
     id: "gal-05",
     title: "Dedicated Faculty Doubt Counter",
+    titleHi: "संकाय सदस्यों संग व्यक्तिगत डाउट सत्र",
     category: "Campus",
+    categoryHi: "कैंपस",
     image: "./galary4.jpg"
   }
 ];

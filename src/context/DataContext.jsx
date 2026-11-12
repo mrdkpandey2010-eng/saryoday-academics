@@ -29,7 +29,7 @@ import {
 import { validateEnglishOnly } from '../utils/validation';
 
 const DataContext = createContext(null);
-const STORAGE_KEY = 'SARYODAY_ACADEMICS_SECURE_V6';
+const STORAGE_KEY = 'SARYODAY_ACADEMICS_SECURE_V7';
 
 // Helper to merge default items with rich English/Hindi properties while preserving admin additions
 const mergeSeedWithUpdatedEnglish = (existingList = [], defaultList = []) => {
@@ -40,7 +40,19 @@ const mergeSeedWithUpdatedEnglish = (existingList = [], defaultList = []) => {
   const merged = existingList.map(item => {
     seenIds.add(item.id);
     if (defaultMap.has(item.id)) {
-      return { ...item, ...defaultMap.get(item.id) };
+      const def = defaultMap.get(item.id);
+      // For albums, also ensure photos from default are updated with bilingual fields
+      if (item.photos && def.photos) {
+        const photoMap = new Map(def.photos.map(p => [p.id, p]));
+        const mergedPhotos = item.photos.map(p => {
+          if (photoMap.has(p.id)) {
+            return { ...p, ...photoMap.get(p.id) };
+          }
+          return p;
+        });
+        return { ...item, ...def, photos: mergedPhotos };
+      }
+      return { ...item, ...def };
     }
     return item;
   });
@@ -102,13 +114,13 @@ export const DataProvider = ({ children }) => {
   // Load state from localStorage or initialize with clean seed data
   const [data, setData] = useState(() => {
     try {
-      const savedV6 = localStorage.getItem(STORAGE_KEY);
-      if (savedV6) {
-        return filterOutMockData(JSON.parse(savedV6));
+      const savedV7 = localStorage.getItem(STORAGE_KEY);
+      if (savedV7) {
+        return filterOutMockData(JSON.parse(savedV7));
       }
 
       // Check older storage keys and sanitize
-      const oldKeys = ['SARYODAY_ACADEMICS_SECURE_V5', 'SARYODAY_ACADEMICS_DB_V2', 'SARYODAY_ACADEMICS_DB_V1'];
+      const oldKeys = ['SARYODAY_ACADEMICS_SECURE_V6', 'SARYODAY_ACADEMICS_SECURE_V5', 'SARYODAY_ACADEMICS_DB_V2', 'SARYODAY_ACADEMICS_DB_V1'];
       for (const k of oldKeys) {
         const oldData = localStorage.getItem(k);
         if (oldData) {
